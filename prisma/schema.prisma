@@ -1,0 +1,263 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model DBCliente {
+  id                   String  @id @default(uuid())
+  status               String?
+  codigo               String?
+  nome_razao           String
+  responsavel          String?
+  telefone             String?
+  cidade               String?
+  cep                  String
+  endereco             String
+  supervisor           String?
+  quant_pessoas        String?
+  quant_rotinas        String?
+  ranking_financeiro   String?
+  periodicidade_visita String?
+  status_contrato      String?
+  observacao           String?
+  
+  // Novos campos adicionados (Reorganização de Clientes)
+  razao_social         String?
+  cnpj                 String?
+  numero               String?
+  complemento          String?
+  bairro               String?
+  uf                   String?
+
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  postos_de_trabalho PostoDeTrabalho[]
+  servicos_extras    ServicoExtraCliente[]
+  usuarios           Usuario[]
+}
+
+model Usuario {
+  id            String   @id @default(uuid())
+  nome          String
+  email         String   @unique
+  senha_hash    String
+  role          String   @default("OPERACIONAL") // "ADMIN", "SUPERVISOR", "OPERACIONAL", "CLIENTE", "TEC_SEGURANCA"
+  cliente_id    String?
+  telefone_whatsapp String?
+
+  troca_senha_obrigatoria Boolean  @default(true)
+  ultima_troca_senha      DateTime @default(now())
+
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  cliente       DBCliente? @relation(fields: [cliente_id], references: [id])
+}
+
+model DBColab {
+  id         String @id @default(uuid())
+  nome       String
+  papel      String
+  cep        String
+  endereco   String
+  turno_base String // ex: "12x36 Dia", "12x36 Noite", "5x2"
+
+  // Novos campos (Informação Cadastral)
+  rg                  String?
+  cpf                 String?
+  telefone_principal  String?
+  is_whatsapp         Boolean  @default(false)
+  telefone_secundario String?
+  logradouro          String?
+  numero              String?
+  bairro              String?
+  cidade              String?
+  uf                  String?
+
+  // Novos campos adicionados a partir do CSV
+  status_cadastro          String?
+  tipo_contratacao         String?
+  horas_contratadas        String?
+  categoria_cargo          String?
+  cargo_alterdata          String?
+  matricula                String?
+  ctps                     String?
+  localizacao              String?
+  sub_local                String?
+  admissao                 String?
+  contrato_experiencia_dias Int?
+  experiencia_1            String?
+  experiencia_2            String?
+  situacao_disponibilidade String?
+  justificativa_inativo    String?
+  data_retorno             String?
+  observacao_retorno       String?
+
+  ferias_ultimo_aquisitivo String?
+  ferias_notificacao       String?
+  ferias_limite_entrada    String?
+  ferias_retorno           String?
+  ferias_vencimento        String?
+
+  // Educação e Treinamento
+  data_integracao               String?
+  reciclagem_integracao         String?
+  manual_conduta_data           String?
+  manual_conduta_reciclagem     String?
+  seguranca_medicina_data       String?
+  seguranca_medicina_reciclagem String?
+  treino_basico_data            String?
+  treino_basico_reciclagem      String?
+
+  requer_nr32           Boolean @default(false)
+  data_nr32             String?
+  reciclagem_nr32       String?
+  requer_nr35           Boolean @default(false)
+  data_nr35             String?
+  reciclagem_nr35       String?
+  data_aso              String?
+  reciclagem_aso        String?
+  exame_complementar_data    String?
+  exame_complementar_retorno String?
+
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  alocacoes    Alocacao[]
+  ocorrencias  FluxoCorretivo[]
+  afastamentos Afastamento[]
+  avisos_ferias AvisoFerias[]
+}
+
+model PostoDeTrabalho {
+  id               String  @id @default(uuid())
+  cliente_id       String
+  codigo           String  @unique // ex: "AG037 - MD-B/U"
+  categoria_posto  String? // ex: "PORTEIRO", "LIMPADOR"
+  turno            String? // ex: "DIURNO", "NOTURNO"
+  tipo_escala      String? // ex: "12 por 36", "B - 44 horas"
+  descricao_escala String? // texto livre da planilha
+  horas_diarias    String? // ex: "44:00:00"
+  exige_nr32       Boolean @default(false)
+  exige_nr35       Boolean @default(false)
+
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  cliente   DBCliente  @relation(fields: [cliente_id], references: [id])
+  alocacoes Alocacao[]
+  substituicoes_ferias SubstituicaoFerias[]
+}
+
+model Alocacao {
+  id        String   @id @default(uuid())
+  posto_id  String
+  colab_id  String
+  criado_em DateTime @default(now())
+
+  posto PostoDeTrabalho @relation(fields: [posto_id], references: [id])
+  colab DBColab         @relation(fields: [colab_id], references: [id])
+
+  @@unique([posto_id, colab_id])
+}
+
+model FluxoCorretivo {
+  id            String   @id @default(uuid())
+  colab_id      String?
+  tipo          String // "Atraso", "Falta", "Extra", "Atestado"
+  data          DateTime
+  tempo_minutos Int? // Quantidade de minutos (em caso de atraso/extra)
+  observacao    String?
+  sancao             String? // "Informe", "Advertência", "Suspensão", "Justa Causa"
+  origem             String   @default("SISTEMA") // "SISTEMA", "WHATSAPP"
+  origem_informacao  String?  // "Próprio Funcionário", "Cliente", "Funcionário Aguardando"
+  motivo_falta       String?  // "Doença", "Sem Justificativa", "INSS", "Doação de Sangue", "Acompanhar Filho Escola", "Acompanhar Filho Médico"
+  documento_exigido  Boolean  @default(false)
+  documento_entregue Boolean  @default(false)
+  prazo_documento    DateTime?
+  url_documento      String?
+  resolvido          Boolean  @default(false)
+  
+  servico_extra_id   String?
+  
+  criado_em          DateTime @default(now())
+
+  colab              DBColab? @relation(fields: [colab_id], references: [id])
+  servico_extra      ServicoExtraCliente? @relation(fields: [servico_extra_id], references: [id])
+}
+
+model Afastamento {
+  id                    String   @id @default(uuid())
+  colab_id              String
+  motivo                String   // "INSS", "Atestado", "Férias"
+  data_inicio           DateTime
+  data_fim              DateTime?
+  data_retorno_prevista DateTime
+  observacao            String?
+  
+  criado_em     DateTime @default(now())
+  atualizado_em DateTime @updatedAt
+
+  colab DBColab @relation(fields: [colab_id], references: [id])
+}
+
+model AvisoFerias {
+  id                 String   @id @default(uuid())
+  colab_id           String
+  
+  data_aviso         DateTime @default(now())
+  data_inicio        DateTime // 30 dias após o aviso
+  
+  dias_ferias        Int      @default(30) // Pode ser 30, 15, ou 10
+  dias_venda         Int      @default(0)  // Pode ser 0 ou 10
+  data_fim           DateTime // Início + dias_ferias
+  
+  status             String   @default("AGUARDANDO_ASSINATURA") // "AGUARDANDO_ASSINATURA", "ASSINADO", "CONCLUIDO"
+  url_documento      String?
+  cliente_informado  Boolean  @default(false)
+  
+  status_retorno     String   @default("AGUARDANDO_DECISAO") // "AGUARDANDO_DECISAO", "RETORNA_AO_POSTO", "NAO_RETORNA"
+  
+  criado_em          DateTime @default(now())
+  atualizado_em      DateTime @updatedAt
+
+  colab              DBColab  @relation(fields: [colab_id], references: [id])
+  substituicoes      SubstituicaoFerias[]
+}
+
+model SubstituicaoFerias {
+  id                   String   @id @default(uuid())
+  aviso_ferias_id      String
+  posto_id             String
+  colab_substituto_id  String
+  colab_substituido_id String?  // Quem foi substituído (o de férias, ou o transferido de outro posto)
+  
+  ativa                Boolean  @default(true)
+
+  aviso AvisoFerias @relation(fields: [aviso_ferias_id], references: [id])
+  posto PostoDeTrabalho @relation(fields: [posto_id], references: [id])
+}
+
+model ServicoExtraCliente {
+  id                       String   @id @default(uuid())
+  cliente_id               String?
+  nome_cliente_avulso      String?
+  tipo_servico             String
+  exige_nr32               Boolean  @default(false)
+  exige_nr35               Boolean  @default(false)
+  quantidade_profissionais Int
+  data_inicio              DateTime
+  data_fim                 DateTime
+  status                   String   @default("PENDENTE_ALOCACAO") // PENDENTE_ALOCACAO, ALOCADO, CONCLUIDO
+  faturado                 Boolean  @default(false)
+
+  criado_em                DateTime @default(now())
+  atualizado_em            DateTime @updatedAt
+
+  cliente                  DBCliente?       @relation(fields: [cliente_id], references: [id])
+  apontamentos             FluxoCorretivo[]
+}

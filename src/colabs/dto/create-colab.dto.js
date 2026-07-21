@@ -1,0 +1,198 @@
+"use strict";
+var __esDecorate = (this && this.__esDecorate) || function (ctor, descriptorIn, decorators, contextIn, initializers, extraInitializers) {
+    function accept(f) { if (f !== void 0 && typeof f !== "function") throw new TypeError("Function expected"); return f; }
+    var kind = contextIn.kind, key = kind === "getter" ? "get" : kind === "setter" ? "set" : "value";
+    var target = !descriptorIn && ctor ? contextIn["static"] ? ctor : ctor.prototype : null;
+    var descriptor = descriptorIn || (target ? Object.getOwnPropertyDescriptor(target, contextIn.name) : {});
+    var _, done = false;
+    for (var i = decorators.length - 1; i >= 0; i--) {
+        var context = {};
+        for (var p in contextIn) context[p] = p === "access" ? {} : contextIn[p];
+        for (var p in contextIn.access) context.access[p] = contextIn.access[p];
+        context.addInitializer = function (f) { if (done) throw new TypeError("Cannot add initializers after decoration has completed"); extraInitializers.push(accept(f || null)); };
+        var result = (0, decorators[i])(kind === "accessor" ? { get: descriptor.get, set: descriptor.set } : descriptor[key], context);
+        if (kind === "accessor") {
+            if (result === void 0) continue;
+            if (result === null || typeof result !== "object") throw new TypeError("Object expected");
+            if (_ = accept(result.get)) descriptor.get = _;
+            if (_ = accept(result.set)) descriptor.set = _;
+            if (_ = accept(result.init)) initializers.unshift(_);
+        }
+        else if (_ = accept(result)) {
+            if (kind === "field") initializers.unshift(_);
+            else descriptor[key] = _;
+        }
+    }
+    if (target) Object.defineProperty(target, contextIn.name, descriptor);
+    done = true;
+};
+var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
+    var useValue = arguments.length > 2;
+    for (var i = 0; i < initializers.length; i++) {
+        value = useValue ? initializers[i].call(thisArg, value) : initializers[i].call(thisArg);
+    }
+    return useValue ? value : void 0;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateColabDto = void 0;
+var class_validator_1 = require("class-validator");
+var swagger_1 = require("@nestjs/swagger");
+var CreateColabDto = function () {
+    var _a;
+    var _nome_decorators;
+    var _nome_initializers = [];
+    var _nome_extraInitializers = [];
+    var _papel_decorators;
+    var _papel_initializers = [];
+    var _papel_extraInitializers = [];
+    var _cep_decorators;
+    var _cep_initializers = [];
+    var _cep_extraInitializers = [];
+    var _endereco_decorators;
+    var _endereco_initializers = [];
+    var _endereco_extraInitializers = [];
+    var _turno_base_decorators;
+    var _turno_base_initializers = [];
+    var _turno_base_extraInitializers = [];
+    var _matricula_decorators;
+    var _matricula_initializers = [];
+    var _matricula_extraInitializers = [];
+    var _horas_contratadas_decorators;
+    var _horas_contratadas_initializers = [];
+    var _horas_contratadas_extraInitializers = [];
+    var _tipo_contratacao_decorators;
+    var _tipo_contratacao_initializers = [];
+    var _tipo_contratacao_extraInitializers = [];
+    var _status_cadastro_decorators;
+    var _status_cadastro_initializers = [];
+    var _status_cadastro_extraInitializers = [];
+    var _admissao_decorators;
+    var _admissao_initializers = [];
+    var _admissao_extraInitializers = [];
+    var _ctps_decorators;
+    var _ctps_initializers = [];
+    var _ctps_extraInitializers = [];
+    var _experiencia_1_decorators;
+    var _experiencia_1_initializers = [];
+    var _experiencia_1_extraInitializers = [];
+    var _experiencia_2_decorators;
+    var _experiencia_2_initializers = [];
+    var _experiencia_2_extraInitializers = [];
+    var _situacao_disponibilidade_decorators;
+    var _situacao_disponibilidade_initializers = [];
+    var _situacao_disponibilidade_extraInitializers = [];
+    var _data_retorno_decorators;
+    var _data_retorno_initializers = [];
+    var _data_retorno_extraInitializers = [];
+    var _justificativa_inativo_decorators;
+    var _justificativa_inativo_initializers = [];
+    var _justificativa_inativo_extraInitializers = [];
+    var _data_integracao_decorators;
+    var _data_integracao_initializers = [];
+    var _data_integracao_extraInitializers = [];
+    var _reciclagem_integracao_decorators;
+    var _reciclagem_integracao_initializers = [];
+    var _reciclagem_integracao_extraInitializers = [];
+    var _data_nr32_decorators;
+    var _data_nr32_initializers = [];
+    var _data_nr32_extraInitializers = [];
+    var _reciclagem_nr32_decorators;
+    var _reciclagem_nr32_initializers = [];
+    var _reciclagem_nr32_extraInitializers = [];
+    var _data_nr35_decorators;
+    var _data_nr35_initializers = [];
+    var _data_nr35_extraInitializers = [];
+    var _reciclagem_nr35_decorators;
+    var _reciclagem_nr35_initializers = [];
+    var _reciclagem_nr35_extraInitializers = [];
+    var _data_aso_decorators;
+    var _data_aso_initializers = [];
+    var _data_aso_extraInitializers = [];
+    var _reciclagem_aso_decorators;
+    var _reciclagem_aso_initializers = [];
+    var _reciclagem_aso_extraInitializers = [];
+    return _a = /** @class */ (function () {
+            function CreateColabDto() {
+                this.nome = __runInitializers(this, _nome_initializers, void 0);
+                this.papel = (__runInitializers(this, _nome_extraInitializers), __runInitializers(this, _papel_initializers, void 0));
+                this.cep = (__runInitializers(this, _papel_extraInitializers), __runInitializers(this, _cep_initializers, void 0));
+                this.endereco = (__runInitializers(this, _cep_extraInitializers), __runInitializers(this, _endereco_initializers, void 0));
+                this.turno_base = (__runInitializers(this, _endereco_extraInitializers), __runInitializers(this, _turno_base_initializers, void 0));
+                this.matricula = (__runInitializers(this, _turno_base_extraInitializers), __runInitializers(this, _matricula_initializers, void 0));
+                this.horas_contratadas = (__runInitializers(this, _matricula_extraInitializers), __runInitializers(this, _horas_contratadas_initializers, void 0));
+                this.tipo_contratacao = (__runInitializers(this, _horas_contratadas_extraInitializers), __runInitializers(this, _tipo_contratacao_initializers, void 0));
+                this.status_cadastro = (__runInitializers(this, _tipo_contratacao_extraInitializers), __runInitializers(this, _status_cadastro_initializers, void 0));
+                this.admissao = (__runInitializers(this, _status_cadastro_extraInitializers), __runInitializers(this, _admissao_initializers, void 0));
+                this.ctps = (__runInitializers(this, _admissao_extraInitializers), __runInitializers(this, _ctps_initializers, void 0));
+                this.experiencia_1 = (__runInitializers(this, _ctps_extraInitializers), __runInitializers(this, _experiencia_1_initializers, void 0));
+                this.experiencia_2 = (__runInitializers(this, _experiencia_1_extraInitializers), __runInitializers(this, _experiencia_2_initializers, void 0));
+                this.situacao_disponibilidade = (__runInitializers(this, _experiencia_2_extraInitializers), __runInitializers(this, _situacao_disponibilidade_initializers, void 0));
+                this.data_retorno = (__runInitializers(this, _situacao_disponibilidade_extraInitializers), __runInitializers(this, _data_retorno_initializers, void 0));
+                this.justificativa_inativo = (__runInitializers(this, _data_retorno_extraInitializers), __runInitializers(this, _justificativa_inativo_initializers, void 0));
+                this.data_integracao = (__runInitializers(this, _justificativa_inativo_extraInitializers), __runInitializers(this, _data_integracao_initializers, void 0));
+                this.reciclagem_integracao = (__runInitializers(this, _data_integracao_extraInitializers), __runInitializers(this, _reciclagem_integracao_initializers, void 0));
+                this.data_nr32 = (__runInitializers(this, _reciclagem_integracao_extraInitializers), __runInitializers(this, _data_nr32_initializers, void 0));
+                this.reciclagem_nr32 = (__runInitializers(this, _data_nr32_extraInitializers), __runInitializers(this, _reciclagem_nr32_initializers, void 0));
+                this.data_nr35 = (__runInitializers(this, _reciclagem_nr32_extraInitializers), __runInitializers(this, _data_nr35_initializers, void 0));
+                this.reciclagem_nr35 = (__runInitializers(this, _data_nr35_extraInitializers), __runInitializers(this, _reciclagem_nr35_initializers, void 0));
+                this.data_aso = (__runInitializers(this, _reciclagem_nr35_extraInitializers), __runInitializers(this, _data_aso_initializers, void 0));
+                this.reciclagem_aso = (__runInitializers(this, _data_aso_extraInitializers), __runInitializers(this, _reciclagem_aso_initializers, void 0));
+                __runInitializers(this, _reciclagem_aso_extraInitializers);
+            }
+            return CreateColabDto;
+        }()),
+        (function () {
+            var _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
+            _nome_decorators = [(0, swagger_1.ApiProperty)(), (0, class_validator_1.IsString)(), (0, class_validator_1.IsNotEmpty)()];
+            _papel_decorators = [(0, swagger_1.ApiProperty)(), (0, class_validator_1.IsString)(), (0, class_validator_1.IsNotEmpty)()];
+            _cep_decorators = [(0, swagger_1.ApiProperty)(), (0, class_validator_1.IsString)(), (0, class_validator_1.IsNotEmpty)()];
+            _endereco_decorators = [(0, swagger_1.ApiProperty)(), (0, class_validator_1.IsString)(), (0, class_validator_1.IsNotEmpty)()];
+            _turno_base_decorators = [(0, swagger_1.ApiProperty)(), (0, class_validator_1.IsString)(), (0, class_validator_1.IsNotEmpty)()];
+            _matricula_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _horas_contratadas_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _tipo_contratacao_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _status_cadastro_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _admissao_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _ctps_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _experiencia_1_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _experiencia_2_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _situacao_disponibilidade_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _data_retorno_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _justificativa_inativo_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _data_integracao_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _reciclagem_integracao_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _data_nr32_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _reciclagem_nr32_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _data_nr35_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _reciclagem_nr35_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _data_aso_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            _reciclagem_aso_decorators = [(0, swagger_1.ApiProperty)({ required: false }), (0, class_validator_1.IsString)(), (0, class_validator_1.IsOptional)()];
+            __esDecorate(null, null, _nome_decorators, { kind: "field", name: "nome", static: false, private: false, access: { has: function (obj) { return "nome" in obj; }, get: function (obj) { return obj.nome; }, set: function (obj, value) { obj.nome = value; } }, metadata: _metadata }, _nome_initializers, _nome_extraInitializers);
+            __esDecorate(null, null, _papel_decorators, { kind: "field", name: "papel", static: false, private: false, access: { has: function (obj) { return "papel" in obj; }, get: function (obj) { return obj.papel; }, set: function (obj, value) { obj.papel = value; } }, metadata: _metadata }, _papel_initializers, _papel_extraInitializers);
+            __esDecorate(null, null, _cep_decorators, { kind: "field", name: "cep", static: false, private: false, access: { has: function (obj) { return "cep" in obj; }, get: function (obj) { return obj.cep; }, set: function (obj, value) { obj.cep = value; } }, metadata: _metadata }, _cep_initializers, _cep_extraInitializers);
+            __esDecorate(null, null, _endereco_decorators, { kind: "field", name: "endereco", static: false, private: false, access: { has: function (obj) { return "endereco" in obj; }, get: function (obj) { return obj.endereco; }, set: function (obj, value) { obj.endereco = value; } }, metadata: _metadata }, _endereco_initializers, _endereco_extraInitializers);
+            __esDecorate(null, null, _turno_base_decorators, { kind: "field", name: "turno_base", static: false, private: false, access: { has: function (obj) { return "turno_base" in obj; }, get: function (obj) { return obj.turno_base; }, set: function (obj, value) { obj.turno_base = value; } }, metadata: _metadata }, _turno_base_initializers, _turno_base_extraInitializers);
+            __esDecorate(null, null, _matricula_decorators, { kind: "field", name: "matricula", static: false, private: false, access: { has: function (obj) { return "matricula" in obj; }, get: function (obj) { return obj.matricula; }, set: function (obj, value) { obj.matricula = value; } }, metadata: _metadata }, _matricula_initializers, _matricula_extraInitializers);
+            __esDecorate(null, null, _horas_contratadas_decorators, { kind: "field", name: "horas_contratadas", static: false, private: false, access: { has: function (obj) { return "horas_contratadas" in obj; }, get: function (obj) { return obj.horas_contratadas; }, set: function (obj, value) { obj.horas_contratadas = value; } }, metadata: _metadata }, _horas_contratadas_initializers, _horas_contratadas_extraInitializers);
+            __esDecorate(null, null, _tipo_contratacao_decorators, { kind: "field", name: "tipo_contratacao", static: false, private: false, access: { has: function (obj) { return "tipo_contratacao" in obj; }, get: function (obj) { return obj.tipo_contratacao; }, set: function (obj, value) { obj.tipo_contratacao = value; } }, metadata: _metadata }, _tipo_contratacao_initializers, _tipo_contratacao_extraInitializers);
+            __esDecorate(null, null, _status_cadastro_decorators, { kind: "field", name: "status_cadastro", static: false, private: false, access: { has: function (obj) { return "status_cadastro" in obj; }, get: function (obj) { return obj.status_cadastro; }, set: function (obj, value) { obj.status_cadastro = value; } }, metadata: _metadata }, _status_cadastro_initializers, _status_cadastro_extraInitializers);
+            __esDecorate(null, null, _admissao_decorators, { kind: "field", name: "admissao", static: false, private: false, access: { has: function (obj) { return "admissao" in obj; }, get: function (obj) { return obj.admissao; }, set: function (obj, value) { obj.admissao = value; } }, metadata: _metadata }, _admissao_initializers, _admissao_extraInitializers);
+            __esDecorate(null, null, _ctps_decorators, { kind: "field", name: "ctps", static: false, private: false, access: { has: function (obj) { return "ctps" in obj; }, get: function (obj) { return obj.ctps; }, set: function (obj, value) { obj.ctps = value; } }, metadata: _metadata }, _ctps_initializers, _ctps_extraInitializers);
+            __esDecorate(null, null, _experiencia_1_decorators, { kind: "field", name: "experiencia_1", static: false, private: false, access: { has: function (obj) { return "experiencia_1" in obj; }, get: function (obj) { return obj.experiencia_1; }, set: function (obj, value) { obj.experiencia_1 = value; } }, metadata: _metadata }, _experiencia_1_initializers, _experiencia_1_extraInitializers);
+            __esDecorate(null, null, _experiencia_2_decorators, { kind: "field", name: "experiencia_2", static: false, private: false, access: { has: function (obj) { return "experiencia_2" in obj; }, get: function (obj) { return obj.experiencia_2; }, set: function (obj, value) { obj.experiencia_2 = value; } }, metadata: _metadata }, _experiencia_2_initializers, _experiencia_2_extraInitializers);
+            __esDecorate(null, null, _situacao_disponibilidade_decorators, { kind: "field", name: "situacao_disponibilidade", static: false, private: false, access: { has: function (obj) { return "situacao_disponibilidade" in obj; }, get: function (obj) { return obj.situacao_disponibilidade; }, set: function (obj, value) { obj.situacao_disponibilidade = value; } }, metadata: _metadata }, _situacao_disponibilidade_initializers, _situacao_disponibilidade_extraInitializers);
+            __esDecorate(null, null, _data_retorno_decorators, { kind: "field", name: "data_retorno", static: false, private: false, access: { has: function (obj) { return "data_retorno" in obj; }, get: function (obj) { return obj.data_retorno; }, set: function (obj, value) { obj.data_retorno = value; } }, metadata: _metadata }, _data_retorno_initializers, _data_retorno_extraInitializers);
+            __esDecorate(null, null, _justificativa_inativo_decorators, { kind: "field", name: "justificativa_inativo", static: false, private: false, access: { has: function (obj) { return "justificativa_inativo" in obj; }, get: function (obj) { return obj.justificativa_inativo; }, set: function (obj, value) { obj.justificativa_inativo = value; } }, metadata: _metadata }, _justificativa_inativo_initializers, _justificativa_inativo_extraInitializers);
+            __esDecorate(null, null, _data_integracao_decorators, { kind: "field", name: "data_integracao", static: false, private: false, access: { has: function (obj) { return "data_integracao" in obj; }, get: function (obj) { return obj.data_integracao; }, set: function (obj, value) { obj.data_integracao = value; } }, metadata: _metadata }, _data_integracao_initializers, _data_integracao_extraInitializers);
+            __esDecorate(null, null, _reciclagem_integracao_decorators, { kind: "field", name: "reciclagem_integracao", static: false, private: false, access: { has: function (obj) { return "reciclagem_integracao" in obj; }, get: function (obj) { return obj.reciclagem_integracao; }, set: function (obj, value) { obj.reciclagem_integracao = value; } }, metadata: _metadata }, _reciclagem_integracao_initializers, _reciclagem_integracao_extraInitializers);
+            __esDecorate(null, null, _data_nr32_decorators, { kind: "field", name: "data_nr32", static: false, private: false, access: { has: function (obj) { return "data_nr32" in obj; }, get: function (obj) { return obj.data_nr32; }, set: function (obj, value) { obj.data_nr32 = value; } }, metadata: _metadata }, _data_nr32_initializers, _data_nr32_extraInitializers);
+            __esDecorate(null, null, _reciclagem_nr32_decorators, { kind: "field", name: "reciclagem_nr32", static: false, private: false, access: { has: function (obj) { return "reciclagem_nr32" in obj; }, get: function (obj) { return obj.reciclagem_nr32; }, set: function (obj, value) { obj.reciclagem_nr32 = value; } }, metadata: _metadata }, _reciclagem_nr32_initializers, _reciclagem_nr32_extraInitializers);
+            __esDecorate(null, null, _data_nr35_decorators, { kind: "field", name: "data_nr35", static: false, private: false, access: { has: function (obj) { return "data_nr35" in obj; }, get: function (obj) { return obj.data_nr35; }, set: function (obj, value) { obj.data_nr35 = value; } }, metadata: _metadata }, _data_nr35_initializers, _data_nr35_extraInitializers);
+            __esDecorate(null, null, _reciclagem_nr35_decorators, { kind: "field", name: "reciclagem_nr35", static: false, private: false, access: { has: function (obj) { return "reciclagem_nr35" in obj; }, get: function (obj) { return obj.reciclagem_nr35; }, set: function (obj, value) { obj.reciclagem_nr35 = value; } }, metadata: _metadata }, _reciclagem_nr35_initializers, _reciclagem_nr35_extraInitializers);
+            __esDecorate(null, null, _data_aso_decorators, { kind: "field", name: "data_aso", static: false, private: false, access: { has: function (obj) { return "data_aso" in obj; }, get: function (obj) { return obj.data_aso; }, set: function (obj, value) { obj.data_aso = value; } }, metadata: _metadata }, _data_aso_initializers, _data_aso_extraInitializers);
+            __esDecorate(null, null, _reciclagem_aso_decorators, { kind: "field", name: "reciclagem_aso", static: false, private: false, access: { has: function (obj) { return "reciclagem_aso" in obj; }, get: function (obj) { return obj.reciclagem_aso; }, set: function (obj, value) { obj.reciclagem_aso = value; } }, metadata: _metadata }, _reciclagem_aso_initializers, _reciclagem_aso_extraInitializers);
+            if (_metadata) Object.defineProperty(_a, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
+        })(),
+        _a;
+}();
+exports.CreateColabDto = CreateColabDto;
