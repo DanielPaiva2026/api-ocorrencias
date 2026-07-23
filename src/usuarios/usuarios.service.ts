@@ -14,6 +14,7 @@ export class UsuariosService {
         email: true,
         role: true,
         cliente_id: true,
+        telefone_whatsapp: true,
         criado_em: true,
         ultima_troca_senha: true,
         troca_senha_obrigatoria: true,
@@ -42,6 +43,7 @@ export class UsuariosService {
         role: data.role,
         senha_hash,
         cliente_id: data.cliente_id || null,
+        telefone_whatsapp: data.telefone_whatsapp || null,
         troca_senha_obrigatoria: true, // Sempre verdadeiro no cadastro inicial
       },
       select: {
@@ -49,6 +51,7 @@ export class UsuariosService {
         nome: true,
         email: true,
         role: true,
+        telefone_whatsapp: true,
       }
     });
 
