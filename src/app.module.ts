@@ -17,6 +17,8 @@ import { ServicosExtrasModule } from './servicos-extras/servicos-extras.module';
 import { AuthModule } from './auth/auth.module';
 import { UsuariosModule } from './usuarios/usuarios.module';
 import { RelatoriosModule } from './relatorios/relatorios.module';
+import { WhatsappModule } from './whatsapp/whatsapp.module';
+import { AlertasModule } from './alertas/alertas.module';
 
 @Module({
   imports: [
@@ -35,6 +37,8 @@ import { RelatoriosModule } from './relatorios/relatorios.module';
     AuthModule,
     UsuariosModule,
     RelatoriosModule,
+    WhatsappModule,
+    AlertasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
