@@ -122,10 +122,10 @@ export class AlertasService {
       checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       
       // NRs
-      if (colab.requer_nr32 || colab.exige_nr32) {
+      if (colab.requer_nr32) {
         checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       }
-      if (colab.requer_nr35 || colab.exige_nr35) {
+      if (colab.requer_nr35) {
         checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       }
 
