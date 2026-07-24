@@ -62,8 +62,9 @@ export class AlertasService {
       if (clienteId) {
         await this.enviarMensagemParaCliente(clienteId, mensagem);
       }
-      // Envia para o Coordenador
+      // Envia para o Coordenador e Admin
       await this.enviarMensagemParaPerfil('COORDENADOR', mensagem);
+      await this.enviarMensagemParaPerfil('ADMIN', mensagem);
     }
   }
 
@@ -89,6 +90,7 @@ export class AlertasService {
       if (!doc.colab) continue;
       const msg = `⚠️ *Documentação Pendente Vencendo Hoje* ⚠️\nO prazo de 48h para entrega do documento (Tipo: ${doc.tipo}) de *${doc.colab.nome}* vence hoje.`;
       await this.enviarMensagemParaPerfil('COORDENADOR', msg);
+      await this.enviarMensagemParaPerfil('ADMIN', msg);
     }
   }
 
@@ -117,23 +119,23 @@ export class AlertasService {
       };
 
       // Integração
-      checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA'], [20, 5, 0]);
+      checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       
       // NRs
       if (colab.requer_nr32 || colab.exige_nr32) {
-        checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA'], [20, 5, 0]);
+        checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       }
       if (colab.requer_nr35 || colab.exige_nr35) {
-        checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA'], [20, 5, 0]);
+        checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
       }
 
       // ASO e Exames Complementares
-      checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH'], [20, 5, 0]);
-      checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH'], [20, 5, 0]);
+      checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
+      checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
 
       // Férias (somente 5 dias antes para Coordenador)
       const feriasDt = colab.ferias_limite_entrada || colab.ferias_vencimento;
-      checkAlert(feriasDt, 'Férias / Limite de Entrada', ['COORDENADOR'], [5]);
+      checkAlert(feriasDt, 'Férias / Limite de Entrada', ['COORDENADOR', 'ADMIN'], [5]);
     }
   }
 
