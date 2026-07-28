@@ -132,10 +132,6 @@ export class AlertasService {
       // ASO e Exames Complementares
       checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
       checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
-
-      // Férias (somente 5 dias antes para Coordenador)
-      const feriasDt = colab.ferias_limite_entrada || colab.ferias_vencimento;
-      checkAlert(feriasDt, 'Férias / Limite de Entrada', ['COORDENADOR', 'ADMIN'], [5]);
     }
   }
 
