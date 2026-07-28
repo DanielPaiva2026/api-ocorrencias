@@ -68,36 +68,91 @@ export class RelatoriosService {
           }
         }
       },
-      select: { id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true },
+      select: { 
+        id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true,
+        afastamentos: {
+          where: { motivo: 'INSS', data_fim: { not: null } },
+          select: { data_inicio: true, data_fim: true }
+        }
+      },
     });
 
     const alertas: any[] = [];
 
     for (const c of colabs) {
-      // Se tiver ultimo aquisitivo, usa ele. Se não, usa admissão.
-      const baseDataStr = c.ferias_ultimo_aquisitivo || c.admissao;
+      let baseDataStr = c.ferias_ultimo_aquisitivo || c.admissao;
       if (!baseDataStr) continue;
 
-      const dataBase = this.parseDate(baseDataStr);
+      let dataBase = this.parseDate(baseDataStr);
       if (!dataBase) continue;
 
-      // O limite concessivo é 2 anos após a admissão (ou seja, ganha direito com 1 ano e tem +1 ano para tirar)
-      // Se for ferias_ultimo_aquisitivo (ex: inicio do período), adicionamos 2 anos para o vencimento fatal.
+      let limitExtendedDays = 0;
+      let forceAcaoImediata = false;
+
+      // Filtrar INSS dentro do período aquisitivo atual
+      const inssNoAquisitivo = c.afastamentos.filter(af => af.data_inicio >= dataBase && af.data_fim);
+
+      // Processar cada INSS cronologicamente
+      inssNoAquisitivo.sort((a, b) => a.data_inicio.getTime() - b.data_inicio.getTime());
+
+      for (const inss of inssNoAquisitivo) {
+         if (!inss.data_fim) continue;
+         const duracao = differenceInDays(inss.data_fim, inss.data_inicio) + 1;
+         const diasTrabalhadosAntes = differenceInDays(inss.data_inicio, dataBase);
+
+         // Regra 3: Entrou de INSS com período aquisitivo JÁ completo (qualquer tempo de INSS)
+         if (diasTrabalhadosAntes >= 365) {
+             forceAcaoImediata = true;
+         }
+
+         // Regra 1 e 2 só valem para INSS > 180 dias num único afastamento
+         if (duracao > 180) {
+             if (diasTrabalhadosAntes < 180) {
+                 // Regra 1: Perde a contagem, recomeça no retorno
+                 const novaDataBase = new Date(inss.data_fim);
+                 novaDataBase.setDate(novaDataBase.getDate() + 1);
+                 dataBase = novaDataBase;
+                 baseDataStr = novaDataBase.toLocaleDateString('pt-BR');
+                 limitExtendedDays = 0; // zera acúmulo de prorrogação
+                 forceAcaoImediata = false; // zera regra 3 pois recomeçou
+
+                 // Atualização preguiçosa no banco
+                 this.prisma.dBColab.update({
+                    where: { id: c.id },
+                    data: { ferias_ultimo_aquisitivo: baseDataStr }
+                 }).catch(err => console.error('Erro ao atualizar DBColab ferias', err));
+             } else {
+                 // Regra 2: Trabalhou >= 180 dias, congela e estende
+                 limitExtendedDays += duracao;
+             }
+         }
+      }
+
+      // O limite concessivo é 2 anos após a data base
       const dataLimite = addYears(dataBase, 2);
+      if (limitExtendedDays > 0) {
+          dataLimite.setDate(dataLimite.getDate() + limitExtendedDays);
+      }
       
       const diasRestantesLimiteFatal = differenceInDays(dataLimite, hoje);
       
-      // Regra: O sistema avisa 15 dias ANTES do prazo de 90 dias anterior ao prazo final.
-      // 90 dias antes = data limite para *iniciar* processo de férias e aviso
-      // Avisar 15 dias antes disso = 105 dias antes do limite fatal.
-      if (diasRestantesLimiteFatal <= 105) {
+      let status = '';
+      if (forceAcaoImediata || diasRestantesLimiteFatal <= 90) {
+          status = 'AÇÃO IMEDIATA';
+      } else if (diasRestantesLimiteFatal <= 115) {
+          status = 'ATRASADA';
+      } else if (diasRestantesLimiteFatal <= 120) {
+          status = 'AVISO';
+      }
+
+      if (status !== '') {
         alertas.push({
           colabId: c.id,
           colabNome: c.nome,
           dataBase: baseDataStr,
           dataLimite: dataLimite.toLocaleDateString('pt-BR'),
           diasRestantes: diasRestantesLimiteFatal,
-          status: diasRestantesLimiteFatal < 0 ? 'AÇÃO IMEDIATA' : diasRestantesLimiteFatal <= 90 ? 'ATRASADA' : 'AVISO'
+          status: status
         });
       }
     }
