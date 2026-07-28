@@ -90,7 +90,7 @@ export class RelatoriosService {
       let forceAcaoImediata = false;
 
       // Filtrar INSS dentro do período aquisitivo atual
-      const inssNoAquisitivo = c.afastamentos.filter(af => af.data_inicio >= dataBase && af.data_fim);
+      const inssNoAquisitivo = c.afastamentos.filter(af => af.data_inicio >= dataBase! && af.data_fim);
 
       // Processar cada INSS cronologicamente
       inssNoAquisitivo.sort((a, b) => a.data_inicio.getTime() - b.data_inicio.getTime());
