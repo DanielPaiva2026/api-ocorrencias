@@ -12,16 +12,29 @@ export class AlertasService {
     private readonly whatsapp: WhatsappService,
   ) {}
 
-  // Todos os dias às 07:00 da manhã
-  @Cron('0 7 * * *')
-  async processarAlertasDiarios() {
-    this.logger.log('Iniciando processamento de alertas diários via WhatsApp (Cron)...');
+  // =========================================================================
+  // CRONS PAUSADOS TEMPORARIAMENTE A PEDIDO DO CLIENTE PARA ATUALIZAÇÃO DO BD
+  // Para reativar, basta descomentar as anotações @Cron abaixo:
+  // =========================================================================
+
+  // @Cron('0 7 * * *') // Todos os dias às 07:00 da manhã
+  async processarAlertasGerais() {
+    this.logger.log('Iniciando processamento de alertas diários via WhatsApp (Gerais)...');
     try {
       await this.alertaCatraca();
-      await this.alertaAtestados();
       await this.alertaTreinamentosEFerias();
     } catch (e) {
-      this.logger.error('Erro nos alertas diarios', e);
+      this.logger.error('Erro nos alertas gerais', e);
+    }
+  }
+
+  // @Cron('0 8 * * *') // Todos os dias às 08:00 da manhã
+  async processarAlertasAtestados() {
+    this.logger.log('Iniciando processamento de alertas diários via WhatsApp (Atestados)...');
+    try {
+      await this.alertaAtestados();
+    } catch (e) {
+      this.logger.error('Erro nos alertas atestados', e);
     }
   }
 
@@ -83,12 +96,25 @@ export class AlertasService {
           lte: fimHoje,
         }
       },
-      include: { colab: true }
+      include: { 
+        colab: {
+          include: { alocacoes: { include: { posto: true } } }
+        } 
+      }
     });
 
     for (const doc of vencendo) {
       if (!doc.colab) continue;
-      const msg = `⚠️ *Documentação Pendente Vencendo Hoje* ⚠️\nO prazo de 48h para entrega do documento (Tipo: ${doc.tipo}) de *${doc.colab.nome}* vence hoje.`;
+      
+      const posto = doc.colab.alocacoes[0]?.posto;
+      const clienteId = posto?.cliente_id;
+      
+      const dataStr = doc.prazo_documento?.toLocaleDateString('pt-BR') || 'Hoje';
+      const msg = `⚠️ *Aviso: Prazo de Atestado Vencendo Hoje* ⚠️\nO prazo de 48h para a entrega do atestado/documento do colaborador *${doc.colab.nome}* vence hoje, *${dataStr}*.\nPor favor, verifique se o documento foi entregue para evitar pendências no fechamento.`;
+
+      if (clienteId) {
+        await this.enviarMensagemParaCliente(clienteId, msg);
+      }
       await this.enviarMensagemParaPerfil('COORDENADOR', msg);
       await this.enviarMensagemParaPerfil('ADMIN', msg);
     }
@@ -104,14 +130,22 @@ export class AlertasService {
     hoje.setHours(0,0,0,0);
 
     for (const colab of colabs) {
-      const checkAlert = (dateStr: string | null, label: string, perfis: string[], diasAlvo: number[]) => {
+      const checkAlert = (dateStr: string | null, label: string, perfis: string[], diasAlvo: number[], icone: string) => {
         const dt = this.parseDateBR(dateStr);
         if (!dt) return;
         
         const diff = this.daysDiff(dt, hoje);
         if (diasAlvo.includes(diff)) {
           const statusStr = diff === 0 ? '*VENCE HOJE*' : `vence em ${diff} dia(s)`;
-          const msg = `📅 *Alerta de Vencimento* 📅\nO prazo de *${label}* do colaborador *${colab.nome}* ${statusStr} (${dateStr}).`;
+          let msg = '';
+          if (label === 'Integração') {
+             msg = `${icone} *Alerta de Vencimento: Integração* ${icone}\nO treinamento de Integração do colaborador *${colab.nome}* ${statusStr} (Data: ${dateStr}).`;
+          } else if (label.startsWith('NR')) {
+             msg = `${icone} *Alerta de Vencimento: ${label}* ${icone}\nO treinamento normativo de ${label} do colaborador *${colab.nome}* ${statusStr} (Data: ${dateStr}).`;
+          } else {
+             msg = `${icone} *Alerta de Vencimento: ${label}* ${icone}\nO ${label} do colaborador *${colab.nome}* ${statusStr} (Data: ${dateStr}).`;
+          }
+          
           for (const perfil of perfis) {
             this.enviarMensagemParaPerfil(perfil, msg);
           }
@@ -119,19 +153,19 @@ export class AlertasService {
       };
 
       // Integração
-      checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
+      checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🎓');
       
       // NRs
-      if (colab.requer_nr32) {
-        checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
+      if (colab.reciclagem_nr32 && colab.reciclagem_nr32 !== '-' && colab.reciclagem_nr32.trim() !== '') {
+        checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🛡️');
       }
-      if (colab.requer_nr35) {
-        checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0]);
+      if (colab.reciclagem_nr35 && colab.reciclagem_nr35 !== '-' && colab.reciclagem_nr35.trim() !== '') {
+        checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🛡️');
       }
 
       // ASO e Exames Complementares
-      checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
-      checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0]);
+      checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0], '🩺');
+      checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0], '🩺');
     }
   }
 
