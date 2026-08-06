@@ -57,7 +57,7 @@ export class DisponibilidadeService {
          horasRestantes = 0;
          status = 'INDISPONIVEL';
       } else {
-        if (colab.turno_base?.includes('12x36')) {
+        if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
           status = 'LIVRE (Folga 36h)';
           horasRestantes = 12; // simplificado
         } else {
@@ -79,7 +79,7 @@ export class DisponibilidadeService {
         nome: colab.nome,
         tipo_contratacao: colab.tipo_contratacao,
         horas_contratadas: colab.horas_contratadas,
-        turno_base: colab.turno_base,
+        // turno_base removido
         localizacao: colab.localizacao,
         endereco: colab.endereco,
         horasRestantes,
@@ -107,9 +107,7 @@ export class DisponibilidadeService {
       if (posto?.cliente?.cidade) {
         cidadeAlvo = posto.cliente.cidade;
       }
-      if (!papelAlvo && posto?.categoria_posto) {
-        papelAlvo = posto.categoria_posto;
-      }
+      // categoria_posto removido
     }
 
     // 1. Buscar todos os colaboradores sem afastamento ativo
@@ -176,7 +174,7 @@ export class DisponibilidadeService {
         if (isInssAtestadoInativo) {
           prioridade = 99;
           tipoDisponibilidade = colab.situacao_disponibilidade || 'Indisponível';
-        } else if (colab.turno_base?.includes('12x36')) {
+        } else if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
           prioridade = 3;
           tipoDisponibilidade = 'Folga (12x36)';
         } else if (horasRestantes > 0) {
@@ -225,7 +223,7 @@ export class DisponibilidadeService {
           id: colab.id,
           nome: colab.nome,
           papel: colab.papel,
-          turno_base: colab.turno_base,
+          // turno_base removido
           situacao_disponibilidade: colab.situacao_disponibilidade,
           tipoDisponibilidade,
           prioridade,

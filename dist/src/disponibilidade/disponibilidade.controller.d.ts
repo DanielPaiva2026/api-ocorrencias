@@ -7,7 +7,6 @@ export declare class DisponibilidadeController {
         nome: string;
         tipo_contratacao: string | null;
         horas_contratadas: string | null;
-        turno_base: string;
         localizacao: string | null;
         endereco: string;
         horasRestantes: number;
@@ -19,11 +18,11 @@ export declare class DisponibilidadeController {
                 criado_em: Date;
                 atualizado_em: Date;
                 cliente_id: string;
-                categoria_posto: string | null;
-                turno: string | null;
-                tipo_escala: string | null;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
+                cesta_basica: string | null;
+                insalubridade: string | null;
+                feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
             };
@@ -38,7 +37,6 @@ export declare class DisponibilidadeController {
         id: string;
         nome: string;
         papel: string;
-        turno_base: string;
         situacao_disponibilidade: string | null;
         tipoDisponibilidade: string;
         prioridade: number;

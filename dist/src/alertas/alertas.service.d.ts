@@ -5,7 +5,8 @@ export declare class AlertasService {
     private readonly whatsapp;
     private readonly logger;
     constructor(prisma: PrismaService, whatsapp: WhatsappService);
-    processarAlertasDiarios(): Promise<void>;
+    processarAlertasGerais(): Promise<void>;
+    processarAlertasAtestados(): Promise<void>;
     alertaCatraca(): Promise<void>;
     alertaAtestados(): Promise<void>;
     alertaTreinamentosEFerias(): Promise<void>;

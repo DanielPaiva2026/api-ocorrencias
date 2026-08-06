@@ -16,8 +16,7 @@ export declare class DashboardController {
                 atualizado_em: Date;
                 nome: string;
                 papel: string;
-                turno_base: string;
-                rg: string | null;
+                carteira_trabalho: string | null;
                 cpf: string | null;
                 telefone_principal: string | null;
                 is_whatsapp: boolean;
@@ -33,6 +32,7 @@ export declare class DashboardController {
                 localizacao: string | null;
                 sub_local: string | null;
                 admissao: string | null;
+                prazo_experiencia: string | null;
                 contrato_experiencia_dias: number | null;
                 experiencia_1: string | null;
                 experiencia_2: string | null;
@@ -96,8 +96,7 @@ export declare class DashboardController {
                 atualizado_em: Date;
                 nome: string;
                 papel: string;
-                turno_base: string;
-                rg: string | null;
+                carteira_trabalho: string | null;
                 cpf: string | null;
                 telefone_principal: string | null;
                 is_whatsapp: boolean;
@@ -113,6 +112,7 @@ export declare class DashboardController {
                 localizacao: string | null;
                 sub_local: string | null;
                 admissao: string | null;
+                prazo_experiencia: string | null;
                 contrato_experiencia_dias: number | null;
                 experiencia_1: string | null;
                 experiencia_2: string | null;
@@ -193,11 +193,11 @@ export declare class DashboardController {
                 criado_em: Date;
                 atualizado_em: Date;
                 cliente_id: string;
-                categoria_posto: string | null;
-                turno: string | null;
-                tipo_escala: string | null;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
+                cesta_basica: string | null;
+                insalubridade: string | null;
+                feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
             };
@@ -214,8 +214,7 @@ export declare class DashboardController {
                     atualizado_em: Date;
                     nome: string;
                     papel: string;
-                    turno_base: string;
-                    rg: string | null;
+                    carteira_trabalho: string | null;
                     cpf: string | null;
                     telefone_principal: string | null;
                     is_whatsapp: boolean;
@@ -231,6 +230,7 @@ export declare class DashboardController {
                     localizacao: string | null;
                     sub_local: string | null;
                     admissao: string | null;
+                    prazo_experiencia: string | null;
                     contrato_experiencia_dias: number | null;
                     experiencia_1: string | null;
                     experiencia_2: string | null;
@@ -298,8 +298,7 @@ export declare class DashboardController {
                 atualizado_em: Date;
                 nome: string;
                 papel: string;
-                turno_base: string;
-                rg: string | null;
+                carteira_trabalho: string | null;
                 cpf: string | null;
                 telefone_principal: string | null;
                 is_whatsapp: boolean;
@@ -315,6 +314,7 @@ export declare class DashboardController {
                 localizacao: string | null;
                 sub_local: string | null;
                 admissao: string | null;
+                prazo_experiencia: string | null;
                 contrato_experiencia_dias: number | null;
                 experiencia_1: string | null;
                 experiencia_2: string | null;
@@ -374,8 +374,7 @@ export declare class DashboardController {
                 atualizado_em: Date;
                 nome: string;
                 papel: string;
-                turno_base: string;
-                rg: string | null;
+                carteira_trabalho: string | null;
                 cpf: string | null;
                 telefone_principal: string | null;
                 is_whatsapp: boolean;
@@ -391,6 +390,7 @@ export declare class DashboardController {
                 localizacao: string | null;
                 sub_local: string | null;
                 admissao: string | null;
+                prazo_experiencia: string | null;
                 contrato_experiencia_dias: number | null;
                 experiencia_1: string | null;
                 experiencia_2: string | null;
@@ -467,11 +467,11 @@ export declare class DashboardController {
                 criado_em: Date;
                 atualizado_em: Date;
                 cliente_id: string;
-                categoria_posto: string | null;
-                turno: string | null;
-                tipo_escala: string | null;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
+                cesta_basica: string | null;
+                insalubridade: string | null;
+                feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
             };
@@ -512,8 +512,7 @@ export declare class DashboardController {
                     atualizado_em: Date;
                     nome: string;
                     papel: string;
-                    turno_base: string;
-                    rg: string | null;
+                    carteira_trabalho: string | null;
                     cpf: string | null;
                     telefone_principal: string | null;
                     is_whatsapp: boolean;
@@ -529,6 +528,7 @@ export declare class DashboardController {
                     localizacao: string | null;
                     sub_local: string | null;
                     admissao: string | null;
+                    prazo_experiencia: string | null;
                     contrato_experiencia_dias: number | null;
                     experiencia_1: string | null;
                     experiencia_2: string | null;
@@ -600,8 +600,7 @@ export declare class DashboardController {
                     atualizado_em: Date;
                     nome: string;
                     papel: string;
-                    turno_base: string;
-                    rg: string | null;
+                    carteira_trabalho: string | null;
                     cpf: string | null;
                     telefone_principal: string | null;
                     is_whatsapp: boolean;
@@ -617,6 +616,7 @@ export declare class DashboardController {
                     localizacao: string | null;
                     sub_local: string | null;
                     admissao: string | null;
+                    prazo_experiencia: string | null;
                     contrato_experiencia_dias: number | null;
                     experiencia_1: string | null;
                     experiencia_2: string | null;
@@ -688,8 +688,7 @@ export declare class DashboardController {
                     atualizado_em: Date;
                     nome: string;
                     papel: string;
-                    turno_base: string;
-                    rg: string | null;
+                    carteira_trabalho: string | null;
                     cpf: string | null;
                     telefone_principal: string | null;
                     is_whatsapp: boolean;
@@ -705,6 +704,7 @@ export declare class DashboardController {
                     localizacao: string | null;
                     sub_local: string | null;
                     admissao: string | null;
+                    prazo_experiencia: string | null;
                     contrato_experiencia_dias: number | null;
                     experiencia_1: string | null;
                     experiencia_2: string | null;

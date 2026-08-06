@@ -19,9 +19,7 @@ export class OcorrenciasService {
     if (alocacao) {
       const textos = [
         alocacao.posto.descricao_escala,
-        alocacao.posto.horas_diarias,
-        alocacao.posto.tipo_escala,
-        alocacao.colab.turno_base
+        alocacao.posto.horas_diarias
       ];
       for (const texto of textos) {
         if (!texto) continue;
@@ -35,14 +33,9 @@ export class OcorrenciasService {
       }
     } else {
       const colab = await tx.dBColab.findUnique({ where: { id: colabId } });
-      if (colab && colab.turno_base) {
-         const match = colab.turno_base.match(/\b([01]?\d|2[0-3])[:hH]([0-5]\d)?\b/);
-         if (match) {
-           return {
-             hora: parseInt(match[1], 10),
-             minuto: match[2] ? parseInt(match[2], 10) : 0
-           };
-         }
+      if (colab) {
+         // turno_base foi removido, então não conseguimos extrair horário de entrada pelo colab diretamente sem alocação
+         // podemos retornar o padrão abaixo
       }
     }
     return { hora: 8, minuto: 0 };
@@ -92,7 +85,7 @@ export class OcorrenciasService {
       if (match) horasContratadas = parseInt(match[1], 10);
     }
 
-    if (colab.turno_base?.includes('12x36') || horasContratadas >= 44) {
+    if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36')) || horasContratadas >= 44) {
       return 'Extra';
     }
 

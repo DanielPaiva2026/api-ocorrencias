@@ -22,10 +22,7 @@ export class CreateColabDto {
   @IsNotEmpty()
   endereco: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  turno_base: string;
+  // turno_base: string;
 
   @ApiProperty({ required: false })
   @IsString()

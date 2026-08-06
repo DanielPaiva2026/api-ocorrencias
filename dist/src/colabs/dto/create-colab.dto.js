@@ -17,7 +17,6 @@ class CreateColabDto {
     papel;
     cep;
     endereco;
-    turno_base;
     matricula;
     horas_contratadas;
     tipo_contratacao;
@@ -82,12 +81,6 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateColabDto.prototype, "endereco", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateColabDto.prototype, "turno_base", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsString)(),

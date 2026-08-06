@@ -57,8 +57,7 @@ export declare class OcorrenciasService {
             atualizado_em: Date;
             nome: string;
             papel: string;
-            turno_base: string;
-            rg: string | null;
+            carteira_trabalho: string | null;
             cpf: string | null;
             telefone_principal: string | null;
             is_whatsapp: boolean;
@@ -74,6 +73,7 @@ export declare class OcorrenciasService {
             localizacao: string | null;
             sub_local: string | null;
             admissao: string | null;
+            prazo_experiencia: string | null;
             contrato_experiencia_dias: number | null;
             experiencia_1: string | null;
             experiencia_2: string | null;
@@ -194,8 +194,7 @@ export declare class OcorrenciasService {
             atualizado_em: Date;
             nome: string;
             papel: string;
-            turno_base: string;
-            rg: string | null;
+            carteira_trabalho: string | null;
             cpf: string | null;
             telefone_principal: string | null;
             is_whatsapp: boolean;
@@ -211,6 +210,7 @@ export declare class OcorrenciasService {
             localizacao: string | null;
             sub_local: string | null;
             admissao: string | null;
+            prazo_experiencia: string | null;
             contrato_experiencia_dias: number | null;
             experiencia_1: string | null;
             experiencia_2: string | null;

@@ -133,13 +133,10 @@ async function main() {
         const reciclagem_nr32 = row[40]?.trim() || null;
         const data_nr35 = row[43]?.trim() || null;
         const reciclagem_nr35 = row[44]?.trim() || null;
-        let strContrato = tipo_contratacao || '';
-        let strHoras = horas_contratadas || '';
-        const turno_base = `${strContrato} - ${strHoras}`.trim() || 'N/A';
         const papel = categoria_cargo || 'Limpador';
         const endereco = sub_local || localizacao || 'N/A';
         const colabData = {
-            nome, papel, endereco, cep: '00000-000', turno_base,
+            nome, papel, endereco, cep: '00000-000',
             status_cadastro, tipo_contratacao, horas_contratadas, categoria_cargo, cargo_alterdata,
             matricula, ctps, localizacao, sub_local, admissao, experiencia_1, experiencia_2,
             situacao_disponibilidade, justificativa_inativo, data_retorno, observacao_retorno,
@@ -179,9 +176,6 @@ async function main() {
                     data: {
                         codigo,
                         cliente_id: clienteDb.id,
-                        categoria_posto,
-                        turno,
-                        tipo_escala,
                         descricao_escala,
                         horas_diarias
                     }

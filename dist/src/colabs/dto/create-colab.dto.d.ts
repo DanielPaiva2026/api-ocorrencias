@@ -3,7 +3,6 @@ export declare class CreateColabDto {
     papel: string;
     cep: string;
     endereco: string;
-    turno_base: string;
     matricula?: string;
     horas_contratadas?: string;
     tipo_contratacao?: string;

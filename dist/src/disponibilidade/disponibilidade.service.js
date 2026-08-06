@@ -60,7 +60,7 @@ let DisponibilidadeService = class DisponibilidadeService {
                 status = 'INDISPONIVEL';
             }
             else {
-                if (colab.turno_base?.includes('12x36')) {
+                if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
                     status = 'LIVRE (Folga 36h)';
                     horasRestantes = 12;
                 }
@@ -84,7 +84,6 @@ let DisponibilidadeService = class DisponibilidadeService {
                 nome: colab.nome,
                 tipo_contratacao: colab.tipo_contratacao,
                 horas_contratadas: colab.horas_contratadas,
-                turno_base: colab.turno_base,
                 localizacao: colab.localizacao,
                 endereco: colab.endereco,
                 horasRestantes,
@@ -107,9 +106,6 @@ let DisponibilidadeService = class DisponibilidadeService {
             });
             if (posto?.cliente?.cidade) {
                 cidadeAlvo = posto.cliente.cidade;
-            }
-            if (!papelAlvo && posto?.categoria_posto) {
-                papelAlvo = posto.categoria_posto;
             }
         }
         const colaboradores = await this.prisma.dBColab.findMany({
@@ -169,7 +165,7 @@ let DisponibilidadeService = class DisponibilidadeService {
                 prioridade = 99;
                 tipoDisponibilidade = colab.situacao_disponibilidade || 'Indisponível';
             }
-            else if (colab.turno_base?.includes('12x36')) {
+            else if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
                 prioridade = 3;
                 tipoDisponibilidade = 'Folga (12x36)';
             }
@@ -212,7 +208,6 @@ let DisponibilidadeService = class DisponibilidadeService {
                 id: colab.id,
                 nome: colab.nome,
                 papel: colab.papel,
-                turno_base: colab.turno_base,
                 situacao_disponibilidade: colab.situacao_disponibilidade,
                 tipoDisponibilidade,
                 prioridade,

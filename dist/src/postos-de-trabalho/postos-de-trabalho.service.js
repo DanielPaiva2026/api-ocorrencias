@@ -57,7 +57,7 @@ let PostosDeTrabalhoService = class PostosDeTrabalhoService {
             }
         }
         let horasRestantes = 0;
-        if (colab.turno_base?.includes('12x36')) {
+        if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
             horasRestantes = 12;
         }
         else {
@@ -74,9 +74,8 @@ let PostosDeTrabalhoService = class PostosDeTrabalhoService {
             const endColab = (colab.endereco || '').toLowerCase();
             const locColab = (colab.localizacao || '').toLowerCase();
             const mesma_cidade = cidadePosto && (endColab.includes(cidadePosto) || locColab.includes(cidadePosto));
-            const catPosto = (posto.categoria_posto || '').toLowerCase();
             const papelColab = (colab.papel || '').toLowerCase();
-            const mesma_funcao = catPosto && papelColab.includes(catPosto);
+            const mesma_funcao = false;
             let horas_compativeis = true;
             if (posto.horas_diarias) {
                 const hPosto = parseInt(posto.horas_diarias.split(':')[0], 10) || 44;
@@ -116,8 +115,7 @@ let PostosDeTrabalhoService = class PostosDeTrabalhoService {
             data: {
                 exige_nr32: data.exige_nr32,
                 exige_nr35: data.exige_nr35,
-                horas_diarias: data.horas_diarias,
-                categoria_posto: data.categoria_posto
+                horas_diarias: data.horas_diarias
             }
         });
     }
