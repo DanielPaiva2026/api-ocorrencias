@@ -64,10 +64,9 @@ model DBColab {
   papel      String
   cep        String
   endereco   String
-  turno_base String // ex: "12x36 Dia", "12x36 Noite", "5x2"
 
   // Novos campos (Informação Cadastral)
-  rg                  String?
+  carteira_trabalho   String?
   cpf                 String?
   telefone_principal  String?
   is_whatsapp         Boolean  @default(false)
@@ -89,6 +88,7 @@ model DBColab {
   localizacao              String?
   sub_local                String?
   admissao                 String?
+  prazo_experiencia        String?
   contrato_experiencia_dias Int?
   experiencia_1            String?
   experiencia_2            String?
@@ -137,11 +137,11 @@ model PostoDeTrabalho {
   id               String  @id @default(uuid())
   cliente_id       String
   codigo           String  @unique // ex: "AG037 - MD-B/U"
-  categoria_posto  String? // ex: "PORTEIRO", "LIMPADOR"
-  turno            String? // ex: "DIURNO", "NOTURNO"
-  tipo_escala      String? // ex: "12 por 36", "B - 44 horas"
   descricao_escala String? // texto livre da planilha
   horas_diarias    String? // ex: "44:00:00"
+  cesta_basica     String?
+  insalubridade    String?
+  feriados         String?
   exige_nr32       Boolean @default(false)
   exige_nr35       Boolean @default(false)
 
