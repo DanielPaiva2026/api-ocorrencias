@@ -24,6 +24,20 @@ function parseDate(dateStr: string | number | null | undefined): string | null {
   return str;
 }
 
+function parseHours(val: string | number | null | undefined): string | null {
+  if (val === null || val === undefined) return null;
+  if (typeof val === 'number') {
+    if (val < 10) {
+      const hours = Math.round(val * 24);
+      return `${hours}h`;
+    }
+    return `${val}h`;
+  }
+  const str = String(val).trim();
+  if (str === '' || str === '-' || str === 'N/A') return null;
+  return str;
+}
+
 function parseBoolean(val: any): boolean {
   if (!val) return false;
   const str = String(val).trim().toUpperCase();
@@ -85,6 +99,7 @@ async function run() {
       cliente = await prisma.dBCliente.update({
         where: { id: cliente.id },
         data: {
+          status: 'Ativo',
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
           cnpj: c.cnpj,
@@ -105,6 +120,7 @@ async function run() {
     } else {
       cliente = await prisma.dBCliente.create({
         data: {
+          status: 'Ativo',
           codigo: codigo,
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
@@ -150,7 +166,7 @@ async function run() {
         cliente_id: clienteId,
         codigo: codigoPosto,
         descricao_escala: p['DESCRIÇÃO DA ESCALA - dia da semana + horario'] || null,
-        horas_diarias: p['HORAS DIÁRIAS']?.toString() || null,
+        horas_diarias: parseHours(p['HORAS DIÁRIAS']),
         exige_nr32: parseBoolean(p['exigencia_nr32']),
         exige_nr35: parseBoolean(p['exigencia_nr35']),
         cesta_basica: p['CESTA BASICA']?.toString() || null,
@@ -199,7 +215,7 @@ async function run() {
 
         status_cadastro: c['status_cadastro'] || null,
         tipo_contratacao: c['tipo_contratacao'] || null,
-        horas_contratadas: c['horas_contratadas']?.toString() || null,
+        horas_contratadas: parseHours(c['horas_contratadas']),
         categoria_cargo: c['categoria_cargo'] || null,
         matricula: c['Matrc']?.toString() || null,
         ctps: c['Carteira de Trabalho']?.toString() || null, 
