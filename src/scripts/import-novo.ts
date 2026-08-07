@@ -100,7 +100,8 @@ async function run() {
       cliente = await prisma.dBCliente.update({
         where: { id: cliente.id },
         data: {
-          status: 'ATIVO',
+          status: 'Ativo',
+          status_contrato: 'Ativo',
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
           cnpj: c.cnpj,
@@ -121,7 +122,8 @@ async function run() {
     } else {
       cliente = await prisma.dBCliente.create({
         data: {
-          status: 'ATIVO',
+          status: 'Ativo',
+          status_contrato: 'Ativo',
           codigo: codigo,
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
