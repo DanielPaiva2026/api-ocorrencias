@@ -24,14 +24,15 @@ function parseDate(dateStr: string | number | null | undefined): string | null {
   return str;
 }
 
-function parseHours(val: string | number | null | undefined): string | null {
+function parseHours(val: any): string | null {
   if (val === null || val === undefined) return null;
-  if (typeof val === 'number') {
-    if (val < 10) {
-      const hours = Math.round(val * 24);
+  const num = Number(val);
+  if (!isNaN(num) && typeof val !== 'boolean' && String(val).trim() !== '') {
+    if (num < 10 && num > 0) { // fraction of a day (excel time)
+      const hours = Math.round(num * 24);
       return `${hours}h`;
     }
-    return `${val}h`;
+    return `${num}h`;
   }
   const str = String(val).trim();
   if (str === '' || str === '-' || str === 'N/A') return null;
@@ -99,7 +100,7 @@ async function run() {
       cliente = await prisma.dBCliente.update({
         where: { id: cliente.id },
         data: {
-          status: 'Ativo',
+          status: 'ATIVO',
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
           cnpj: c.cnpj,
@@ -120,7 +121,7 @@ async function run() {
     } else {
       cliente = await prisma.dBCliente.create({
         data: {
-          status: 'Ativo',
+          status: 'ATIVO',
           codigo: codigo,
           nome_razao: c.razao_social,
           razao_social: c.razao_social,
@@ -185,7 +186,7 @@ async function run() {
   const mapColabs = new Map<string, string>(); // CPF -> colab.id
 
   for (const c of colabData) {
-    const cpfRaw = String(c['CPF'] || '').trim();
+    const cpfRaw = String(c['CPF'] || '').trim().replace(/\D/g, '');
     if (!cpfRaw) continue;
 
     const vacina = parseDate(c['Vencimento Férias']); 
@@ -244,7 +245,7 @@ async function run() {
 
   for (const a of alocacaoData) {
     const codPosto = String(a['CODIGO POSTO'] || '').trim();
-    const cpfRaw = String(a['CPF'] || '').trim();
+    const cpfRaw = String(a['CPF'] || '').trim().replace(/\D/g, '');
 
     if (!codPosto || !cpfRaw) continue;
 

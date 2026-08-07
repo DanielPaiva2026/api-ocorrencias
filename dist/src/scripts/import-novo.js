@@ -55,6 +55,22 @@ function parseDate(dateStr) {
         return null;
     return str;
 }
+function parseHours(val) {
+    if (val === null || val === undefined)
+        return null;
+    const num = Number(val);
+    if (!isNaN(num) && typeof val !== 'boolean' && String(val).trim() !== '') {
+        if (num < 10 && num > 0) {
+            const hours = Math.round(num * 24);
+            return `${hours}h`;
+        }
+        return `${num}h`;
+    }
+    const str = String(val).trim();
+    if (str === '' || str === '-' || str === 'N/A')
+        return null;
+    return str;
+}
 function parseBoolean(val) {
     if (!val)
         return false;
@@ -101,6 +117,7 @@ async function run() {
             cliente = await prisma.dBCliente.update({
                 where: { id: cliente.id },
                 data: {
+                    status: 'ATIVO',
                     nome_razao: c.razao_social,
                     razao_social: c.razao_social,
                     cnpj: c.cnpj,
@@ -122,6 +139,7 @@ async function run() {
         else {
             cliente = await prisma.dBCliente.create({
                 data: {
+                    status: 'ATIVO',
                     codigo: codigo,
                     nome_razao: c.razao_social,
                     razao_social: c.razao_social,
@@ -162,7 +180,7 @@ async function run() {
                 cliente_id: clienteId,
                 codigo: codigoPosto,
                 descricao_escala: p['DESCRIÇÃO DA ESCALA - dia da semana + horario'] || null,
-                horas_diarias: p['HORAS DIÁRIAS']?.toString() || null,
+                horas_diarias: parseHours(p['HORAS DIÁRIAS']),
                 exige_nr32: parseBoolean(p['exigencia_nr32']),
                 exige_nr35: parseBoolean(p['exigencia_nr35']),
                 cesta_basica: p['CESTA BASICA']?.toString() || null,
@@ -177,7 +195,7 @@ async function run() {
     const colabData = xlsx.utils.sheet_to_json(colabSheet);
     const mapColabs = new Map();
     for (const c of colabData) {
-        const cpfRaw = String(c['CPF'] || '').trim();
+        const cpfRaw = String(c['CPF'] || '').trim().replace(/\D/g, '');
         if (!cpfRaw)
             continue;
         const vacina = parseDate(c['Vencimento Férias']);
@@ -203,7 +221,7 @@ async function run() {
                 uf: c['uf'] || null,
                 status_cadastro: c['status_cadastro'] || null,
                 tipo_contratacao: c['tipo_contratacao'] || null,
-                horas_contratadas: c['horas_contratadas']?.toString() || null,
+                horas_contratadas: parseHours(c['horas_contratadas']),
                 categoria_cargo: c['categoria_cargo'] || null,
                 matricula: c['Matrc']?.toString() || null,
                 ctps: c['Carteira de Trabalho']?.toString() || null,
@@ -226,7 +244,7 @@ async function run() {
     const alocacaoData = xlsx.utils.sheet_to_json(alocacaoSheet);
     for (const a of alocacaoData) {
         const codPosto = String(a['CODIGO POSTO'] || '').trim();
-        const cpfRaw = String(a['CPF'] || '').trim();
+        const cpfRaw = String(a['CPF'] || '').trim().replace(/\D/g, '');
         if (!codPosto || !cpfRaw)
             continue;
         const postoId = mapPostos.get(codPosto);
