@@ -271,6 +271,30 @@ async function run() {
     }
   }
 
+  console.log('--- Atualizando Situação de Disponibilidade ---');
+  const allColabs = await prisma.dBColab.findMany({
+    include: { alocacoes: true }
+  });
+
+  for (const colab of allColabs) {
+    const sit = (colab.situacao_disponibilidade || '').toUpperCase();
+    const isSpecialStatus = sit.includes('INSS') || sit.includes('FÉRIAS') || sit.includes('FERIAS') || sit.includes('ATESTADO');
+
+    if (!isSpecialStatus) {
+      if (colab.alocacoes.length > 0) {
+        await prisma.dBColab.update({
+          where: { id: colab.id },
+          data: { situacao_disponibilidade: 'Alocado' }
+        });
+      } else {
+        await prisma.dBColab.update({
+          where: { id: colab.id },
+          data: { situacao_disponibilidade: 'Disponível' }
+        });
+      }
+    }
+  }
+
   console.log('====================================');
   console.log('IMPORTAÇÃO CONCLUÍDA COM SUCESSO!');
   console.log('====================================');
