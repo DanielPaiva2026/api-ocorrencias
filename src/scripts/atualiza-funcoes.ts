@@ -84,34 +84,41 @@ async function run() {
     let alocados = 0;
 
     for (const a of alocacaoData) {
-      const codPosto = String(a['CODIGO POSTO'] || a['Código Posto'] || '').trim();
-      let raw = String(a['CPF'] || '').trim().replace(/\D/g, '');
-      let cpfRaw = raw;
-      if (raw && raw.length < 11) {
-          cpfRaw = raw.padStart(11, '0');
-      }
+      const pairs = [
+        { cod: a['CODIGO POSTO'] || a['Código Posto'], cpf: a['CPF'] },
+        { cod: a['CODIGO POSTO_1'], cpf: a['CPF_1'] }
+      ];
 
-      if (!codPosto || !cpfRaw) continue;
-
-      const colab = await prisma.dBColab.findFirst({ where: { cpf: cpfRaw } });
-      const postoId = mapPostos.get(codPosto);
-
-      if (postoId && colab) {
-        // Checar se a alocação já existe caso haja linha repetida no excel
-        const existe = await prisma.alocacao.findFirst({
-          where: { posto_id: postoId, colab_id: colab.id }
-        });
-        if (!existe) {
-          await prisma.alocacao.create({
-            data: {
-              posto_id: postoId,
-              colab_id: colab.id
-            }
-          });
-          alocados++;
+      for (const pair of pairs) {
+        const codPosto = String(pair.cod || '').trim();
+        let raw = String(pair.cpf || '').trim().replace(/\D/g, '');
+        let cpfRaw = raw;
+        if (raw && raw.length < 11) {
+            cpfRaw = raw.padStart(11, '0');
         }
-      } else {
-        console.warn(`Aviso: Posto ${codPosto} ou CPF ${cpfRaw} não localizados para alocação.`);
+
+        if (!codPosto || !cpfRaw) continue;
+
+        const colab = await prisma.dBColab.findFirst({ where: { cpf: cpfRaw } });
+        const postoId = mapPostos.get(codPosto);
+
+        if (postoId && colab) {
+          // Checar se a alocação já existe caso haja linha repetida no excel
+          const existe = await prisma.alocacao.findFirst({
+            where: { posto_id: postoId, colab_id: colab.id }
+          });
+          if (!existe) {
+            await prisma.alocacao.create({
+              data: {
+                posto_id: postoId,
+                colab_id: colab.id
+              }
+            });
+            alocados++;
+          }
+        } else {
+          console.warn(`Aviso: Posto ${codPosto} ou CPF ${cpfRaw} não localizados para alocação.`);
+        }
       }
     }
     console.log(`Novas alocações criadas: ${alocados}.`);
