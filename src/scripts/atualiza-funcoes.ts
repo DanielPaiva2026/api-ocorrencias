@@ -12,7 +12,7 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter } as any);
 
 async function run() {
-  const filePath = path.join(__dirname, '..', '..', 'alpiserra.xlsx');
+  const filePath = path.join(process.cwd(), 'alpiserra.xlsx');
   console.log(`Lendo arquivo: ${filePath}`);
   
   if (!fs.existsSync(filePath)) {
