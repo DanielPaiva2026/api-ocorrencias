@@ -12,7 +12,7 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter } as any);
 
 async function run() {
-  const filePath = path.join(__dirname, '..', '..', '..', 'alpiserra.xlsx');
+  const filePath = path.join(__dirname, '..', '..', 'alpiserra.xlsx');
   console.log(`Lendo arquivo: ${filePath}`);
   
   if (!fs.existsSync(filePath)) {
@@ -32,7 +32,12 @@ async function run() {
     let naoEncontrados = 0;
 
     for (const row of funcoesData) {
-      const cpfRaw = String(row['CPF'] || '').trim().replace(/\D/g, '');
+      let raw = String(row['CPF'] || '').trim().replace(/\D/g, '');
+      let cpfRaw = raw;
+      if (raw && raw.length < 11) {
+          cpfRaw = raw.padStart(11, '0');
+      }
+      
       const novaFuncao = String(row['Função real'] || row['Função Real'] || row['Funcao'] || '').trim();
       const nivelAtuacao = String(row['Nivel de Atuação'] || row['Nível de Atuação'] || row['Nível de Atuacao'] || row['Nivel de Atuacao'] || '').trim();
 
@@ -80,7 +85,11 @@ async function run() {
 
     for (const a of alocacaoData) {
       const codPosto = String(a['CODIGO POSTO'] || a['Código Posto'] || '').trim();
-      const cpfRaw = String(a['CPF'] || '').trim().replace(/\D/g, '');
+      let raw = String(a['CPF'] || '').trim().replace(/\D/g, '');
+      let cpfRaw = raw;
+      if (raw && raw.length < 11) {
+          cpfRaw = raw.padStart(11, '0');
+      }
 
       if (!codPosto || !cpfRaw) continue;
 
