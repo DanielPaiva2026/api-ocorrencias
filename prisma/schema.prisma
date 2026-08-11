@@ -62,6 +62,7 @@ model DBColab {
   id         String @id @default(uuid())
   nome       String
   papel      String
+  nivel_atuacao String?
   cep        String
   endereco   String
 
