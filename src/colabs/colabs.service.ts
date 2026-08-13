@@ -123,19 +123,24 @@ export class ColabsService {
   }
 
   async uploadCsv(file: any) {
-    const results: any[] = [];
-    const csvParserObj = typeof csvParser === 'function' ? csvParser : (csvParser as any).default || csvParser;
-    return new Promise((resolve, reject) => {
-      const fileStr = file.buffer.toString('utf-8');
-      const firstLine = fileStr.split('\n')[0] || '';
-      const separator = firstLine.includes(';') ? ';' : ',';
+    try {
+      if (!file || !file.buffer) {
+        return { success: false, message: 'Arquivo não recebido ou vazio. Tente reenviar.' };
+      }
+      const results: any[] = [];
+      const csvParserObj = typeof csvParser === 'function' ? csvParser : (csvParser as any).default || csvParser;
+      return await new Promise((resolve) => {
+        try {
+          const fileStr = file.buffer.toString('utf-8');
+          const firstLine = fileStr.split('\n')[0] || '';
+          const separator = firstLine.includes(';') ? ';' : ',';
 
-      Readable.from(file.buffer)
-        .pipe(csvParserObj({ 
-            separator,
-            mapHeaders: ({ header }: { header: string }) => header ? header.replace(/^\ufeff/, '').toLowerCase().normalize('NFD').replace(/[^a-z0-9\s_]/g, '').trim().replace(/\s+/g, '_') : null
-        }))
-        .on('data', (data: any) => {
+          Readable.from(file.buffer)
+            .pipe(csvParserObj({ 
+                separator,
+                mapHeaders: ({ header }: { header: string }) => header ? header.replace(/^\ufeff/, '').toLowerCase().normalize('NFD').replace(/[^a-z0-9\s_]/g, '').trim().replace(/\s+/g, '_') : null
+            }))
+            .on('data', (data: any) => {
            const nome = data.nome || data.name;
            const cargo = data.categoria_cargo || data.papel || data.funcao || data.funo;
            if (nome && cargo && String(nome).trim() !== '') {
@@ -237,7 +242,15 @@ export class ColabsService {
           }
         })
         .on('error', (error: any) => resolve({ success: false, message: 'Erro no Arquivo: ' + (error.message || String(error)) }));
-    });
+        } catch (error: any) {
+           console.error('ERRO SINCRONO NO PARSE DO CSV:', error);
+           resolve({ success: false, message: 'Erro ao analisar arquivo: ' + (error.message || String(error)) });
+        }
+      });
+    } catch (error: any) {
+      console.error('ERRO GERAL NO UPLOAD:', error);
+      return { success: false, message: 'Erro fatal ao processar upload: ' + (error.message || String(error)) };
+    }
   }
 
   async updateStatus(id: string, status: string) {
