@@ -126,15 +126,29 @@ export class ColabsService {
     const results: any[] = [];
     const csvParserObj = typeof csvParser === 'function' ? csvParser : (csvParser as any).default || csvParser;
     return new Promise((resolve, reject) => {
+      const fileStr = file.buffer.toString('utf-8');
+      const firstLine = fileStr.split('\n')[0] || '';
+      const separator = firstLine.includes(';') ? ';' : ',';
+
       Readable.from(file.buffer)
-        .pipe(csvParserObj({ separator: ',' }))
+        .pipe(csvParserObj({ 
+            separator,
+            mapHeaders: ({ header }: { header: string }) => header ? header.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, '_') : null
+        }))
         .on('data', (data: any) => {
-          const cargo = data.categoria_cargo || data.papel;
-          if (data.nome && cargo) {
+           const nome = data.nome || data.name;
+           const cargo = data.categoria_cargo || data.papel || data.funcao;
+           if (nome && cargo) {
+                 let admissao = data.data_de_admissao || data.admissao || null;
+                 if (admissao && !isNaN(Number(admissao))) {
+                    const date = new Date((Number(admissao) - (25567 + 2)) * 86400 * 1000);
+                    admissao = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+                 }
                  let exp1 = data.experiencia_1 || null;
                  let exp2 = data.experiencia_2 || null;
-                 if (data.admissao && data.contrato_experiencia_dias) {
-                     const dias = parseInt(data.contrato_experiencia_dias, 10);
+                 let prazoExp = data.prazo_de_experiencia || data.contrato_experiencia_dias || null;
+                 if (admissao && prazoExp) {
+                     const dias = parseInt(prazoExp, 10);
                      if (!isNaN(dias)) {
                          const addDays = (dateStr: string, d: number) => {
                              const parts = dateStr.split('/');
@@ -148,23 +162,44 @@ export class ColabsService {
                              }
                              return null;
                          };
-                         exp1 = addDays(data.admissao, dias) || exp1;
+                         exp1 = addDays(admissao, dias) || exp1;
                          exp2 = exp1 ? (addDays(exp1, dias) || exp2) : exp2;
                      }
                  }
 
+                 let isWhatsapp = false;
+                 if (data.is_whatsapp) {
+                    const wStr = String(data.is_whatsapp).toLowerCase().trim();
+                    isWhatsapp = wStr === 'sim' || wStr === 'true' || wStr === '1';
+                 }
+
+                 let dataAso = data.data_exame_admissional_aso || data.data_aso || null;
+                 if (dataAso && !isNaN(Number(dataAso))) {
+                    const date = new Date((Number(dataAso) - (25567 + 2)) * 86400 * 1000);
+                    dataAso = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+                 }
+
                  results.push({
-                 nome: data.nome,
-                 matricula: data.matricula || null,
+                 nome: nome,
+                 matricula: data.matricula ? String(data.matricula) : null,
                  categoria_cargo: cargo,
-                 // turno_base: data.turno_base,
                  cep: data.cep || '00000-000',
-                 endereco: data.endereco || 'Endereço não informado',
-                 horas_contratadas: data.horas_contratadas || null,
+                 endereco: data.endereco || data.logradouro || 'Endereço não informado',
+                 logradouro: data.logradouro || null,
+                 numero: data.numero ? String(data.numero) : null,
+                 bairro: data.bairro || null,
+                 cidade: data.cidade || null,
+                 uf: data.uf || null,
+                 cpf: data.cpf ? String(data.cpf) : null,
+                 telefone_principal: data.telefone_principal ? String(data.telefone_principal) : null,
+                 is_whatsapp: isWhatsapp,
+                 telefone_secundario: data.telefone_secundario ? String(data.telefone_secundario) : null,
+                 horas_contratadas: data.horas_contratadas ? String(data.horas_contratadas) : null,
                  tipo_contratacao: data.tipo_contratacao || null,
-                 status_cadastro: data.status_cadastro || null,
-                 admissao: data.admissao || null,
-                 ctps: data.ctps || null,
+                 status_cadastro: data.status_cadastro || 'ativo',
+                 admissao: admissao,
+                 ctps: data.ctps ? String(data.ctps) : null,
+                 contrato_experiencia_dias: prazoExp ? parseInt(prazoExp, 10) : null,
                  experiencia_1: exp1,
                  experiencia_2: exp2,
                  situacao_disponibilidade: data.situacao_disponibilidade || null,
@@ -176,7 +211,7 @@ export class ColabsService {
                  reciclagem_nr32: data.reciclagem_nr32 || null,
                  data_nr35: data.data_nr35 || null,
                  reciclagem_nr35: data.reciclagem_nr35 || null,
-                 data_aso: data.data_aso || null,
+                 data_aso: dataAso,
                  reciclagem_aso: data.reciclagem_aso || null,
                });
           }
