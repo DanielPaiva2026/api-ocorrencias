@@ -164,21 +164,21 @@ let ColabsService = class ColabsService {
             stream_1.Readable.from(file.buffer)
                 .pipe(csvParserObj({
                 separator,
-                mapHeaders: ({ header }) => header ? header.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, '_') : null
+                mapHeaders: ({ header }) => header ? header.replace(/^\ufeff/, '').toLowerCase().normalize('NFD').replace(/[^a-z0-9\s_]/g, '').trim().replace(/\s+/g, '_') : null
             }))
                 .on('data', (data) => {
                 const nome = data.nome || data.name;
-                const cargo = data.categoria_cargo || data.papel || data.funcao;
-                if (nome && cargo) {
-                    let admissao = data.data_de_admissao || data.admissao || null;
-                    if (admissao && !isNaN(Number(admissao))) {
+                const cargo = data.categoria_cargo || data.papel || data.funcao || data.funo;
+                if (nome && cargo && String(nome).trim() !== '') {
+                    let admissao = data.data_de_admissao || data.data_de_admisso || data.admissao || null;
+                    if (admissao && String(admissao).trim() !== '' && !isNaN(Number(admissao))) {
                         const date = new Date((Number(admissao) - (25567 + 2)) * 86400 * 1000);
                         admissao = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
                     }
                     let exp1 = data.experiencia_1 || null;
                     let exp2 = data.experiencia_2 || null;
-                    let prazoExp = data.prazo_de_experiencia || data.contrato_experiencia_dias || null;
-                    if (admissao && prazoExp) {
+                    let prazoExp = data.prazo_de_experiencia || data.prazo_de_experincia || data.contrato_experiencia_dias || null;
+                    if (admissao && prazoExp && String(prazoExp).trim() !== '') {
                         const dias = parseInt(prazoExp, 10);
                         if (!isNaN(dias)) {
                             const addDays = (dateStr, d) => {
@@ -203,13 +203,19 @@ let ColabsService = class ColabsService {
                         isWhatsapp = wStr === 'sim' || wStr === 'true' || wStr === '1';
                     }
                     let dataAso = data.data_exame_admissional_aso || data.data_aso || null;
-                    if (dataAso && !isNaN(Number(dataAso))) {
+                    if (dataAso && String(dataAso).trim() !== '' && !isNaN(Number(dataAso))) {
                         const date = new Date((Number(dataAso) - (25567 + 2)) * 86400 * 1000);
                         dataAso = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
                     }
+                    let parsedDiasExp = null;
+                    if (prazoExp && String(prazoExp).trim() !== '') {
+                        const parsed = parseInt(prazoExp, 10);
+                        if (!isNaN(parsed))
+                            parsedDiasExp = parsed;
+                    }
                     results.push({
-                        nome: nome,
-                        matricula: data.matricula ? String(data.matricula) : null,
+                        nome: String(nome).trim(),
+                        matricula: data.matricula ? String(data.matricula).trim() : null,
                         categoria_cargo: cargo,
                         cep: data.cep || '00000-000',
                         endereco: data.endereco || data.logradouro || 'Endereço não informado',
@@ -225,9 +231,9 @@ let ColabsService = class ColabsService {
                         horas_contratadas: data.horas_contratadas ? String(data.horas_contratadas) : null,
                         tipo_contratacao: data.tipo_contratacao || null,
                         status_cadastro: data.status_cadastro || 'ativo',
-                        admissao: admissao,
-                        ctps: data.ctps ? String(data.ctps) : null,
-                        contrato_experiencia_dias: prazoExp ? parseInt(prazoExp, 10) : null,
+                        admissao: admissao ? String(admissao).trim() : null,
+                        ctps: data.ctps ? String(data.ctps).trim() : null,
+                        contrato_experiencia_dias: parsedDiasExp,
                         experiencia_1: exp1,
                         experiencia_2: exp2,
                         situacao_disponibilidade: data.situacao_disponibilidade || null,
@@ -255,6 +261,7 @@ let ColabsService = class ColabsService {
                     resolve({ success: true, count: results.length });
                 }
                 catch (error) {
+                    console.error('ERRO NO PRISMA AO IMPORTAR CSV:', error);
                     reject(error);
                 }
             })

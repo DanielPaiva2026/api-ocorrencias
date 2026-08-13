@@ -133,20 +133,20 @@ export class ColabsService {
       Readable.from(file.buffer)
         .pipe(csvParserObj({ 
             separator,
-            mapHeaders: ({ header }: { header: string }) => header ? header.replace(/^\ufeff/, '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().replace(/\s+/g, '_') : null
+            mapHeaders: ({ header }: { header: string }) => header ? header.replace(/^\ufeff/, '').toLowerCase().normalize('NFD').replace(/[^a-z0-9\s_]/g, '').trim().replace(/\s+/g, '_') : null
         }))
         .on('data', (data: any) => {
            const nome = data.nome || data.name;
-           const cargo = data.categoria_cargo || data.papel || data.funcao;
+           const cargo = data.categoria_cargo || data.papel || data.funcao || data.funo;
            if (nome && cargo && String(nome).trim() !== '') {
-                 let admissao = data.data_de_admissao || data.admissao || null;
+                 let admissao = data.data_de_admissao || data.data_de_admisso || data.admissao || null;
                  if (admissao && String(admissao).trim() !== '' && !isNaN(Number(admissao))) {
                     const date = new Date((Number(admissao) - (25567 + 2)) * 86400 * 1000);
                     admissao = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
                  }
                  let exp1 = data.experiencia_1 || null;
                  let exp2 = data.experiencia_2 || null;
-                 let prazoExp = data.prazo_de_experiencia || data.contrato_experiencia_dias || null;
+                 let prazoExp = data.prazo_de_experiencia || data.prazo_de_experincia || data.contrato_experiencia_dias || null;
                  if (admissao && prazoExp && String(prazoExp).trim() !== '') {
                      const dias = parseInt(prazoExp, 10);
                      if (!isNaN(dias)) {
