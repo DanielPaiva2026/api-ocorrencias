@@ -231,12 +231,12 @@ export class ColabsService {
               });
             }
             resolve({ success: true, count: results.length });
-          } catch (error) {
+          } catch (error: any) {
             console.error('ERRO NO PRISMA AO IMPORTAR CSV:', error);
-            reject(error);
+            resolve({ success: false, message: 'Erro Banco de Dados: ' + (error.message || String(error)) });
           }
         })
-        .on('error', (error: any) => reject(error));
+        .on('error', (error: any) => resolve({ success: false, message: 'Erro no Arquivo: ' + (error.message || String(error)) }));
     });
   }
 
