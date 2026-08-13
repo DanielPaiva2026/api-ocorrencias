@@ -17,13 +17,13 @@ export class DisponibilidadeController {
   @ApiOperation({ summary: 'Listar possíveis substitutos para uma ocorrência ordenados por prioridade' })
   getSubstitutos(
     @Query('posto_id') postoId?: string,
-    @Query('papel') papel?: string,
+    @Query('categoria_cargo') categoria_cargo?: string,
     @Query('data') data?: string,
     @Query('exige_nr32') exige_nr32?: string,
     @Query('exige_nr35') exige_nr35?: string,
   ) {
     const nr32 = exige_nr32 === 'true';
     const nr35 = exige_nr35 === 'true';
-    return this.disponibilidadeService.getSubstitutos(postoId, papel, data, nr32, nr35);
+    return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35);
   }
 }

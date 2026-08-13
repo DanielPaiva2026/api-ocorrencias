@@ -201,7 +201,6 @@ async function run() {
     const colab = await prisma.dBColab.create({
       data: {
         nome: c['nome'] || 'Sem Nome',
-        papel: 'OPERACIONAL',
         cep: String(c['cep'] || ''),
         endereco: c['logradouro'] || '',
         

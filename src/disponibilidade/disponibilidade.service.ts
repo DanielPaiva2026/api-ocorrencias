@@ -91,7 +91,7 @@ export class DisponibilidadeService {
     return livres;
   }
 
-  async getSubstitutos(postoId?: string, papelAlvo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean) {
+  async getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean) {
     let targetDate = new Date();
     if (data) {
       targetDate = new Date(data);
@@ -222,7 +222,7 @@ export class DisponibilidadeService {
         return {
           id: colab.id,
           nome: colab.nome,
-          papel: colab.papel,
+          categoria_cargo: colab.categoria_cargo,
           // turno_base removido
           situacao_disponibilidade: colab.situacao_disponibilidade,
           tipoDisponibilidade,
@@ -258,9 +258,9 @@ export class DisponibilidadeService {
       if (a.scoreDistancia !== b.scoreDistancia) return a.scoreDistancia - b.scoreDistancia;
       
       // Desempate por papel (se papel for igual ao alvo, ganha)
-      if (papelAlvo) {
-        const aMesmoPapel = a.papel.toLowerCase().includes(papelAlvo.toLowerCase());
-        const bMesmoPapel = b.papel.toLowerCase().includes(papelAlvo.toLowerCase());
+      if (categoria_cargo) {
+        const aMesmoPapel = (a.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
+        const bMesmoPapel = (b.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
         if (aMesmoPapel && !bMesmoPapel) return -1;
         if (!aMesmoPapel && bMesmoPapel) return 1;
       }

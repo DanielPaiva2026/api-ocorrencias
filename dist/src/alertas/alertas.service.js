@@ -138,15 +138,19 @@ let AlertasService = AlertasService_1 = class AlertasService {
                     }
                 }
             };
-            checkAlert(colab.reciclagem_integracao, 'Integração', ['RH', 'TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🎓');
+            const diasAlvo = [30, 15, 5, 0];
+            checkAlert(colab.reciclagem_integracao, 'Integração', ['TEC_SEGURANCA', 'ADMIN'], diasAlvo, '🎓');
+            checkAlert(colab.seguranca_medicina_reciclagem, 'Segurança e Medicina do Trabalho', ['TEC_SEGURANCA', 'ADMIN'], diasAlvo, '🛡️');
+            checkAlert(colab.manual_conduta_reciclagem, 'Manual de Conduta', ['RH', 'ADMIN'], diasAlvo, '📘');
+            checkAlert(colab.treino_basico_reciclagem, 'Treinamento Básico da Operação', ['GERENCIA', 'COORDENADOR', 'ADMIN'], diasAlvo, '⚙️');
             if (colab.reciclagem_nr32 && colab.reciclagem_nr32 !== '-' && colab.reciclagem_nr32.trim() !== '') {
-                checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🛡️');
+                checkAlert(colab.reciclagem_nr32, 'NR-32', ['TEC_SEGURANCA', 'ADMIN'], diasAlvo, '🛡️');
             }
             if (colab.reciclagem_nr35 && colab.reciclagem_nr35 !== '-' && colab.reciclagem_nr35.trim() !== '') {
-                checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], [20, 5, 0], '🛡️');
+                checkAlert(colab.reciclagem_nr35, 'NR-35', ['TEC_SEGURANCA', 'ADMIN'], diasAlvo, '🛡️');
             }
-            checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0], '🩺');
-            checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], [20, 5, 0], '🩺');
+            checkAlert(colab.reciclagem_aso, 'ASO', ['COORDENADOR', 'RH', 'ADMIN'], diasAlvo, '🩺');
+            checkAlert(colab.exame_complementar_retorno, 'Exames Complementares', ['COORDENADOR', 'RH', 'ADMIN'], diasAlvo, '🩺');
         }
     }
     async enviarMensagemParaPerfil(perfil, mensagem) {

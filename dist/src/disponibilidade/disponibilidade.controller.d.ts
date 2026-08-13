@@ -33,10 +33,10 @@ export declare class DisponibilidadeController {
             colab_id: string;
         })[];
     }[]>;
-    getSubstitutos(postoId?: string, papel?: string, data?: string, exige_nr32?: string, exige_nr35?: string): Promise<{
+    getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: string, exige_nr35?: string): Promise<{
         id: string;
         nome: string;
-        papel: string;
+        categoria_cargo: string | null;
         situacao_disponibilidade: string | null;
         tipoDisponibilidade: string;
         prioridade: number;

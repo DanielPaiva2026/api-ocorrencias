@@ -24,10 +24,10 @@ let DisponibilidadeController = class DisponibilidadeController {
     getLivres() {
         return this.disponibilidadeService.getLivres();
     }
-    getSubstitutos(postoId, papel, data, exige_nr32, exige_nr35) {
+    getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35) {
         const nr32 = exige_nr32 === 'true';
         const nr35 = exige_nr35 === 'true';
-        return this.disponibilidadeService.getSubstitutos(postoId, papel, data, nr32, nr35);
+        return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35);
     }
 };
 exports.DisponibilidadeController = DisponibilidadeController;
@@ -42,7 +42,7 @@ __decorate([
     (0, common_1.Get)('substitutos'),
     (0, swagger_1.ApiOperation)({ summary: 'Listar possíveis substitutos para uma ocorrência ordenados por prioridade' }),
     __param(0, (0, common_1.Query)('posto_id')),
-    __param(1, (0, common_1.Query)('papel')),
+    __param(1, (0, common_1.Query)('categoria_cargo')),
     __param(2, (0, common_1.Query)('data')),
     __param(3, (0, common_1.Query)('exige_nr32')),
     __param(4, (0, common_1.Query)('exige_nr35')),

@@ -17,7 +17,7 @@ export class RelatoriosService {
       where: { 
         OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: null }]
       },
-      select: { id: true, nome: true, papel: true, reciclagem_integracao: true, reciclagem_nr32: true, reciclagem_nr35: true, reciclagem_aso: true },
+      select: { id: true, nome: true, categoria_cargo: true, reciclagem_integracao: true, reciclagem_nr32: true, reciclagem_nr35: true, reciclagem_aso: true },
     });
 
     const hoje = new Date();
@@ -33,7 +33,7 @@ export class RelatoriosService {
         alertas.push({
           colabId: colab.id,
           colabNome: colab.nome,
-          papel: colab.papel,
+          categoria_cargo: colab.categoria_cargo,
           tipo,
           dataVencimento: dataStr,
           diasRestantes,

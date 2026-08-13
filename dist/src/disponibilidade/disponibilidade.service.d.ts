@@ -33,10 +33,10 @@ export declare class DisponibilidadeService {
             colab_id: string;
         })[];
     }[]>;
-    getSubstitutos(postoId?: string, papelAlvo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean): Promise<{
+    getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean): Promise<{
         id: string;
         nome: string;
-        papel: string;
+        categoria_cargo: string | null;
         situacao_disponibilidade: string | null;
         tipoDisponibilidade: string;
         prioridade: number;

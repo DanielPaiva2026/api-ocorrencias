@@ -68,7 +68,7 @@ export class PostosDeTrabalhoService {
       const locColab = (colab.localizacao || '').toLowerCase();
       const mesma_cidade = cidadePosto && (endColab.includes(cidadePosto) || locColab.includes(cidadePosto));
 
-      const papelColab = (colab.papel || '').toLowerCase();
+      const papelColab = (colab.categoria_cargo || '').toLowerCase();
       const mesma_funcao = false; // categoria_posto removida
 
       let horas_compativeis = true; 

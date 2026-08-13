@@ -93,7 +93,7 @@ let DisponibilidadeService = class DisponibilidadeService {
         }).filter(c => c.horasRestantes > 0 && c.status !== 'INDISPONIVEL');
         return livres;
     }
-    async getSubstitutos(postoId, papelAlvo, data, exige_nr32, exige_nr35) {
+    async getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35) {
         let targetDate = new Date();
         if (data) {
             targetDate = new Date(data);
@@ -207,7 +207,7 @@ let DisponibilidadeService = class DisponibilidadeService {
             return {
                 id: colab.id,
                 nome: colab.nome,
-                papel: colab.papel,
+                categoria_cargo: colab.categoria_cargo,
                 situacao_disponibilidade: colab.situacao_disponibilidade,
                 tipoDisponibilidade,
                 prioridade,
@@ -231,9 +231,9 @@ let DisponibilidadeService = class DisponibilidadeService {
                 return a.prioridade - b.prioridade;
             if (a.scoreDistancia !== b.scoreDistancia)
                 return a.scoreDistancia - b.scoreDistancia;
-            if (papelAlvo) {
-                const aMesmoPapel = a.papel.toLowerCase().includes(papelAlvo.toLowerCase());
-                const bMesmoPapel = b.papel.toLowerCase().includes(papelAlvo.toLowerCase());
+            if (categoria_cargo) {
+                const aMesmoPapel = (a.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
+                const bMesmoPapel = (b.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
                 if (aMesmoPapel && !bMesmoPapel)
                     return -1;
                 if (!aMesmoPapel && bMesmoPapel)

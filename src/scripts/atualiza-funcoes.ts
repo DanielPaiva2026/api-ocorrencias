@@ -49,7 +49,6 @@ async function run() {
         await prisma.dBColab.update({
           where: { id: colab.id },
           data: {
-            papel: novaFuncao || colab.papel,
             nivel_atuacao: nivelAtuacao || null,
           }
         });

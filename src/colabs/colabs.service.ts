@@ -129,7 +129,7 @@ export class ColabsService {
       Readable.from(file.buffer)
         .pipe(csvParserObj({ separator: ',' }))
         .on('data', (data: any) => {
-          if (data.nome && data.papel) {
+          if (data.nome && data.categoria_cargo) {
                  let exp1 = data.experiencia_1 || null;
                  let exp2 = data.experiencia_2 || null;
                  if (data.admissao && data.contrato_experiencia_dias) {
@@ -155,7 +155,7 @@ export class ColabsService {
                  results.push({
                  nome: data.nome,
                  matricula: data.matricula || null,
-                 papel: data.papel,
+                 categoria_cargo: data.categoria_cargo,
                  // turno_base: data.turno_base,
                  cep: data.cep || '00000-000',
                  endereco: data.endereco || 'Endereço não informado',

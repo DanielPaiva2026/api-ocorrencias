@@ -117,7 +117,8 @@ async function run() {
             cliente = await prisma.dBCliente.update({
                 where: { id: cliente.id },
                 data: {
-                    status: 'ATIVO',
+                    status: 'Ativo',
+                    status_contrato: 'Ativo',
                     nome_razao: c.razao_social,
                     razao_social: c.razao_social,
                     cnpj: c.cnpj,
@@ -139,7 +140,8 @@ async function run() {
         else {
             cliente = await prisma.dBCliente.create({
                 data: {
-                    status: 'ATIVO',
+                    status: 'Ativo',
+                    status_contrato: 'Ativo',
                     codigo: codigo,
                     nome_razao: c.razao_social,
                     razao_social: c.razao_social,
@@ -206,7 +208,6 @@ async function run() {
         const colab = await prisma.dBColab.create({
             data: {
                 nome: c['nome'] || 'Sem Nome',
-                papel: 'OPERACIONAL',
                 cep: String(c['cep'] || ''),
                 endereco: c['logradouro'] || '',
                 carteira_trabalho: c['Carteira de Trabalho']?.toString() || null,
@@ -264,6 +265,28 @@ async function run() {
         }
         else {
             console.warn(`Alocação ignorada: Posto ${codPosto} ou CPF ${cpfRaw} não localizados.`);
+        }
+    }
+    console.log('--- Atualizando Situação de Disponibilidade ---');
+    const allColabs = await prisma.dBColab.findMany({
+        include: { alocacoes: true }
+    });
+    for (const colab of allColabs) {
+        const sit = (colab.situacao_disponibilidade || '').toUpperCase();
+        const isSpecialStatus = sit.includes('INSS') || sit.includes('FÉRIAS') || sit.includes('FERIAS') || sit.includes('ATESTADO');
+        if (!isSpecialStatus) {
+            if (colab.alocacoes.length > 0) {
+                await prisma.dBColab.update({
+                    where: { id: colab.id },
+                    data: { situacao_disponibilidade: 'Alocado' }
+                });
+            }
+            else {
+                await prisma.dBColab.update({
+                    where: { id: colab.id },
+                    data: { situacao_disponibilidade: 'Disponível' }
+                });
+            }
         }
     }
     console.log('====================================');

@@ -52,7 +52,7 @@ export declare class OcorrenciasController {
             criado_em: Date;
             atualizado_em: Date;
             nome: string;
-            papel: string;
+            nivel_atuacao: string | null;
             carteira_trabalho: string | null;
             cpf: string | null;
             telefone_principal: string | null;
@@ -132,7 +132,7 @@ export declare class OcorrenciasController {
             criado_em: Date;
             atualizado_em: Date;
             nome: string;
-            papel: string;
+            nivel_atuacao: string | null;
             carteira_trabalho: string | null;
             cpf: string | null;
             telefone_principal: string | null;
