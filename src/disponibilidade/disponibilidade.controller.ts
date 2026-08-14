@@ -21,9 +21,10 @@ export class DisponibilidadeController {
     @Query('data') data?: string,
     @Query('exige_nr32') exige_nr32?: string,
     @Query('exige_nr35') exige_nr35?: string,
+    @Query('cidade_alvo') cidade_alvo?: string,
   ) {
     const nr32 = exige_nr32 === 'true';
     const nr35 = exige_nr35 === 'true';
-    return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35);
+    return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35, cidade_alvo);
   }
 }

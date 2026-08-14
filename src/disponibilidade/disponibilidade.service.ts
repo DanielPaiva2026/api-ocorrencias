@@ -91,14 +91,14 @@ export class DisponibilidadeService {
     return livres;
   }
 
-  async getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean) {
+  async getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean, cidade_alvo?: string) {
     let targetDate = new Date();
     if (data) {
       targetDate = new Date(data);
     }
-    let cidadeAlvo = '';
+    let cidadeAlvo = cidade_alvo || '';
     
-    // Se temos o posto_id, buscamos a cidade para prioridade de distância
+    // Se temos o posto_id, buscamos a cidade para prioridade de distancia
     if (postoId) {
       const posto = await this.prisma.postoDeTrabalho.findUnique({
         where: { id: postoId },
@@ -107,7 +107,6 @@ export class DisponibilidadeService {
       if (posto?.cliente?.cidade) {
         cidadeAlvo = posto.cliente.cidade;
       }
-      // categoria_posto removido
     }
 
     // 1. Buscar todos os colaboradores sem afastamento ativo
@@ -194,23 +193,30 @@ export class DisponibilidadeService {
         // Determinar pontuação de distância (mesma cidade = menor pontuação = melhor)
         let scoreDistancia = 1; 
         if (cidadeAlvo) {
-          const normalize = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const normalize = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
           const colabCidade = normalize(colab.cidade || '');
           const end = normalize(colab.endereco || '');
           const loc = normalize(colab.localizacao || '');
           const cid = normalize(cidadeAlvo);
 
+          // Remove estados como " - sp" ou "/rj" para a comparacao
+          const cidBase = cid.split(/[-/]/)[0].trim();
+          const colabCidadeBase = colabCidade.split(/[-/]/)[0].trim();
+
           // Verifica se contem, ou se a sigla/abreviacao da cidade bate
           if (
-            (cid.length > 2 && colabCidade === cid) ||
-            (cid.length > 2 && colabCidade.includes(cid)) ||
-            (cid.length > 2 && end.includes(cid)) || 
-            (cid.length > 2 && loc.includes(cid)) || 
-            (loc.length > 2 && cid.includes(loc)) ||
-            (end.length > 2 && cid.includes(end))
+            (cidBase.length > 2 && colabCidadeBase === cidBase) ||
+            (cidBase.length > 2 && colabCidade.includes(cidBase)) ||
+            (colabCidadeBase.length > 2 && cid.includes(colabCidadeBase)) ||
+            (cidBase.length > 2 && end.includes(cidBase)) || 
+            (cidBase.length > 2 && loc.includes(cidBase)) || 
+            (loc.length > 2 && cidBase.includes(loc)) ||
+            (end.length > 2 && cidBase.includes(end))
           ) {
             scoreDistancia = 0; // Mora na mesma cidade
           }
+        } else {
+          scoreDistancia = 0; // Se nao ha cidade alvo, nao penalizamos ninguem
         }
 
         const checkNrValida = (dataStr: string | null) => {
