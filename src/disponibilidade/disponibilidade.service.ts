@@ -195,12 +195,15 @@ export class DisponibilidadeService {
         let scoreDistancia = 1; 
         if (cidadeAlvo) {
           const normalize = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const colabCidade = normalize(colab.cidade || '');
           const end = normalize(colab.endereco || '');
           const loc = normalize(colab.localizacao || '');
           const cid = normalize(cidadeAlvo);
 
           // Verifica se contem, ou se a sigla/abreviacao da cidade bate
           if (
+            (cid.length > 2 && colabCidade === cid) ||
+            (cid.length > 2 && colabCidade.includes(cid)) ||
             (cid.length > 2 && end.includes(cid)) || 
             (cid.length > 2 && loc.includes(cid)) || 
             (loc.length > 2 && cid.includes(loc)) ||
