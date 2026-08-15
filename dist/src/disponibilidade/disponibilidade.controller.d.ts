@@ -46,11 +46,5 @@ export declare class DisponibilidadeController {
         tem_nr32: boolean;
         tem_nr35: boolean;
         tipo_contratacao: string;
-        debug_cidBase: any;
-        debug_colabCidadeBase: any;
-        debug_cid: any;
-        debug_colabCidade: any;
-        debug_end: any;
-        debug_loc: any;
     }[]>;
 }

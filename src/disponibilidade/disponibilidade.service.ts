@@ -192,13 +192,6 @@ export class DisponibilidadeService {
 
         // Determinar pontuação de distância (mesma cidade = menor pontuação = melhor)
         let scoreDistancia = 1; 
-        
-        let cidBaseDebug = '';
-        let colabCidadeBaseDebug = '';
-        let cidDebug = '';
-        let colabCidadeDebug = '';
-        let endDebug = '';
-        let locDebug = '';
 
         if (cidadeAlvo) {
           const normalize = (str: string) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -210,13 +203,6 @@ export class DisponibilidadeService {
           // Remove estados como " - sp" ou "/rj" para a comparacao
           const cidBase = cid.split(/[-/]/)[0].trim();
           const colabCidadeBase = colabCidade.split(/[-/]/)[0].trim();
-
-          cidBaseDebug = cidBase;
-          colabCidadeBaseDebug = colabCidadeBase;
-          cidDebug = cid;
-          colabCidadeDebug = colabCidade;
-          endDebug = end;
-          locDebug = loc;
 
           // Verifica se contem, ou se a sigla/abreviacao da cidade bate
           if (
@@ -256,14 +242,7 @@ export class DisponibilidadeService {
           alocacoesCount: colab.alocacoes.length,
           tem_nr32: checkNrValida(colab.data_nr32) || checkNrValida(colab.reciclagem_nr32),
           tem_nr35: checkNrValida(colab.data_nr35) || checkNrValida(colab.reciclagem_nr35),
-          tipo_contratacao: colab.tipo_contratacao || '',
-          // DEBUG FIELDS:
-          debug_cidBase: typeof cidBaseDebug !== 'undefined' ? cidBaseDebug : '',
-          debug_colabCidadeBase: typeof colabCidadeBaseDebug !== 'undefined' ? colabCidadeBaseDebug : '',
-          debug_cid: typeof cidDebug !== 'undefined' ? cidDebug : '',
-          debug_colabCidade: typeof colabCidadeDebug !== 'undefined' ? colabCidadeDebug : '',
-          debug_end: typeof endDebug !== 'undefined' ? endDebug : '',
-          debug_loc: typeof locDebug !== 'undefined' ? locDebug : ''
+          tipo_contratacao: colab.tipo_contratacao || ''
         };
       });
 

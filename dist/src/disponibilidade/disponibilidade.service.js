@@ -225,13 +225,7 @@ let DisponibilidadeService = class DisponibilidadeService {
                 alocacoesCount: colab.alocacoes.length,
                 tem_nr32: checkNrValida(colab.data_nr32) || checkNrValida(colab.reciclagem_nr32),
                 tem_nr35: checkNrValida(colab.data_nr35) || checkNrValida(colab.reciclagem_nr35),
-                tipo_contratacao: colab.tipo_contratacao || '',
-                debug_cidBase: cidBase,
-                debug_colabCidadeBase: colabCidadeBase,
-                debug_cid: cid,
-                debug_colabCidade: colabCidade,
-                debug_end: end,
-                debug_loc: loc
+                tipo_contratacao: colab.tipo_contratacao || ''
             };
         });
         let substitutos = candidatos.filter(c => c.prioridade < 99);
