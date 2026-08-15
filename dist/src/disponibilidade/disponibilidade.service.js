@@ -229,11 +229,8 @@ let DisponibilidadeService = class DisponibilidadeService {
             };
         });
         let substitutos = candidatos.filter(c => c.prioridade < 99);
-        if (exige_nr32) {
-            substitutos = substitutos.filter(c => c.tem_nr32);
-        }
-        if (exige_nr35) {
-            substitutos = substitutos.filter(c => c.tem_nr35);
+        if (categoria_cargo) {
+            substitutos = substitutos.filter(c => (c.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase()));
         }
         substitutos.sort((a, b) => {
             if (a.prioridade !== b.prioridade)
@@ -241,8 +238,8 @@ let DisponibilidadeService = class DisponibilidadeService {
             if (a.scoreDistancia !== b.scoreDistancia)
                 return a.scoreDistancia - b.scoreDistancia;
             if (categoria_cargo) {
-                const aMesmoPapel = (a.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
-                const bMesmoPapel = (b.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
+                const aMesmoPapel = (a.categoria_cargo || '').toLowerCase() === categoria_cargo.toLowerCase();
+                const bMesmoPapel = (b.categoria_cargo || '').toLowerCase() === categoria_cargo.toLowerCase();
                 if (aMesmoPapel && !bMesmoPapel)
                     return -1;
                 if (!aMesmoPapel && bMesmoPapel)

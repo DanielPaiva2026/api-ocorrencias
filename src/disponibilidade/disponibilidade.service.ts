@@ -246,31 +246,26 @@ export class DisponibilidadeService {
         };
       });
 
-    // 3. Filtrar apenas os disponíveis (prioridade < 99) e preferencialmente do mesmo papel (se informado)
+    // 3. Filtrar apenas os disponíveis (prioridade < 99)
     let substitutos = candidatos.filter(c => c.prioridade < 99);
     
-    // Filtrar exigência de treinamentos
-    if (exige_nr32) {
-       substitutos = substitutos.filter(c => c.tem_nr32);
-    }
-    if (exige_nr35) {
-       substitutos = substitutos.filter(c => c.tem_nr35);
+    // 4. Hard filter por cargo (ex: se pede Porteiro, só mostra Porteiro)
+    if (categoria_cargo) {
+       substitutos = substitutos.filter(c => (c.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase()));
     }
 
-    // Em vez de filtrar estritamente e ocultar pessoas de outras cidades, 
-    // apenas marcamos com scoreDistancia maior para que apareçam no fim da lista.
-    // Isso evita que a lista fique vazia e o usuário ache que é um erro do sistema.
-    
-    // Se papel foi informado, podemos dar um pequeno boost ou filtrar, mas para não esvaziar a lista, apenas ordenamos.
-    // Aqui ordenamos: 1º Prioridade, 2º Distância, 3º Mesmo papel
+    // O frontend já possui a lógica de exibir um aviso ("Falta NR32") caso o posto exija e o colaborador não tenha,
+    // portanto removemos o hard filter de NR32/NR35 daqui para que eles apareçam na lista com a ressalva.
+
+    // 5. Ordenacao
     substitutos.sort((a, b) => {
       if (a.prioridade !== b.prioridade) return a.prioridade - b.prioridade;
       if (a.scoreDistancia !== b.scoreDistancia) return a.scoreDistancia - b.scoreDistancia;
       
-      // Desempate por papel (se papel for igual ao alvo, ganha)
+      // Desempate por papel (caso o filtro contains pegue mais de um tipo e queremos priorizar o match exato)
       if (categoria_cargo) {
-        const aMesmoPapel = (a.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
-        const bMesmoPapel = (b.categoria_cargo || '').toLowerCase().includes(categoria_cargo.toLowerCase());
+        const aMesmoPapel = (a.categoria_cargo || '').toLowerCase() === categoria_cargo.toLowerCase();
+        const bMesmoPapel = (b.categoria_cargo || '').toLowerCase() === categoria_cargo.toLowerCase();
         if (aMesmoPapel && !bMesmoPapel) return -1;
         if (!aMesmoPapel && bMesmoPapel) return 1;
       }
