@@ -24,10 +24,10 @@ let DisponibilidadeController = class DisponibilidadeController {
     getLivres() {
         return this.disponibilidadeService.getLivres();
     }
-    getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35) {
+    getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35, cidade_alvo) {
         const nr32 = exige_nr32 === 'true';
         const nr35 = exige_nr35 === 'true';
-        return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35);
+        return this.disponibilidadeService.getSubstitutos(postoId, categoria_cargo, data, nr32, nr35, cidade_alvo);
     }
 };
 exports.DisponibilidadeController = DisponibilidadeController;
@@ -46,8 +46,9 @@ __decorate([
     __param(2, (0, common_1.Query)('data')),
     __param(3, (0, common_1.Query)('exige_nr32')),
     __param(4, (0, common_1.Query)('exige_nr35')),
+    __param(5, (0, common_1.Query)('cidade_alvo')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], DisponibilidadeController.prototype, "getSubstitutos", null);
 exports.DisponibilidadeController = DisponibilidadeController = __decorate([

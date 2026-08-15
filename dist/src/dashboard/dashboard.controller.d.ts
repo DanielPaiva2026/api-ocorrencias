@@ -6,14 +6,14 @@ export declare class DashboardController {
         alertasDocumentos: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -66,8 +66,8 @@ export declare class DashboardController {
             } | null;
         } & {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -86,14 +86,14 @@ export declare class DashboardController {
         pendenciasFerias: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -146,9 +146,9 @@ export declare class DashboardController {
             };
         } & {
             id: string;
-            status: string;
             criado_em: Date;
             atualizado_em: Date;
+            status: string;
             colab_id: string;
             url_documento: string | null;
             data_inicio: Date;
@@ -163,8 +163,10 @@ export declare class DashboardController {
             posto: {
                 cliente: {
                     id: string;
-                    status: string | null;
                     codigo: string | null;
+                    criado_em: Date;
+                    atualizado_em: Date;
+                    status: string | null;
                     nome_razao: string;
                     responsavel: string | null;
                     telefone: string | null;
@@ -184,15 +186,11 @@ export declare class DashboardController {
                     complemento: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                 };
             } & {
                 id: string;
-                codigo: string;
-                criado_em: Date;
-                atualizado_em: Date;
                 cliente_id: string;
+                codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
                 cesta_basica: string | null;
@@ -200,18 +198,20 @@ export declare class DashboardController {
                 feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
+                criado_em: Date;
+                atualizado_em: Date;
             };
             aviso: {
                 colab: {
                     id: string;
+                    criado_em: Date;
+                    atualizado_em: Date;
                     cidade: string | null;
                     cep: string;
                     endereco: string;
                     numero: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                     nome: string;
                     nivel_atuacao: string | null;
                     carteira_trabalho: string | null;
@@ -264,9 +264,9 @@ export declare class DashboardController {
                 };
             } & {
                 id: string;
-                status: string;
                 criado_em: Date;
                 atualizado_em: Date;
+                status: string;
                 colab_id: string;
                 url_documento: string | null;
                 data_inicio: Date;
@@ -288,14 +288,14 @@ export declare class DashboardController {
         avisosRetorno: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -348,9 +348,9 @@ export declare class DashboardController {
             };
         } & {
             id: string;
-            status: string;
             criado_em: Date;
             atualizado_em: Date;
+            status: string;
             colab_id: string;
             url_documento: string | null;
             data_inicio: Date;
@@ -364,14 +364,14 @@ export declare class DashboardController {
         colaboradoresEmFerias: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -424,9 +424,9 @@ export declare class DashboardController {
             };
         } & {
             id: string;
-            observacao: string | null;
             criado_em: Date;
             atualizado_em: Date;
+            observacao: string | null;
             colab_id: string;
             motivo: string;
             data_inicio: Date;
@@ -437,8 +437,10 @@ export declare class DashboardController {
             posto: {
                 cliente: {
                     id: string;
-                    status: string | null;
                     codigo: string | null;
+                    criado_em: Date;
+                    atualizado_em: Date;
+                    status: string | null;
                     nome_razao: string;
                     responsavel: string | null;
                     telefone: string | null;
@@ -458,15 +460,11 @@ export declare class DashboardController {
                     complemento: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                 };
             } & {
                 id: string;
-                codigo: string;
-                criado_em: Date;
-                atualizado_em: Date;
                 cliente_id: string;
+                codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
                 cesta_basica: string | null;
@@ -474,12 +472,14 @@ export declare class DashboardController {
                 feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
+                criado_em: Date;
+                atualizado_em: Date;
             };
             aviso: {
                 id: string;
-                status: string;
                 criado_em: Date;
                 atualizado_em: Date;
+                status: string;
                 colab_id: string;
                 url_documento: string | null;
                 data_inicio: Date;
@@ -502,14 +502,14 @@ export declare class DashboardController {
             ocorrenciasRecentes: ({
                 colab: {
                     id: string;
+                    criado_em: Date;
+                    atualizado_em: Date;
                     cidade: string | null;
                     cep: string;
                     endereco: string;
                     numero: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                     nome: string;
                     nivel_atuacao: string | null;
                     carteira_trabalho: string | null;
@@ -562,8 +562,8 @@ export declare class DashboardController {
                 } | null;
             } & {
                 id: string;
-                observacao: string | null;
                 criado_em: Date;
+                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
                 tipo: string;
@@ -590,14 +590,14 @@ export declare class DashboardController {
             ocorrenciasRecentes: ({
                 colab: {
                     id: string;
+                    criado_em: Date;
+                    atualizado_em: Date;
                     cidade: string | null;
                     cep: string;
                     endereco: string;
                     numero: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                     nome: string;
                     nivel_atuacao: string | null;
                     carteira_trabalho: string | null;
@@ -650,8 +650,8 @@ export declare class DashboardController {
                 } | null;
             } & {
                 id: string;
-                observacao: string | null;
                 criado_em: Date;
+                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
                 tipo: string;
@@ -678,14 +678,14 @@ export declare class DashboardController {
             ocorrenciasRecentes: ({
                 colab: {
                     id: string;
+                    criado_em: Date;
+                    atualizado_em: Date;
                     cidade: string | null;
                     cep: string;
                     endereco: string;
                     numero: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                     nome: string;
                     nivel_atuacao: string | null;
                     carteira_trabalho: string | null;
@@ -738,8 +738,8 @@ export declare class DashboardController {
                 } | null;
             } & {
                 id: string;
-                observacao: string | null;
                 criado_em: Date;
+                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
                 tipo: string;

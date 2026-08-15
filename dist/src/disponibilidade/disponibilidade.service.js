@@ -93,12 +93,12 @@ let DisponibilidadeService = class DisponibilidadeService {
         }).filter(c => c.horasRestantes > 0 && c.status !== 'INDISPONIVEL');
         return livres;
     }
-    async getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35) {
+    async getSubstitutos(postoId, categoria_cargo, data, exige_nr32, exige_nr35, cidade_alvo) {
         let targetDate = new Date();
         if (data) {
             targetDate = new Date(data);
         }
-        let cidadeAlvo = '';
+        let cidadeAlvo = cidade_alvo || '';
         if (postoId) {
             const posto = await this.prisma.postoDeTrabalho.findUnique({
                 where: { id: postoId },
@@ -185,16 +185,25 @@ let DisponibilidadeService = class DisponibilidadeService {
             }
             let scoreDistancia = 1;
             if (cidadeAlvo) {
-                const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                const normalize = (str) => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+                const colabCidade = normalize(colab.cidade || '');
                 const end = normalize(colab.endereco || '');
                 const loc = normalize(colab.localizacao || '');
                 const cid = normalize(cidadeAlvo);
-                if ((cid.length > 2 && end.includes(cid)) ||
-                    (cid.length > 2 && loc.includes(cid)) ||
-                    (loc.length > 2 && cid.includes(loc)) ||
-                    (end.length > 2 && cid.includes(end))) {
+                const cidBase = cid.split(/[-/]/)[0].trim();
+                const colabCidadeBase = colabCidade.split(/[-/]/)[0].trim();
+                if ((cidBase.length > 2 && colabCidadeBase === cidBase) ||
+                    (cidBase.length > 2 && colabCidade.includes(cidBase)) ||
+                    (colabCidadeBase.length > 2 && cid.includes(colabCidadeBase)) ||
+                    (cidBase.length > 2 && end.includes(cidBase)) ||
+                    (cidBase.length > 2 && loc.includes(cidBase)) ||
+                    (loc.length > 2 && cidBase.includes(loc)) ||
+                    (end.length > 2 && cidBase.includes(end))) {
                     scoreDistancia = 0;
                 }
+            }
+            else {
+                scoreDistancia = 0;
             }
             const checkNrValida = (dataStr) => {
                 if (!dataStr || dataStr.trim() === '')
@@ -216,7 +225,13 @@ let DisponibilidadeService = class DisponibilidadeService {
                 alocacoesCount: colab.alocacoes.length,
                 tem_nr32: checkNrValida(colab.data_nr32) || checkNrValida(colab.reciclagem_nr32),
                 tem_nr35: checkNrValida(colab.data_nr35) || checkNrValida(colab.reciclagem_nr35),
-                tipo_contratacao: colab.tipo_contratacao || ''
+                tipo_contratacao: colab.tipo_contratacao || '',
+                debug_cidBase: cidBase,
+                debug_colabCidadeBase: colabCidadeBase,
+                debug_cid: cid,
+                debug_colabCidade: colabCidade,
+                debug_end: end,
+                debug_loc: loc
             };
         });
         let substitutos = candidatos.filter(c => c.prioridade < 99);

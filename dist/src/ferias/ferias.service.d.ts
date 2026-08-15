@@ -8,9 +8,9 @@ export declare class FeriasService {
     private formatDateBr;
     createAviso(dto: CreateAvisoDto): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;
@@ -23,9 +23,9 @@ export declare class FeriasService {
     }>;
     updateDocumento(avisoId: string, urlDocumento: string): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;
@@ -46,9 +46,9 @@ export declare class FeriasService {
     }>;
     decisaoRetorno(avisoId: string, retorna: boolean): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;

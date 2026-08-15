@@ -4,8 +4,8 @@ export declare class OcorrenciasController {
     constructor(ocorrenciasService: OcorrenciasService);
     create(data: any): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -23,8 +23,8 @@ export declare class OcorrenciasController {
     }>;
     webhook(payload: any): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -43,14 +43,14 @@ export declare class OcorrenciasController {
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -103,8 +103,8 @@ export declare class OcorrenciasController {
         } | null;
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -123,14 +123,14 @@ export declare class OcorrenciasController {
     getPendenciasDocumentos(): Promise<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -183,8 +183,8 @@ export declare class OcorrenciasController {
         } | null;
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -202,8 +202,8 @@ export declare class OcorrenciasController {
     })[]>;
     resolve(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -223,8 +223,8 @@ export declare class OcorrenciasController {
         urlDocumento?: string;
     }): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -244,8 +244,8 @@ export declare class OcorrenciasController {
         sancao: string;
     }): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -266,8 +266,8 @@ export declare class OcorrenciasController {
         entregou_documento?: boolean;
     }): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -290,8 +290,8 @@ export declare class OcorrenciasController {
         sancao_sugerida: string;
         historico: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -311,8 +311,8 @@ export declare class OcorrenciasController {
     registrarTratamentoAtraso(payload: any): Promise<{
         ocorrenciaPrincipal: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -330,8 +330,8 @@ export declare class OcorrenciasController {
         };
         extras: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -351,8 +351,8 @@ export declare class OcorrenciasController {
     registrarTratamentoJornadaIncompleta(payload: any): Promise<{
         ocorrenciaPrincipal: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -370,8 +370,8 @@ export declare class OcorrenciasController {
         };
         extras: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -390,8 +390,8 @@ export declare class OcorrenciasController {
     }>;
     update(id: string, body: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -409,8 +409,8 @@ export declare class OcorrenciasController {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string, body: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;

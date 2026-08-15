@@ -7,14 +7,14 @@ export declare class ClientesService {
             alocacoes: ({
                 colab: {
                     id: string;
+                    criado_em: Date;
+                    atualizado_em: Date;
                     cidade: string | null;
                     cep: string;
                     endereco: string;
                     numero: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                     nome: string;
                     nivel_atuacao: string | null;
                     carteira_trabalho: string | null;
@@ -73,10 +73,8 @@ export declare class ClientesService {
             })[];
         } & {
             id: string;
-            codigo: string;
-            criado_em: Date;
-            atualizado_em: Date;
             cliente_id: string;
+            codigo: string;
             descricao_escala: string | null;
             horas_diarias: string | null;
             cesta_basica: string | null;
@@ -84,11 +82,15 @@ export declare class ClientesService {
             feriados: string | null;
             exige_nr32: boolean;
             exige_nr35: boolean;
+            criado_em: Date;
+            atualizado_em: Date;
         })[];
     } & {
         id: string;
-        status: string | null;
         codigo: string | null;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string | null;
         nome_razao: string;
         responsavel: string | null;
         telefone: string | null;
@@ -108,8 +110,6 @@ export declare class ClientesService {
         complemento: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
     })[]>;
     createSimplificado(data: {
         nome_razao: string;
@@ -117,8 +117,10 @@ export declare class ClientesService {
         cidade?: string;
     }): import("@prisma/client").Prisma.Prisma__DBClienteClient<{
         id: string;
-        status: string | null;
         codigo: string | null;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string | null;
         nome_razao: string;
         responsavel: string | null;
         telefone: string | null;
@@ -138,13 +140,13 @@ export declare class ClientesService {
         complemento: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, data: any): import("@prisma/client").Prisma.Prisma__DBClienteClient<{
         id: string;
-        status: string | null;
         codigo: string | null;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string | null;
         nome_razao: string;
         responsavel: string | null;
         telefone: string | null;
@@ -164,17 +166,13 @@ export declare class ClientesService {
         complemento: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     previewContract(file: Express.Multer.File): Promise<any>;
     confirmContract(data: any): Promise<{
         postos_de_trabalho: {
             id: string;
-            codigo: string;
-            criado_em: Date;
-            atualizado_em: Date;
             cliente_id: string;
+            codigo: string;
             descricao_escala: string | null;
             horas_diarias: string | null;
             cesta_basica: string | null;
@@ -182,11 +180,15 @@ export declare class ClientesService {
             feriados: string | null;
             exige_nr32: boolean;
             exige_nr35: boolean;
+            criado_em: Date;
+            atualizado_em: Date;
         }[];
     } & {
         id: string;
-        status: string | null;
         codigo: string | null;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string | null;
         nome_razao: string;
         responsavel: string | null;
         telefone: string | null;
@@ -206,7 +208,5 @@ export declare class ClientesService {
         complemento: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
     }>;
 }

@@ -4,9 +4,9 @@ export declare class UsuariosController {
     constructor(usuariosService: UsuariosService);
     findAll(req: any): Promise<{
         id: string;
+        cliente_id: string | null;
         criado_em: Date;
         nome: string;
-        cliente_id: string | null;
         email: string;
         role: string;
         telefone_whatsapp: string | null;

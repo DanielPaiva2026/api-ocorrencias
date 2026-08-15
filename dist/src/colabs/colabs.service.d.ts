@@ -16,8 +16,10 @@ export declare class ColabsService {
             posto: {
                 cliente: {
                     id: string;
-                    status: string | null;
                     codigo: string | null;
+                    criado_em: Date;
+                    atualizado_em: Date;
+                    status: string | null;
                     nome_razao: string;
                     responsavel: string | null;
                     telefone: string | null;
@@ -37,15 +39,11 @@ export declare class ColabsService {
                     complemento: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                 };
             } & {
                 id: string;
-                codigo: string;
-                criado_em: Date;
-                atualizado_em: Date;
                 cliente_id: string;
+                codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
                 cesta_basica: string | null;
@@ -53,6 +51,8 @@ export declare class ColabsService {
                 feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
+                criado_em: Date;
+                atualizado_em: Date;
             };
         } & {
             id: string;
@@ -62,8 +62,8 @@ export declare class ColabsService {
         })[];
         ocorrencias: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -81,14 +81,14 @@ export declare class ColabsService {
         }[];
     } & {
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -141,14 +141,14 @@ export declare class ColabsService {
     })[]>;
     create(createColabDto: any): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -202,14 +202,14 @@ export declare class ColabsService {
     uploadCsv(file: any): Promise<unknown>;
     updateStatus(id: string, status: string): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -262,14 +262,14 @@ export declare class ColabsService {
     }>;
     update(id: string, data: any): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;

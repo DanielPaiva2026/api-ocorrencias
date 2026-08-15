@@ -14,10 +14,8 @@ export declare class DisponibilidadeController {
         alocacoes: ({
             posto: {
                 id: string;
-                codigo: string;
-                criado_em: Date;
-                atualizado_em: Date;
                 cliente_id: string;
+                codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
                 cesta_basica: string | null;
@@ -25,6 +23,8 @@ export declare class DisponibilidadeController {
                 feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
+                criado_em: Date;
+                atualizado_em: Date;
             };
         } & {
             id: string;
@@ -33,7 +33,7 @@ export declare class DisponibilidadeController {
             colab_id: string;
         })[];
     }[]>;
-    getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: string, exige_nr35?: string): Promise<{
+    getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: string, exige_nr35?: string, cidade_alvo?: string): Promise<{
         id: string;
         nome: string;
         categoria_cargo: string | null;
@@ -46,5 +46,11 @@ export declare class DisponibilidadeController {
         tem_nr32: boolean;
         tem_nr35: boolean;
         tipo_contratacao: string;
+        debug_cidBase: any;
+        debug_colabCidadeBase: any;
+        debug_cid: any;
+        debug_colabCidade: any;
+        debug_end: any;
+        debug_loc: any;
     }[]>;
 }

@@ -6,9 +6,9 @@ export declare class FeriasController {
     constructor(feriasService: FeriasService);
     createAviso(createAvisoDto: CreateAvisoDto): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;
@@ -21,9 +21,9 @@ export declare class FeriasController {
     }>;
     updateDocumento(id: string, urlDocumento: string): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;
@@ -44,9 +44,9 @@ export declare class FeriasController {
     }>;
     decisaoRetorno(id: string, retorna: boolean): Promise<{
         id: string;
-        status: string;
         criado_em: Date;
         atualizado_em: Date;
+        status: string;
         colab_id: string;
         url_documento: string | null;
         data_inicio: Date;

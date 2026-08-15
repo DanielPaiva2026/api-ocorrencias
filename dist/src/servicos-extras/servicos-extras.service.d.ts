@@ -7,12 +7,12 @@ export declare class ServicosExtrasService {
     constructor(prisma: PrismaService, ocorrenciasService: OcorrenciasService);
     create(createServicosExtraDto: any): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<{
         id: string;
-        status: string;
-        criado_em: Date;
-        atualizado_em: Date;
         cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string;
         data_inicio: Date;
         data_fim: Date;
         nome_cliente_avulso: string | null;
@@ -23,8 +23,10 @@ export declare class ServicosExtrasService {
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         cliente: {
             id: string;
-            status: string | null;
             codigo: string | null;
+            criado_em: Date;
+            atualizado_em: Date;
+            status: string | null;
             nome_razao: string;
             responsavel: string | null;
             telefone: string | null;
@@ -44,20 +46,18 @@ export declare class ServicosExtrasService {
             complemento: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
         } | null;
         apontamentos: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -110,8 +110,8 @@ export declare class ServicosExtrasService {
             } | null;
         } & {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -129,12 +129,12 @@ export declare class ServicosExtrasService {
         })[];
     } & {
         id: string;
-        status: string;
-        criado_em: Date;
-        atualizado_em: Date;
         cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string;
         data_inicio: Date;
         data_fim: Date;
         nome_cliente_avulso: string | null;
@@ -145,8 +145,10 @@ export declare class ServicosExtrasService {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<({
         cliente: {
             id: string;
-            status: string | null;
             codigo: string | null;
+            criado_em: Date;
+            atualizado_em: Date;
+            status: string | null;
             nome_razao: string;
             responsavel: string | null;
             telefone: string | null;
@@ -166,20 +168,18 @@ export declare class ServicosExtrasService {
             complemento: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
         } | null;
         apontamentos: ({
             colab: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cidade: string | null;
                 cep: string;
                 endereco: string;
                 numero: string | null;
                 bairro: string | null;
                 uf: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 nome: string;
                 nivel_atuacao: string | null;
                 carteira_trabalho: string | null;
@@ -232,8 +232,8 @@ export declare class ServicosExtrasService {
             } | null;
         } & {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -251,12 +251,12 @@ export declare class ServicosExtrasService {
         })[];
     } & {
         id: string;
-        status: string;
-        criado_em: Date;
-        atualizado_em: Date;
         cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string;
         data_inicio: Date;
         data_fim: Date;
         nome_cliente_avulso: string | null;
@@ -267,12 +267,12 @@ export declare class ServicosExtrasService {
     alocar(id: string, colabIds: string[]): Promise<{
         servico: {
             id: string;
-            status: string;
-            criado_em: Date;
-            atualizado_em: Date;
             cliente_id: string | null;
             exige_nr32: boolean;
             exige_nr35: boolean;
+            criado_em: Date;
+            atualizado_em: Date;
+            status: string;
             data_inicio: Date;
             data_fim: Date;
             nome_cliente_avulso: string | null;
@@ -282,8 +282,8 @@ export declare class ServicosExtrasService {
         };
         ocorrenciasCriadas: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -303,12 +303,12 @@ export declare class ServicosExtrasService {
     update(id: string, updateServicosExtraDto: UpdateServicosExtraDto): string;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<{
         id: string;
-        status: string;
-        criado_em: Date;
-        atualizado_em: Date;
         cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
+        criado_em: Date;
+        atualizado_em: Date;
+        status: string;
         data_inicio: Date;
         data_fim: Date;
         nome_cliente_avulso: string | null;

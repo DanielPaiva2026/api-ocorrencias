@@ -4,9 +4,9 @@ export declare class AfastamentosController {
     constructor(afastamentosService: AfastamentosService);
     create(createAfastamentoDto: any): import("@prisma/client").Prisma.Prisma__AfastamentoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
@@ -16,14 +16,14 @@ export declare class AfastamentosController {
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -76,9 +76,9 @@ export declare class AfastamentosController {
         };
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
@@ -88,14 +88,14 @@ export declare class AfastamentosController {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__AfastamentoClient<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -148,9 +148,9 @@ export declare class AfastamentosController {
         };
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
@@ -159,9 +159,9 @@ export declare class AfastamentosController {
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateAfastamentoDto: any): import("@prisma/client").Prisma.Prisma__AfastamentoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
@@ -170,9 +170,9 @@ export declare class AfastamentosController {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__AfastamentoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;

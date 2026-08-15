@@ -7,8 +7,8 @@ export declare class OcorrenciasService {
     private getHorarioEntradaColab;
     create(data: any): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -27,8 +27,8 @@ export declare class OcorrenciasService {
     calcularTipoApontamento(colabId: string): Promise<string>;
     processWebhook(payload: any): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -47,14 +47,14 @@ export declare class OcorrenciasService {
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -107,8 +107,8 @@ export declare class OcorrenciasService {
         } | null;
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -126,8 +126,8 @@ export declare class OcorrenciasService {
     })[]>;
     resolve(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -145,8 +145,8 @@ export declare class OcorrenciasService {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     anexarDocumento(id: string, urlDocumento?: string): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -164,8 +164,8 @@ export declare class OcorrenciasService {
     }>;
     converterParaInjustificada(id: string, sancao: string): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -184,14 +184,14 @@ export declare class OcorrenciasService {
     getPendenciasDocumentos(): Promise<({
         colab: {
             id: string;
+            criado_em: Date;
+            atualizado_em: Date;
             cidade: string | null;
             cep: string;
             endereco: string;
             numero: string | null;
             bairro: string | null;
             uf: string | null;
-            criado_em: Date;
-            atualizado_em: Date;
             nome: string;
             nivel_atuacao: string | null;
             carteira_trabalho: string | null;
@@ -244,8 +244,8 @@ export declare class OcorrenciasService {
         } | null;
     } & {
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -263,8 +263,8 @@ export declare class OcorrenciasService {
     })[]>;
     resolverPendenciaDocumento(id: string, sancao: string, entregouDocumento?: boolean): Promise<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -287,8 +287,8 @@ export declare class OcorrenciasService {
         sancao_sugerida: string;
         historico: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -308,8 +308,8 @@ export declare class OcorrenciasService {
     registrarTratamentoAtraso(payload: any): Promise<{
         ocorrenciaPrincipal: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -327,8 +327,8 @@ export declare class OcorrenciasService {
         };
         extras: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -348,8 +348,8 @@ export declare class OcorrenciasService {
     registrarTratamentoJornadaIncompleta(payload: any): Promise<{
         ocorrenciaPrincipal: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -367,8 +367,8 @@ export declare class OcorrenciasService {
         };
         extras: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -387,8 +387,8 @@ export declare class OcorrenciasService {
     }>;
     update(id: string, data: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;
@@ -406,8 +406,8 @@ export declare class OcorrenciasService {
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
-        observacao: string | null;
         criado_em: Date;
+        observacao: string | null;
         data: Date;
         colab_id: string | null;
         tipo: string;

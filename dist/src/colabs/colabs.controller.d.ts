@@ -5,14 +5,14 @@ export declare class ColabsController {
     constructor(colabsService: ColabsService);
     create(createColabDto: CreateColabDto): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -78,8 +78,10 @@ export declare class ColabsController {
             posto: {
                 cliente: {
                     id: string;
-                    status: string | null;
                     codigo: string | null;
+                    criado_em: Date;
+                    atualizado_em: Date;
+                    status: string | null;
                     nome_razao: string;
                     responsavel: string | null;
                     telefone: string | null;
@@ -99,15 +101,11 @@ export declare class ColabsController {
                     complemento: string | null;
                     bairro: string | null;
                     uf: string | null;
-                    criado_em: Date;
-                    atualizado_em: Date;
                 };
             } & {
                 id: string;
-                codigo: string;
-                criado_em: Date;
-                atualizado_em: Date;
                 cliente_id: string;
+                codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
                 cesta_basica: string | null;
@@ -115,6 +113,8 @@ export declare class ColabsController {
                 feriados: string | null;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
+                criado_em: Date;
+                atualizado_em: Date;
             };
         } & {
             id: string;
@@ -124,8 +124,8 @@ export declare class ColabsController {
         })[];
         ocorrencias: {
             id: string;
-            observacao: string | null;
             criado_em: Date;
+            observacao: string | null;
             data: Date;
             colab_id: string | null;
             tipo: string;
@@ -143,14 +143,14 @@ export declare class ColabsController {
         }[];
     } & {
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -203,14 +203,14 @@ export declare class ColabsController {
     })[]>;
     updateStatus(id: string, status: string): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
@@ -263,14 +263,14 @@ export declare class ColabsController {
     }>;
     update(id: string, updateColabDto: any): Promise<{
         id: string;
+        criado_em: Date;
+        atualizado_em: Date;
         cidade: string | null;
         cep: string;
         endereco: string;
         numero: string | null;
         bairro: string | null;
         uf: string | null;
-        criado_em: Date;
-        atualizado_em: Date;
         nome: string;
         nivel_atuacao: string | null;
         carteira_trabalho: string | null;
