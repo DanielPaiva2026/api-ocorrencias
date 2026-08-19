@@ -93,23 +93,47 @@ export class ColabsService {
     let exp1 = createColabDto.experiencia_1 || null;
     let exp2 = createColabDto.experiencia_2 || null;
 
-    if (createColabDto.admissao && createColabDto.contrato_experiencia_dias) {
-        const dias = parseInt(createColabDto.contrato_experiencia_dias, 10);
-        if (!isNaN(dias)) {
-            const addDays = (dateStr: string, d: number) => {
-                const parts = dateStr.split('/');
-                if (parts.length === 3) {
-                    const year = parts[2].length === 2 ? 2000 + parseInt(parts[2], 10) : parseInt(parts[2], 10);
-                    const dt = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
-                    if (!isNaN(dt.getTime())) {
-                        dt.setDate(dt.getDate() + d);
-                        return `${String(dt.getDate()).padStart(2, '0')}/${String(dt.getMonth() + 1).padStart(2, '0')}/${dt.getFullYear()}`;
-                    }
+    if (createColabDto.admissao) {
+        const addDays = (dateStr: string, d: number) => {
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+                const year = parts[2].length === 2 ? 2000 + parseInt(parts[2], 10) : parseInt(parts[2], 10);
+                const dt = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+                if (!isNaN(dt.getTime())) {
+                    // Contando o primeiro dia como 1 dia de trabalho
+                    dt.setDate(dt.getDate() + (d - 1));
+                    return `${String(dt.getDate()).padStart(2, '0')}/${String(dt.getMonth() + 1).padStart(2, '0')}/${dt.getFullYear()}`;
                 }
-                return null;
-            };
-            exp1 = addDays(createColabDto.admissao, dias) || exp1;
-            exp2 = exp1 ? (addDays(exp1, dias) || exp2) : exp2;
+            }
+            return null;
+        };
+
+        const tipoContrato = (createColabDto.tipo_contratacao || '').toLowerCase();
+        
+        if (tipoContrato.includes('jovem aprendiz') || tipoContrato.includes('aprendiz')) {
+            const horas = String(createColabDto.horas_contratadas || '');
+            const cargo = (createColabDto.categoria_cargo || '').toLowerCase();
+            let diasTermino = 0;
+
+            if (cargo.includes('limpador') || cargo.includes('limpeza')) {
+                if (horas.includes('20')) diasTermino = 517;
+                else if (horas.includes('30')) diasTermino = 335;
+            } else if (cargo.includes('admin')) {
+                if (horas.includes('20')) diasTermino = 517;
+                else if (horas.includes('30')) diasTermino = 488;
+            }
+
+            if (diasTermino > 0) {
+                exp1 = addDays(createColabDto.admissao, diasTermino) || exp1;
+                exp2 = null;
+                createColabDto.contrato_experiencia_dias = null;
+            }
+        } else if (createColabDto.contrato_experiencia_dias) {
+            const dias = parseInt(createColabDto.contrato_experiencia_dias, 10);
+            if (!isNaN(dias)) {
+                exp1 = addDays(createColabDto.admissao, dias) || exp1;
+                exp2 = exp1 ? (addDays(exp1, dias) || exp2) : exp2;
+            }
         }
     }
 
@@ -152,23 +176,45 @@ export class ColabsService {
                  let exp1 = data.experiencia_1 || null;
                  let exp2 = data.experiencia_2 || null;
                  let prazoExp = data.prazo_de_experiencia || data.prazo_de_experincia || data.contrato_experiencia_dias || null;
-                 if (admissao && prazoExp && String(prazoExp).trim() !== '') {
-                     const dias = parseInt(prazoExp, 10);
-                     if (!isNaN(dias)) {
-                         const addDays = (dateStr: string, d: number) => {
-                             const parts = dateStr.split('/');
-                             if (parts.length === 3) {
-                                 const year = parts[2].length === 2 ? 2000 + parseInt(parts[2], 10) : parseInt(parts[2], 10);
-                                 const dt = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
-                                 if (!isNaN(dt.getTime())) {
-                                     dt.setDate(dt.getDate() + d);
-                                     return `${String(dt.getDate()).padStart(2, '0')}/${String(dt.getMonth() + 1).padStart(2, '0')}/${dt.getFullYear()}`;
-                                 }
+                 let parsedDiasExp = prazoExp ? parseInt(prazoExp, 10) : null;
+                 
+                 if (admissao) {
+                     const addDays = (dateStr: string, d: number) => {
+                         const parts = dateStr.split('/');
+                         if (parts.length === 3) {
+                             const year = parts[2].length === 2 ? 2000 + parseInt(parts[2], 10) : parseInt(parts[2], 10);
+                             const dt = new Date(year, parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+                             if (!isNaN(dt.getTime())) {
+                                 // Contando o primeiro dia como 1 dia de trabalho
+                                 dt.setDate(dt.getDate() + (d - 1));
+                                 return `${String(dt.getDate()).padStart(2, '0')}/${String(dt.getMonth() + 1).padStart(2, '0')}/${dt.getFullYear()}`;
                              }
-                             return null;
-                         };
-                         exp1 = addDays(admissao, dias) || exp1;
-                         exp2 = exp1 ? (addDays(exp1, dias) || exp2) : exp2;
+                         }
+                         return null;
+                     };
+
+                     const tipoContrato = (data.tipo_contratacao || '').toLowerCase();
+                     if (tipoContrato.includes('jovem aprendiz') || tipoContrato.includes('aprendiz')) {
+                         const horas = String(data.horas_contratadas || '');
+                         const cargoStr = String(cargo).toLowerCase();
+                         let diasTermino = 0;
+
+                         if (cargoStr.includes('limpador') || cargoStr.includes('limpeza')) {
+                             if (horas.includes('20')) diasTermino = 517;
+                             else if (horas.includes('30')) diasTermino = 335;
+                         } else if (cargoStr.includes('admin')) {
+                             if (horas.includes('20')) diasTermino = 517;
+                             else if (horas.includes('30')) diasTermino = 488;
+                         }
+
+                         if (diasTermino > 0) {
+                             exp1 = addDays(admissao, diasTermino) || exp1;
+                             exp2 = null;
+                             parsedDiasExp = null;
+                         }
+                     } else if (parsedDiasExp && !isNaN(parsedDiasExp)) {
+                         exp1 = addDays(admissao, parsedDiasExp) || exp1;
+                         exp2 = exp1 ? (addDays(exp1, parsedDiasExp) || exp2) : exp2;
                      }
                  }
 
@@ -184,10 +230,11 @@ export class ColabsService {
                     dataAso = `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
                  }
 
-                 let parsedDiasExp = null;
-                 if (prazoExp && String(prazoExp).trim() !== '') {
+                 if (prazoExp && String(prazoExp).trim() !== '' && !parsedDiasExp) {
                      const parsed = parseInt(prazoExp, 10);
-                     if (!isNaN(parsed)) parsedDiasExp = parsed;
+                     if (!isNaN(parsed)) {
+                         parsedDiasExp = parsed;
+                     }
                  }
 
                  results.push({

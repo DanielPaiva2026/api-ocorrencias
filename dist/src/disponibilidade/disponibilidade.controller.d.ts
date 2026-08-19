@@ -18,13 +18,13 @@ export declare class DisponibilidadeController {
                 codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
-                cesta_basica: string | null;
-                insalubridade: string | null;
-                feriados: string | null;
-                exige_nr32: boolean;
-                exige_nr35: boolean;
                 criado_em: Date;
                 atualizado_em: Date;
+                exige_nr32: boolean;
+                exige_nr35: boolean;
+                cesta_basica: string | null;
+                feriados: string | null;
+                insalubridade: string | null;
             };
         } & {
             id: string;

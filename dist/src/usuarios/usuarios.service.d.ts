@@ -9,9 +9,9 @@ export declare class UsuariosService {
         nome: string;
         email: string;
         role: string;
-        telefone_whatsapp: string | null;
         troca_senha_obrigatoria: boolean;
         ultima_troca_senha: Date;
+        telefone_whatsapp: string | null;
     }[]>;
     create(data: any): Promise<{
         id: string;

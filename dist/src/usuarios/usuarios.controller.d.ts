@@ -9,9 +9,9 @@ export declare class UsuariosController {
         nome: string;
         email: string;
         role: string;
-        telefone_whatsapp: string | null;
         troca_senha_obrigatoria: boolean;
         ultima_troca_senha: Date;
+        telefone_whatsapp: string | null;
     }[]>;
     create(req: any, createUsuarioDto: any): Promise<{
         id: string;
