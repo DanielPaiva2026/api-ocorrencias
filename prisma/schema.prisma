@@ -34,6 +34,7 @@ model DBCliente {
   postos_de_trabalho   PostoDeTrabalho[]
   servicos_extras      ServicoExtraCliente[]
   usuarios             Usuario[]
+  descontos            DescontoCliente[]
 }
 
 model Usuario {
@@ -52,7 +53,7 @@ model Usuario {
 }
 
 model DBColab {
-  id                            String           @id @default(uuid())
+  id                            String            @id @default(uuid())
   nome                          String
   cep                           String
   endereco                      String
@@ -80,8 +81,8 @@ model DBColab {
   reciclagem_nr35               String?
   data_aso                      String?
   reciclagem_aso                String?
-  criado_em                     DateTime         @default(now())
-  atualizado_em                 DateTime         @updatedAt
+  criado_em                     DateTime          @default(now())
+  atualizado_em                 DateTime          @updatedAt
   ferias_limite_entrada         String?
   ferias_notificacao            String?
   ferias_retorno                String?
@@ -91,7 +92,7 @@ model DBColab {
   cidade                        String?
   contrato_experiencia_dias     Int?
   cpf                           String?
-  is_whatsapp                   Boolean          @default(false)
+  is_whatsapp                   Boolean           @default(false)
   logradouro                    String?
   manual_conduta_data           String?
   manual_conduta_reciclagem     String?
@@ -105,8 +106,8 @@ model DBColab {
   uf                            String?
   exame_complementar_data       String?
   exame_complementar_retorno    String?
-  requer_nr32                   Boolean          @default(false)
-  requer_nr35                   Boolean          @default(false)
+  requer_nr32                   Boolean           @default(false)
+  requer_nr35                   Boolean           @default(false)
   carteira_trabalho             String?
   prazo_experiencia             String?
   nivel_atuacao                 String?
@@ -114,24 +115,27 @@ model DBColab {
   alocacoes                     Alocacao[]
   avisos_ferias                 AvisoFerias[]
   ocorrencias                   FluxoCorretivo[]
+  descontos                     DescontoCliente[]
 }
 
 model PostoDeTrabalho {
-  id                   String               @id @default(uuid())
-  cliente_id           String
-  codigo               String               @unique
-  descricao_escala     String?
-  horas_diarias        String?
-  criado_em            DateTime             @default(now())
-  atualizado_em        DateTime             @updatedAt
-  exige_nr32           Boolean              @default(false)
-  exige_nr35           Boolean              @default(false)
-  cesta_basica         String?
-  feriados             String?
-  insalubridade        String?
-  alocacoes            Alocacao[]
-  cliente              DBCliente            @relation(fields: [cliente_id], references: [id])
-  substituicoes_ferias SubstituicaoFerias[]
+  id                     String               @id @default(uuid())
+  cliente_id             String
+  codigo                 String               @unique
+  descricao_escala       String?
+  horas_diarias          String?
+  criado_em              DateTime             @default(now())
+  atualizado_em          DateTime             @updatedAt
+  exige_nr32             Boolean              @default(false)
+  exige_nr35             Boolean              @default(false)
+  cesta_basica           String?
+  feriados               String?
+  insalubridade          String?
+  alocacoes              Alocacao[]
+  cliente                DBCliente            @relation(fields: [cliente_id], references: [id])
+  substituicoes_ferias   SubstituicaoFerias[]
+  descontos              DescontoCliente[]
+  data_base_escala_12x36 String?
 }
 
 model Alocacao {
@@ -225,4 +229,18 @@ model ServicoExtraCliente {
   atualizado_em            DateTime         @updatedAt
   apontamentos             FluxoCorretivo[]
   cliente                  DBCliente?       @relation(fields: [cliente_id], references: [id])
+}
+
+model DescontoCliente {
+  id                String           @id @default(uuid())
+  cliente_id        String
+  posto_id          String?
+  colab_faltante_id String?
+  data              DateTime
+  motivo            String?
+  cliente_avisado   Boolean          @default(false)
+  criado_em         DateTime         @default(now())
+  cliente           DBCliente        @relation(fields: [cliente_id], references: [id])
+  posto             PostoDeTrabalho? @relation(fields: [posto_id], references: [id])
+  colab_faltante    DBColab?         @relation(fields: [colab_faltante_id], references: [id])
 }

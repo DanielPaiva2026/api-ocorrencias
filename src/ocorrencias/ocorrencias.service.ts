@@ -468,6 +468,22 @@ export class OcorrenciasService {
          }
       }
 
+      // 4. Grava os Descontos no Cliente se houver
+      if (payload.descontos_cliente && Array.isArray(payload.descontos_cliente)) {
+         for (const desc of payload.descontos_cliente) {
+            await tx.descontoCliente.create({
+               data: {
+                  cliente_id: desc.cliente_id,
+                  posto_id: desc.posto_id,
+                  colab_faltante_id: desc.colab_faltante_id,
+                  data: new Date(desc.data),
+                  motivo: desc.motivo,
+                  cliente_avisado: desc.cliente_avisado
+               }
+            });
+         }
+      }
+
       // Notifica o gestor via WhatsApp sobre a ocorrência (Falta ou Atraso)
       const colabAtrasado = await tx.dBColab.findUnique({
         where: { id: payload.atrasado_colab_id },
