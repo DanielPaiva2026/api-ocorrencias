@@ -321,7 +321,8 @@ export class OcorrenciasService {
           documento_exigido: documento_exigido,
           documento_entregue: payload.documento_entregue || false,
           prazo_documento: prazo_documento,
-          resolvido: resolvido
+          resolvido: resolvido,
+          url_documento: payload.url_documento || null
         }
       });
 
@@ -537,7 +538,8 @@ export class OcorrenciasService {
           documento_exigido: documento_exigido,
           documento_entregue: payload.enviou_atestado || false,
           prazo_documento: prazo_documento,
-          resolvido: resolvido
+          resolvido: resolvido,
+          url_documento: payload.url_documento || null
         }
       });
 
