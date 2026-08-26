@@ -7,6 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
+const upload_module_1 = require("./upload/upload.module");
+const serve_static_1 = require("@nestjs/serve-static");
+const path_1 = require("path");
 const common_1 = require("@nestjs/common");
 const schedule_1 = require("@nestjs/schedule");
 const app_controller_1 = require("./app.controller");
@@ -33,6 +36,11 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            serve_static_1.ServeStaticModule.forRoot({
+                rootPath: (0, path_1.join)(__dirname, '..', 'uploads'),
+                serveRoot: '/uploads',
+            }),
+            upload_module_1.UploadModule,
             schedule_1.ScheduleModule.forRoot(),
             prisma_module_1.PrismaModule,
             ocorrencias_module_1.OcorrenciasModule,

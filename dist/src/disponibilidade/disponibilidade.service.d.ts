@@ -25,6 +25,7 @@ export declare class DisponibilidadeService {
                 cesta_basica: string | null;
                 feriados: string | null;
                 insalubridade: string | null;
+                data_base_escala_12x36: string | null;
             };
         } & {
             id: string;

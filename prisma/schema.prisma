@@ -81,6 +81,8 @@ model DBColab {
   reciclagem_nr35               String?
   data_aso                      String?
   reciclagem_aso                String?
+  url_aso                       String?
+  url_exame_complementar        String?
   criado_em                     DateTime          @default(now())
   atualizado_em                 DateTime          @updatedAt
   ferias_limite_entrada         String?

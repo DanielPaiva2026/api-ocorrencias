@@ -39,6 +39,8 @@ export declare class PostosDeTrabalhoService {
                 reciclagem_nr35: string | null;
                 data_aso: string | null;
                 reciclagem_aso: string | null;
+                url_aso: string | null;
+                url_exame_complementar: string | null;
                 ferias_limite_entrada: string | null;
                 ferias_notificacao: string | null;
                 ferias_retorno: string | null;
@@ -109,6 +111,7 @@ export declare class PostosDeTrabalhoService {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        data_base_escala_12x36: string | null;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__PostoDeTrabalhoClient<({
         alocacoes: ({
@@ -147,6 +150,8 @@ export declare class PostosDeTrabalhoService {
                 reciclagem_nr35: string | null;
                 data_aso: string | null;
                 reciclagem_aso: string | null;
+                url_aso: string | null;
+                url_exame_complementar: string | null;
                 ferias_limite_entrada: string | null;
                 ferias_notificacao: string | null;
                 ferias_retorno: string | null;
@@ -217,6 +222,7 @@ export declare class PostosDeTrabalhoService {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        data_base_escala_12x36: string | null;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     getParaAlocacao(colabId: string): Promise<{
         mesma_cidade: boolean;
@@ -264,6 +270,8 @@ export declare class PostosDeTrabalhoService {
                 reciclagem_nr35: string | null;
                 data_aso: string | null;
                 reciclagem_aso: string | null;
+                url_aso: string | null;
+                url_exame_complementar: string | null;
                 ferias_limite_entrada: string | null;
                 ferias_notificacao: string | null;
                 ferias_retorno: string | null;
@@ -333,6 +341,7 @@ export declare class PostosDeTrabalhoService {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        data_base_escala_12x36: string | null;
     }[]>;
     update(id: string, data: any): import("@prisma/client").Prisma.Prisma__PostoDeTrabalhoClient<{
         id: string;
@@ -347,5 +356,6 @@ export declare class PostosDeTrabalhoService {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        data_base_escala_12x36: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

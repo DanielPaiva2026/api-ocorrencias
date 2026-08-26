@@ -43,7 +43,7 @@ let OcorrenciasController = class OcorrenciasController {
         return this.ocorrenciasService.converterParaInjustificada(id, body.sancao);
     }
     resolverPendenciaDocumento(id, body) {
-        return this.ocorrenciasService.resolverPendenciaDocumento(id, body.sancao, body.entregou_documento);
+        return this.ocorrenciasService.resolverPendenciaDocumento(id, body.sancao, body.entregou_documento, body.url_documento);
     }
     getSancaoSugerida(colabId, tipo) {
         return this.ocorrenciasService.getSancaoSugerida(colabId, tipo);

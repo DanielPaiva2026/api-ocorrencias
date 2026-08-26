@@ -1,3 +1,6 @@
+import { UploadModule } from './upload/upload.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AppController } from './app.controller';
@@ -22,6 +25,11 @@ import { AlertasModule } from './alertas/alertas.module';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+    UploadModule,
     ScheduleModule.forRoot(),
     PrismaModule,
     OcorrenciasModule,

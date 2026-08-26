@@ -147,7 +147,7 @@ let OcorrenciasService = class OcorrenciasService {
             orderBy: { prazo_documento: 'asc' }
         });
     }
-    async resolverPendenciaDocumento(id, sancao, entregouDocumento = false) {
+    async resolverPendenciaDocumento(id, sancao, entregouDocumento = false, url_documento = null) {
         return this.prisma.$transaction(async (tx) => {
             if (entregouDocumento) {
                 return tx.fluxoCorretivo.update({
@@ -155,7 +155,8 @@ let OcorrenciasService = class OcorrenciasService {
                     data: {
                         documento_entregue: true,
                         resolvido: true,
-                        observacao: 'Atestado entregue. Pendência resolvida.'
+                        observacao: 'Atestado entregue. Pendência resolvida.',
+                        url_documento
                     }
                 });
             }
@@ -417,6 +418,20 @@ let OcorrenciasService = class OcorrenciasService {
                             situacao_disponibilidade: 'Alocada (Substituição)',
                             data_retorno: dataFimStr,
                             observacao_retorno: `Cobrindo afastamento de ${payload.nome_titular || 'Titular'}`
+                        }
+                    });
+                }
+            }
+            if (payload.descontos_cliente && Array.isArray(payload.descontos_cliente)) {
+                for (const desc of payload.descontos_cliente) {
+                    await tx.descontoCliente.create({
+                        data: {
+                            cliente_id: desc.cliente_id,
+                            posto_id: desc.posto_id,
+                            colab_faltante_id: desc.colab_faltante_id,
+                            data: new Date(desc.data),
+                            motivo: desc.motivo,
+                            cliente_avisado: desc.cliente_avisado
                         }
                     });
                 }

@@ -76,6 +76,8 @@ export declare class OcorrenciasController {
             reciclagem_nr35: string | null;
             data_aso: string | null;
             reciclagem_aso: string | null;
+            url_aso: string | null;
+            url_exame_complementar: string | null;
             ferias_limite_entrada: string | null;
             ferias_notificacao: string | null;
             ferias_retorno: string | null;
@@ -156,6 +158,8 @@ export declare class OcorrenciasController {
             reciclagem_nr35: string | null;
             data_aso: string | null;
             reciclagem_aso: string | null;
+            url_aso: string | null;
+            url_exame_complementar: string | null;
             ferias_limite_entrada: string | null;
             ferias_notificacao: string | null;
             ferias_retorno: string | null;
@@ -264,6 +268,7 @@ export declare class OcorrenciasController {
     resolverPendenciaDocumento(id: string, body: {
         sancao: string;
         entregou_documento?: boolean;
+        url_documento?: string;
     }): Promise<{
         id: string;
         criado_em: Date;

@@ -115,7 +115,8 @@ let PostosDeTrabalhoService = class PostosDeTrabalhoService {
             data: {
                 exige_nr32: data.exige_nr32,
                 exige_nr35: data.exige_nr35,
-                horas_diarias: data.horas_diarias
+                horas_diarias: data.horas_diarias,
+                data_base_escala_12x36: data.data_base_escala_12x36
             }
         });
     }

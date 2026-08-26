@@ -40,6 +40,8 @@ export declare class ClientesController {
                     reciclagem_nr35: string | null;
                     data_aso: string | null;
                     reciclagem_aso: string | null;
+                    url_aso: string | null;
+                    url_exame_complementar: string | null;
                     ferias_limite_entrada: string | null;
                     ferias_notificacao: string | null;
                     ferias_retorno: string | null;
@@ -84,6 +86,7 @@ export declare class ClientesController {
             cesta_basica: string | null;
             feriados: string | null;
             insalubridade: string | null;
+            data_base_escala_12x36: string | null;
         })[];
     } & {
         id: string;
@@ -208,6 +211,7 @@ export declare class ClientesController {
             cesta_basica: string | null;
             feriados: string | null;
             insalubridade: string | null;
+            data_base_escala_12x36: string | null;
         }[];
     } & {
         id: string;

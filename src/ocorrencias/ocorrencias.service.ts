@@ -161,7 +161,7 @@ export class OcorrenciasService {
     });
   }
 
-  async resolverPendenciaDocumento(id: string, sancao: string, entregouDocumento: boolean = false) {
+  async resolverPendenciaDocumento(id: string, sancao: string, entregouDocumento: boolean = false, url_documento: string | null = null) {
     return this.prisma.$transaction(async (tx) => {
       if (entregouDocumento) {
         return tx.fluxoCorretivo.update({
@@ -169,7 +169,8 @@ export class OcorrenciasService {
           data: {
             documento_entregue: true,
             resolvido: true,
-            observacao: 'Atestado entregue. Pendência resolvida.'
+            observacao: 'Atestado entregue. Pendência resolvida.',
+            url_documento
           }
         });
       }

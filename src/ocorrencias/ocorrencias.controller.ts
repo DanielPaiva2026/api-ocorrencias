@@ -51,8 +51,8 @@ export class OcorrenciasController {
 
   @Patch(':id/resolver-pendencia')
   @ApiOperation({ summary: 'Resolver pendência de atestado (Advertência ou Suspensão)' })
-  resolverPendenciaDocumento(@Param('id') id: string, @Body() body: { sancao: string, entregou_documento?: boolean }) {
-    return this.ocorrenciasService.resolverPendenciaDocumento(id, body.sancao, body.entregou_documento);
+  resolverPendenciaDocumento(@Param('id') id: string, @Body() body: { sancao: string, entregou_documento?: boolean, url_documento?: string }) {
+    return this.ocorrenciasService.resolverPendenciaDocumento(id, body.sancao, body.entregou_documento, body.url_documento);
   }
 
   @Get('sancao-sugerida')
