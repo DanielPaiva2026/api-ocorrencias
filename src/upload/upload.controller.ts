@@ -56,12 +56,20 @@ export class UploadController {
   downloadBackup(@Query('pin') pin: string, @Res() res: Response) {
     const globalPin = process.env.ADMIN_PIN || '123456';
     if (pin !== globalPin) {
-      throw new UnauthorizedException('PIN inválido');
+      res.status(401).send('PIN invalido');
+      return;
     }
 
     const uploadsDir = path.resolve('./uploads');
     if (!fs.existsSync(uploadsDir)) {
-      throw new BadRequestException('Pasta de uploads não existe');
+      res.status(400).send('Pasta de uploads nao existe');
+      return;
+    }
+
+    const files = fs.readdirSync(uploadsDir);
+    if (files.length === 0) {
+      res.status(400).send('Nenhum documento foi enviado ainda.');
+      return;
     }
 
     res.attachment('backup_documentos.zip');
