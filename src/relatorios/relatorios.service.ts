@@ -281,21 +281,26 @@ export class RelatoriosService {
       return acc;
     }, {} as Record<string, number>);
 
-    // 3. Status de Postos / Vagas
+    // 3. Status Operacional Corrigido
     const totalPostos = await this.prisma.postoDeTrabalho.count();
-    const alocacoes = await this.prisma.alocacao.count();
-    
-    // Simplificando: postos ativos vs alocações. Num sistema real, 1 posto pode exigir N pessoas (usando horas), mas aqui 1 posto = 1 vaga para simplificar.
-    const vagasAbertas = totalPostos - alocacoes;
-
-    // Disponibilidade de colaboradores
+    const colabsAtivos = await this.prisma.dBColab.count({
+      where: { 
+        status_cadastro: { not: 'Inativo' }
+      }
+    });
+    const colabsAlocados = await this.prisma.dBColab.count({
+      where: { 
+        status_cadastro: { not: 'Inativo' },
+        alocacoes: { some: {} }
+      }
+    });
     const colabsLivres = await this.prisma.dBColab.count({
       where: { 
-        OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: null }],
+        status_cadastro: { not: 'Inativo' },
         alocacoes: { none: {} }
       }
     });
-
+    
     return {
       ocorrencias: ocorrenciasMes.map(o => ({ tipo: o.tipo, quantidade: o._count.id })),
       afastamentos: Object.entries(afastamentoCount).map(([motivo, qtd]) => ({ motivo, quantidade: qtd })),
