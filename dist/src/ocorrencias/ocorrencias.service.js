@@ -365,7 +365,12 @@ let OcorrenciasService = class OcorrenciasService {
                     }
                     let tipoSubstituto = isLongo ? 'Alocada' : 'Extra';
                     if (!isLongo) {
-                        tipoSubstituto = await this.calcularTipoApontamento(sub.colab_id);
+                        if (sub.gerar_extra === false) {
+                            tipoSubstituto = 'Substituição';
+                        }
+                        else {
+                            tipoSubstituto = await this.calcularTipoApontamento(sub.colab_id);
+                        }
                     }
                     const extra = await tx.fluxoCorretivo.create({
                         data: {

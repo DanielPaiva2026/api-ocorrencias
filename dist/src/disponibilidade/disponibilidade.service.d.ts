@@ -34,6 +34,7 @@ export declare class DisponibilidadeService {
             colab_id: string;
         })[];
     }[]>;
+    is12x36WorkingDay(targetDate: Date, baseDateStr: string | null): boolean;
     getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean, cidade_alvo?: string): Promise<{
         id: string;
         nome: string;

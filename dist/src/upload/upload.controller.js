@@ -70,11 +70,18 @@ let UploadController = class UploadController {
     downloadBackup(pin, res) {
         const globalPin = process.env.ADMIN_PIN || '123456';
         if (pin !== globalPin) {
-            throw new common_1.UnauthorizedException('PIN inválido');
+            res.status(401).send('PIN invalido');
+            return;
         }
         const uploadsDir = path.resolve('./uploads');
         if (!fs.existsSync(uploadsDir)) {
-            throw new common_1.BadRequestException('Pasta de uploads não existe');
+            res.status(400).send('Pasta de uploads nao existe');
+            return;
+        }
+        const files = fs.readdirSync(uploadsDir);
+        if (files.length === 0) {
+            res.status(400).send('Nenhum documento foi enviado ainda.');
+            return;
         }
         res.attachment('backup_documentos.zip');
         const archive = archiver('zip', {

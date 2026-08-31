@@ -58,7 +58,7 @@ export class DisponibilidadeService {
          status = 'INDISPONIVEL';
       } else {
         if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
-          status = 'LIVRE (Folga 36h)';
+          status = 'LIVRE (Escala 12x36)';
           horasRestantes = 12; // simplificado
         } else {
           horasRestantes = 44 - horasAlocadasSemana;
@@ -89,6 +89,17 @@ export class DisponibilidadeService {
     }).filter(c => c.horasRestantes > 0 && c.status !== 'INDISPONIVEL');
 
     return livres;
+  }
+
+  
+  is12x36WorkingDay(targetDate: Date, baseDateStr: string | null): boolean {
+    if (!baseDateStr) return true; // fallback, assumir q trabalha
+    const [d, m, y] = baseDateStr.split('/');
+    if (!d || !m || !y) return true;
+    const base = new Date(parseInt(y), parseInt(m) - 1, parseInt(d), 0, 0, 0);
+    const target = new Date(targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate(), 0, 0, 0);
+    const diff = Math.floor((target.getTime() - base.getTime()) / (1000 * 60 * 60 * 24));
+    return Math.abs(diff) % 2 === 0;
   }
 
   async getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: boolean, exige_nr35?: boolean, cidade_alvo?: string) {
@@ -173,21 +184,27 @@ export class DisponibilidadeService {
         if (isInssAtestadoInativo) {
           prioridade = 99;
           tipoDisponibilidade = colab.situacao_disponibilidade || 'Indisponível';
-        } else if (colab.alocacoes.some(a => a.posto.descricao_escala?.includes('12x36'))) {
-          prioridade = 3;
-          tipoDisponibilidade = 'Folga (12x36)';
-        } else if (horasRestantes > 0) {
-          if (colab.alocacoes.length === 0) {
-            prioridade = 1;
-            tipoDisponibilidade = 'Disponibilidade Livre';
-          } else {
-            prioridade = 2;
-            tipoDisponibilidade = 'Horas Sobrando';
-          }
+        } else if (colab.alocacoes.length === 0) {
+          prioridade = 1;
+          tipoDisponibilidade = 'Livre';
         } else {
-          // Totalmente alocado (horasRestantes <= 0) e não é 12x36
-          prioridade = 99;
-          tipoDisponibilidade = 'Totalmente Alocado';
+          const aloc12x36 = colab.alocacoes.find(a => a.posto.descricao_escala?.includes('12x36'));
+          if (aloc12x36) {
+            const isWorking = this.is12x36WorkingDay(targetDate, aloc12x36.posto.data_base_escala_12x36);
+            if (!isWorking) {
+              prioridade = 3;
+              tipoDisponibilidade = 'Disponível (Folga 12x36)';
+            } else {
+              prioridade = 99;
+              tipoDisponibilidade = 'Trabalhando (12x36)';
+            }
+          } else if (horasRestantes > 0) {
+            prioridade = 2;
+            tipoDisponibilidade = 'Disponível (Horas Sobrando)';
+          } else {
+            prioridade = 99;
+            tipoDisponibilidade = 'Totalmente Alocado';
+          }
         }
 
         // Determinar pontuação de distância (mesma cidade = menor pontuação = melhor)
