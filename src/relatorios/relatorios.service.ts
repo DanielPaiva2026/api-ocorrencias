@@ -304,7 +304,7 @@ export class RelatoriosService {
     return {
       ocorrencias: ocorrenciasMes.map(o => ({ tipo: o.tipo, quantidade: o._count.id })),
       afastamentos: Object.entries(afastamentoCount).map(([motivo, qtd]) => ({ motivo, quantidade: qtd })),
-      vagas: { totalPostos, alocacoes, vagasAbertas: vagasAbertas > 0 ? vagasAbertas : 0 },
+      vagas: { totalPostos, colabsAtivos, colabsAlocados, colabsLivres },
       disponibilidade: { colabsLivres }
     };
   }
