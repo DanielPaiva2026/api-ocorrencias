@@ -146,7 +146,17 @@ export class DisponibilidadeService {
 
     // 2. Filtrar e classificar
     const candidatos = colaboradores
-      .filter(c => c.afastamentos.length === 0 && c.ocorrencias.length === 0)
+      .filter(c => {
+        if (c.ocorrencias.length > 0) return false;
+        if (c.afastamentos.length > 0) {
+          const hasImpeditivo = c.afastamentos.some(af => {
+             const m = (af.motivo || '').toUpperCase();
+             return !m.includes('FÉRIAS') && !m.includes('FERIAS');
+          });
+          if (hasImpeditivo) return false;
+        }
+        return true;
+      })
       .map(colab => {
         let horasAlocadas = 0;
         // Simulando horas alocadas (assumindo formato de hh:mm ou numero de horas)
@@ -168,38 +178,50 @@ export class DisponibilidadeService {
             horasRestantes = horasContratadasInt - horasAlocadas;
         }
 
-        // Determinar Prioridade (1: Livre, 2: Horas Sobrando, 3: Folga)
+        // Determinar Prioridade (1: Livre, 2: Horas Sobrando, 3: Folga 12x36, 4: Férias)
         let prioridade = 99;
         let tipoDisponibilidade = 'Indisponível';
 
         const sitDisp = (colab.situacao_disponibilidade || '').toUpperCase();
         const isInssAtestadoInativo = sitDisp.includes('INSS') || 
                                       sitDisp.includes('ATESTADO') || 
-                                      sitDisp.includes('FÉRIAS') || 
-                                      sitDisp.includes('FERIAS') || 
                                       sitDisp.includes('FALTA') || 
                                       sitDisp.includes('AFASTAD') || 
                                       (colab.status_cadastro || '').toUpperCase() === 'INATIVO';
 
-        if (isInssAtestadoInativo) {
+        const isFeriasAfastamento = colab.afastamentos.some(af => {
+          const m = (af.motivo || '').toUpperCase();
+          return m.includes('FÉRIAS') || m.includes('FERIAS');
+        });
+        const isFerista = tipoContratacao.includes('FERISTA');
+        
+        if (isInssAtestadoInativo && !sitDisp.includes('FÉRIAS') && !sitDisp.includes('FERIAS')) {
           prioridade = 99;
           tipoDisponibilidade = colab.situacao_disponibilidade || 'Indisponível';
+        } else if (isFeriasAfastamento || sitDisp.includes('FÉRIAS') || sitDisp.includes('FERIAS')) {
+          prioridade = 5;
+          tipoDisponibilidade = 'Disponível (Férias)';
         } else if (colab.alocacoes.length === 0) {
-          prioridade = 1;
-          tipoDisponibilidade = 'Livre';
+          if (isFerista) {
+            prioridade = 2;
+            tipoDisponibilidade = 'Disponível (Ferista)';
+          } else {
+            prioridade = 1;
+            tipoDisponibilidade = 'Livre';
+          }
         } else {
           const aloc12x36 = colab.alocacoes.find(a => a.posto.descricao_escala?.includes('12x36'));
           if (aloc12x36) {
             const isWorking = this.is12x36WorkingDay(targetDate, aloc12x36.posto.data_base_escala_12x36);
             if (!isWorking) {
-              prioridade = 3;
+              prioridade = 4;
               tipoDisponibilidade = 'Disponível (Folga 12x36)';
             } else {
               prioridade = 99;
               tipoDisponibilidade = 'Trabalhando (12x36)';
             }
           } else if (horasRestantes > 0) {
-            prioridade = 2;
+            prioridade = 3;
             tipoDisponibilidade = 'Disponível (Horas Sobrando)';
           } else {
             prioridade = 99;
