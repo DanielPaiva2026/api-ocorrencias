@@ -316,7 +316,11 @@ export class RelatoriosService {
                        (c.cargo_alterdata || '').toLowerCase().includes('administrati') || 
                        (c.cargo_alterdata || '').toLowerCase().includes('gest');
 
-      if (c.afastamentos.length > 0) {
+      const isAfastadoBadge = c.situacao_disponibilidade === 'INSS' || 
+                              c.situacao_disponibilidade === 'Férias' || 
+                              (c.situacao_disponibilidade || '').toLowerCase().includes('afastado');
+
+      if (c.afastamentos.length > 0 || isAfastadoBadge) {
         colabsAfastados++;
       } else if (isGestao) {
         colabsAdministrativo++;
