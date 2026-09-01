@@ -1,17 +1,11 @@
-const { NodeSSH } = require('./node_modules/node-ssh');
-const ssh = new NodeSSH();
-
-async function run() {
-  try {
-    await ssh.connect({host: '72.62.142.112', username: 'root', password: 'Dd6nx8js#2025'});
-    
-    console.log("Checking built JS for NEXT_PUBLIC_API_URL...");
-    const { stdout, stderr } = await ssh.execCommand('docker exec ocorencia-alpiserra_painel_ocorrencia.1.87zlxvpeci5vyiva45uyqk363 grep -r "ocorencia-alpiserra-api-ocorrencia" .next/static/');
-    console.log("STDOUT:", stdout);
-    
-    ssh.dispose();
-  } catch (err) {
-    console.error(err);
-  }
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient({
+  datasources: { db: { url: process.env.DATABASE_URL } }
+});
+async function main() {
+  const cargos = await prisma.dBColab.findMany({ select: { categoria_cargo: true }, distinct: ['categoria_cargo'] });
+  console.log('Categoria Cargo:', cargos.map(c => c.categoria_cargo));
+  const status = await prisma.dBColab.findMany({ select: { status_cadastro: true }, distinct: ['status_cadastro'] });
+  console.log('Status Cadastro:', status.map(s => s.status_cadastro));
 }
-run();
+main().finally(() => prisma.$disconnect());
