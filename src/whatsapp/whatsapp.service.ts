@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, forwardRef, Inject } from '@nestjs/common';
 import axios from 'axios';
 import * as https from 'https';
 import { PrismaService } from '../prisma/prisma.service';
@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import OpenAI from 'openai';
+import { AiService } from './ai.service';
 
 @Injectable()
 export class WhatsappService {
@@ -15,7 +16,12 @@ export class WhatsappService {
   private readonly apiUrl = `https://graph.facebook.com/v19.0/${this.phoneId}/messages`;
   private readonly openai: OpenAI;
 
-  constructor(private prisma: PrismaService) {
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => AiService))
+    private readonly aiService: AiService
+  ) {
+    this.aiService.setWhatsappService(this);
     if (process.env.OPENAI_API_KEY) {
       this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     }
@@ -244,12 +250,8 @@ export class WhatsappService {
           incomingText = message.text?.body || '';
         }
 
-        // Lógica temporária de resposta (antes do motor de IA)
-        if (isAtestado && mediaPath) {
-           await this.sendMessage(from, `📁 Recebemos o seu documento. Arquivo salvo internamente para análise.`);
-        } else if (message.type === 'text') {
-           await this.sendMessage(from, `Olá! Recebemos sua mensagem: "${incomingText}". Nossa assistente virtual logo entrará em operação.`);
-        }
+        // Envia para o motor de IA orquestrar
+        await this.aiService.handleIncomingMessage(from, incomingText, mediaPath || undefined, isAtestado);
       }
     } catch (e) {
       this.logger.error('Erro ao processar mensagem do Webhook', e);
