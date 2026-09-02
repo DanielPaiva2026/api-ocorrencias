@@ -246,3 +246,14 @@ model DescontoCliente {
   posto             PostoDeTrabalho? @relation(fields: [posto_id], references: [id])
   colab_faltante    DBColab?         @relation(fields: [colab_faltante_id], references: [id])
 }
+
+model AtendimentoWhatsapp {
+  id              String   @id @default(uuid())
+  telefone        String   @unique
+  estado_atual    String   @default("TRIAGEM")
+  thread_id       String?
+  dados_coletados Json?
+  criado_em       DateTime @default(now())
+  atualizado_em   DateTime @updatedAt
+}
+
