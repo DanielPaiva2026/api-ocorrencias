@@ -157,19 +157,21 @@ Aja com cordialidade, rapidez e firmeza.`;
             else if (toolCall.function.name === 'notificar_supervisor_atraso') {
               this.logger.log(`Notificando supervisor sobre ATRASO: ${JSON.stringify(args)}`);
               try {
-                await this.whatsappService.sendMessage(this.SUPERVISOR_PHONE, `🚨 *AVISO DE ATRASO* 🚨\n\nTrabalhador: *${args.nome}*\nPosto: *${args.posto}*\nPrevisão: *${args.previsao_chegada}*\n\n(Mensagem da Thais)`);
+                const historico = '1 atraso nos últimos 90 dias'; // FIXME: Real history lookup
+                await this.whatsappService.sendTemplateMessage(this.SUPERVISOR_PHONE, 'aviso_supervisor_atraso', [args.nome, args.posto, args.previsao_chegada, historico]);
                 functionResult = 'O supervisor foi notificado com sucesso. Diga ao colaborador para aguardar.';
               } catch (err: any) {
-                functionResult = 'Erro ao notificar. Diga ao trabalhador que a supervisão foi notificada via sistema.';
+                functionResult = 'Erro ao notificar o supervisor via sistema.';
               }
             } 
             else if (toolCall.function.name === 'notificar_supervisor_falta') {
               this.logger.log(`Notificando supervisor sobre FALTA: ${JSON.stringify(args)}`);
               try {
-                await this.whatsappService.sendMessage(this.SUPERVISOR_PHONE, `🚨 *AVISO DE FALTA* 🚨\n\nTrabalhador: *${args.nome}*\nPosto: *${args.posto}*\nMotivo: *${args.motivo}*\nAtestado: *${args.tem_atestado ? 'Sim' : 'Não/Pendente'}*\n\n(Mensagem da Thais)`);
+                const historico = 'Sem faltas nos últimos 90 dias'; // FIXME: Real history lookup
+                await this.whatsappService.sendTemplateMessage(this.SUPERVISOR_PHONE, 'aviso_supervisor_falta', [args.nome, args.posto, args.motivo, historico]);
                 functionResult = 'O supervisor foi notificado com sucesso. Diga ao colaborador para aguardar.';
               } catch (err: any) {
-                functionResult = 'Erro ao notificar. Diga ao trabalhador que a supervisão foi notificada via sistema.';
+                functionResult = 'Erro ao notificar o supervisor via sistema.';
               }
             }
 
