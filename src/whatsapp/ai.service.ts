@@ -179,21 +179,43 @@ Aja com cordialidade, rapidez e firmeza.`;
 
             if (toolCall.function.name === 'consultar_cadastro_trabalhador') {
               this.logger.log(`Consultando trabalhador: ${args.termo_busca}`);
-              const colabs = await this.prisma.dBColab.findMany({
-                where: {
-                  OR: [
-                    { nome: { contains: args.termo_busca, mode: 'insensitive' } },
-                    { cpf: { contains: args.termo_busca } }
-                  ]
-                }
-              });
+              const termo = args.termo_busca.trim();
+              const isCpf = /^[\d\.\-]+$/.test(termo) && termo.replace(/\D/g, '').length >= 11;
+              const isFullName = termo.includes(' ');
               
-              if (colabs.length === 1) {
-                functionResult = `Trabalhador encontrado: ${colabs[0].nome}. Posto alocado no sistema: ${colabs[0].localizacao}`;
-              } else if (colabs.length > 1) {
-                functionResult = `Foram encontrados ${colabs.length} trabalhadores com esse nome/termo. EXIJA que ele informe o Nome Completo ou o CPF para identificar corretamente. NÃO prossiga.`;
+              if (!isCpf && !isFullName) {
+                 functionResult = 'ERRO: A busca falhou porque você forneceu apenas um nome simples (ex: apenas o primeiro nome). EXIJA que o trabalhador digite o NOME COMPLETO ou o CPF.';
               } else {
-                functionResult = 'Trabalhador não encontrado no sistema com esse nome/CPF. Peça para ele verificar se digitou corretamente.';
+                const colabs = await this.prisma.dBColab.findMany({
+                  where: {
+                    OR: [
+                      { nome: { contains: termo, mode: 'insensitive' } },
+                      { cpf: { contains: termo } }
+                    ]
+                  }
+                });
+                
+                if (colabs.length === 1) {
+                  const colab = colabs[0];
+                  // Busca os postos de trabalho reais
+                  const alocacoes = await this.prisma.alocacao.findMany({
+                    where: { colab_id: colab.id },
+                    include: { posto: { include: { cliente: true } } }
+                  });
+                  
+                  let postosStr = '';
+                  if (alocacoes.length > 0) {
+                    postosStr = alocacoes.map(a => a.posto ? `${a.posto.cliente?.nome_razao} - ${a.posto.codigo}` : '').filter(Boolean).join(' ou ');
+                  } else {
+                    postosStr = colab.localizacao || 'Desconhecido';
+                  }
+
+                  functionResult = `Trabalhador encontrado: ${colab.nome}. Postos alocados no sistema: ${postosStr}. Se houver mais de um posto, pergunte ao trabalhador EM QUAL DESTES POSTOS ele vai faltar.`;
+                } else if (colabs.length > 1) {
+                  functionResult = `Foram encontrados ${colabs.length} trabalhadores com esse nome/termo. EXIJA que ele informe o Nome Completo ou o CPF exato para identificar corretamente. NÃO prossiga.`;
+                } else {
+                  functionResult = 'Trabalhador não encontrado no sistema com esse nome/CPF. Peça para ele verificar se digitou corretamente.';
+                }
               }
             }
             else if (toolCall.function.name === 'notificar_supervisor_atraso') {
