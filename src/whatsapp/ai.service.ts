@@ -35,6 +35,25 @@ Regras de Atendimento:
 Aja com cordialidade, rapidez e firmeza.`;
   }
 
+  async injectSupervisorContext(workerName: string, posto: string, motivoOuPrevisao: string, tipo: 'FALTA' | 'ATRASO') {
+    let atendimento = await this.prisma.atendimentoWhatsapp.findUnique({ where: { telefone: this.SUPERVISOR_PHONE } });
+    if (!atendimento) {
+      atendimento = await this.prisma.atendimentoWhatsapp.create({
+        data: { telefone: this.SUPERVISOR_PHONE, estado_atual: 'TRIAGEM', dados_coletados: { messages: [] } }
+      });
+    }
+    const dados: any = atendimento.dados_coletados || { messages: [] };
+    if (!dados.messages) dados.messages = [];
+    dados.messages.push({
+      role: 'system',
+      content: `[ALERTA DE SISTEMA]: Você (Thais) acabou de enviar uma notificação para este supervisor sobre uma ${tipo} de ${workerName} no posto ${posto}. Motivo/Previsão: ${motivoOuPrevisao}. O supervisor provavelmente está respondendo a esta notificação. Ajude-o informando os detalhes caso ele pergunte.`
+    });
+    await this.prisma.atendimentoWhatsapp.update({
+      where: { id: atendimento.id },
+      data: { dados_coletados: dados }
+    });
+  }
+
   async handleIncomingMessage(from: string, text: string, mediaPath?: string, isAtestado?: boolean) {
     if (!this.openai) return;
 
@@ -160,7 +179,7 @@ Aja com cordialidade, rapidez e firmeza.`;
 
             if (toolCall.function.name === 'consultar_cadastro_trabalhador') {
               this.logger.log(`Consultando trabalhador: ${args.termo_busca}`);
-              const colabBusca = await this.prisma.dBColab.findFirst({
+              const colabs = await this.prisma.dBColab.findMany({
                 where: {
                   OR: [
                     { nome: { contains: args.termo_busca, mode: 'insensitive' } },
@@ -169,8 +188,10 @@ Aja com cordialidade, rapidez e firmeza.`;
                 }
               });
               
-              if (colabBusca) {
-                functionResult = `Trabalhador encontrado: ${colabBusca.nome}. Posto alocado no sistema: ${colabBusca.localizacao}`;
+              if (colabs.length === 1) {
+                functionResult = `Trabalhador encontrado: ${colabs[0].nome}. Posto alocado no sistema: ${colabs[0].localizacao}`;
+              } else if (colabs.length > 1) {
+                functionResult = `Foram encontrados ${colabs.length} trabalhadores com esse nome/termo. EXIJA que ele informe o Nome Completo ou o CPF para identificar corretamente. NÃO prossiga.`;
               } else {
                 functionResult = 'Trabalhador não encontrado no sistema com esse nome/CPF. Peça para ele verificar se digitou corretamente.';
               }
@@ -180,6 +201,7 @@ Aja com cordialidade, rapidez e firmeza.`;
               try {
                 const historico = '1 atraso nos últimos 90 dias'; // FIXME: Real history lookup
                 await this.whatsappService.sendTemplateMessage(this.SUPERVISOR_PHONE, 'aviso_supervisor_atraso', [args.nome, args.posto, args.previsao_chegada, historico]);
+                await this.injectSupervisorContext(args.nome, args.posto, args.previsao_chegada, 'ATRASO');
                 functionResult = 'O supervisor foi notificado com sucesso. Diga ao colaborador para aguardar.';
               } catch (err: any) {
                 functionResult = 'Erro ao notificar o supervisor via sistema.';
@@ -190,6 +212,7 @@ Aja com cordialidade, rapidez e firmeza.`;
               try {
                 const historico = 'Sem faltas nos últimos 90 dias'; // FIXME: Real history lookup
                 await this.whatsappService.sendTemplateMessage(this.SUPERVISOR_PHONE, 'aviso_supervisor_falta', [args.nome, args.posto, args.motivo, historico]);
+                await this.injectSupervisorContext(args.nome, args.posto, args.motivo, 'FALTA');
                 functionResult = 'O supervisor foi notificado com sucesso. Diga ao colaborador para aguardar.';
               } catch (err: any) {
                 functionResult = 'Erro ao notificar o supervisor via sistema.';
