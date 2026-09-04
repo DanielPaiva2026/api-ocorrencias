@@ -50,19 +50,40 @@ Aja com cordialidade, rapidez e firmeza.`;
       const dados: any = atendimento.dados_coletados || { messages: [] };
       if (!dados.messages) dados.messages = [];
 
-      // Identifica colaborador
-      const colab = await this.prisma.dBColab.findFirst({ where: { telefone_principal: from } });
-      const nomeConhecido = colab ? colab.nome : '';
+      // Identifica se é Supervisor ou Colaborador
+      let isSupervisor = false;
+      let nomeConhecido = '';
+      let postoConhecido = 'Desconhecido';
+
+      const usuarioSupervisor = await this.prisma.usuario.findFirst({
+        where: { telefone_whatsapp: from }
+      });
+
+      if (usuarioSupervisor) {
+        isSupervisor = true;
+        nomeConhecido = usuarioSupervisor.nome;
+      } else {
+        const colab = await this.prisma.dBColab.findFirst({ where: { telefone_principal: from } });
+        if (colab) {
+          nomeConhecido = colab.nome;
+          postoConhecido = colab.localizacao || 'Desconhecido';
+        }
+      }
 
       // Adiciona prompt de sistema
       if (dados.messages.length === 0) {
-         let sysPrompt = this.getSystemPrompt();
-         if (nomeConhecido) {
-           sysPrompt += `\n[SISTEMA]: Você já sabe que está falando com o colaborador ${nomeConhecido} do posto ${colab?.localizacao || 'Desconhecido'}. Cumprimente-o pelo nome na sua primeira fala e não precisa perguntar o CPF.`;
+         if (isSupervisor) {
+           let sysPrompt = `Você é a Thais, assistente virtual da AlpiSerra exclusiva para SUPERVISORES.\nO supervisor ${nomeConhecido} está falando com você.\nSua missão:\n1. Receber as orientações dos supervisores sobre quem vai cobrir uma Falta ou Atraso que você enviou para eles.\n2. Quando o supervisor informar o nome do substituto para uma ocorrência, você deve confirmar e registrar no sistema (ferramentas em breve).\nAja de forma muito objetiva.`;
+           dados.messages.push({ role: 'system', content: sysPrompt });
          } else {
-           sysPrompt += `\n[SISTEMA]: Este número de telefone não está cadastrado. Você deve perguntar o NOME COMPLETO e o CPF do colaborador antes de prosseguir.`;
+           let sysPrompt = this.getSystemPrompt();
+           if (nomeConhecido) {
+             sysPrompt += `\n[SISTEMA]: Você já sabe que está falando com o colaborador ${nomeConhecido} do posto ${postoConhecido}. Cumprimente-o pelo nome na sua primeira fala e não precisa perguntar o CPF.`;
+           } else {
+             sysPrompt += `\n[SISTEMA]: Este número de telefone não está cadastrado. Você deve perguntar o NOME COMPLETO e o CPF do colaborador antes de prosseguir.`;
+           }
+           dados.messages.push({ role: 'system', content: sysPrompt });
          }
-         dados.messages.push({ role: 'system', content: sysPrompt });
       }
 
       let contentMsg = text;
