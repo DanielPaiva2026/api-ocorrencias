@@ -3,16 +3,21 @@ import { PrismaService } from '../prisma/prisma.service';
 import OpenAI from 'openai';
 import { WhatsappService } from './whatsapp.service';
 
+import { DisponibilidadeService } from '../disponibilidade/disponibilidade.service';
+
 @Injectable()
 export class AiService {
   private readonly logger = new Logger(AiService.name);
-  private openai: OpenAI;
+  private openai: OpenAI | null = null;
   private whatsappService: WhatsappService;
 
   // Temporário: número do supervisor fixo para testes
   private readonly SUPERVISOR_PHONE = '5524988214800';
 
-  constructor(private readonly prisma: PrismaService) {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly disponibilidadeService: DisponibilidadeService
+  ) {
     if (process.env.OPENAI_API_KEY) {
       this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     }
@@ -202,20 +207,17 @@ Missão:
             if (toolCall.function.name === 'listar_substitutos') {
               this.logger.log('Supervisor pediu lista de substitutos');
               try {
-                // Simplified query for now: get workers that are "Livre" or not alocados
-                const colabs = await this.prisma.dBColab.findMany({ 
-                  where: { situacao_disponibilidade: { in: ['Livre', 'Folguista', 'Afastamento Coberto'] } },
-                  take: 10, 
-                  select: { nome: true, localizacao: true, sub_local: true } 
-                });
+                const dataStr = new Date().toISOString().split('T')[0];
+                const colabs = await this.disponibilidadeService.getSubstitutos(args.posto_alvo, undefined, dataStr);
                 
-                if (colabs.length === 0) {
-                  functionResult = 'Não há nenhum trabalhador com status Livre no momento.';
+                if (!colabs || colabs.length === 0) {
+                  functionResult = 'Não há nenhum substituto disponível no momento para esse perfil/data.';
                 } else {
-                  const lista = colabs.map(c => `- ${c.nome} (${c.localizacao || 'Sem Posto'})`).join('\n');
-                  functionResult = 'Aqui estão alguns substitutos disponíveis no sistema:\n' + lista + '\nPergunte ao supervisor qual deles ele escolhe.';
+                  const lista = colabs.slice(0, 10).map((c: any) => `- ${c.nome} (Prioridade: ${c.prioridade === 1 ? 'Livre' : c.prioridade === 2 ? 'Folguista' : 'Outros'})`).join('\n');
+                  functionResult = 'Aqui estão os melhores substitutos recomendados pelo sistema:\n' + lista + '\nPergunte ao supervisor qual deles ele escolhe.';
                 }
               } catch (err: any) {
+                this.logger.error('Erro listar_substitutos', err);
                 functionResult = 'Erro ao buscar substitutos no banco de dados.';
               }
             }

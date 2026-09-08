@@ -4,6 +4,7 @@ import { DisponibilidadeController } from './disponibilidade.controller';
 
 @Module({
   providers: [DisponibilidadeService],
-  controllers: [DisponibilidadeController]
+  controllers: [DisponibilidadeController],
+  exports: [DisponibilidadeService]
 })
 export class DisponibilidadeModule {}
