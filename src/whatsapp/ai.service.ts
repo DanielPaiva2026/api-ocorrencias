@@ -207,7 +207,9 @@ Aja com cordialidade, rapidez e firmeza.`;
                   if (alocacoes.length > 0) {
                     postosStr = alocacoes.map(a => a.posto ? `${a.posto.cliente?.nome_razao} - ${a.posto.codigo}` : '').filter(Boolean).join(' ou ');
                   } else {
-                    postosStr = colab.localizacao || 'Desconhecido';
+                    const loc = colab.localizacao || 'Desconhecido';
+                    const sub = colab.sub_local ? ` - ${colab.sub_local}` : '';
+                    postosStr = loc + sub;
                   }
 
                   functionResult = `Trabalhador encontrado: ${colab.nome}. Postos alocados no sistema: ${postosStr}. Se houver mais de um posto, pergunte ao trabalhador EM QUAL DESTES POSTOS ele vai faltar.`;
