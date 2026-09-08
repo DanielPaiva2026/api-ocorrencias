@@ -23,15 +23,20 @@ export class AiService {
   }
 
   private getSystemPrompt(): string {
-    return `Você é a Thais, a atendente virtual da AlpiSerra. Este canal é exclusivo para assuntos de Ocorrências (Faltas, Atrasos) e Urgências (Emergências, Alarmes).
-Regras de Atendimento:
-1. Se for uma primeira mensagem, sempre se apresente: "Eu sou a atendente virtual da AlpiSerra. Eu me chamo Thais. Este canal é para assuntos de Ocorrência/Urgências. Funciono 24 horas, como posso te ajudar?".
-2. Se o assunto não for atraso, falta ou emergência, informe que assuntos administrativos devem ser tratados presencialmente ou pelo WhatsApp (24) 98857-8939 no horário comercial.
-3. Se o trabalhador informar Atraso ou Falta, EXIJA SEMPRE o Nome Completo e o CPF (ou Matrícula) caso o sistema já não tenha identificado ele. Não aceite apenas o primeiro nome.
-4. Após o trabalhador fornecer o Nome/CPF, USE A FERRAMENTA 'consultar_cadastro_trabalhador' para verificar em qual posto ele está alocado no sistema. Confirme o posto com ele.
-5. Para Atrasos, pergunte a previsão de chegada ao posto. Para Faltas, pergunte o motivo e exija o atestado (com prazo de 48h).
-6. ASSIM QUE TIVER TODAS AS INFORMAÇÕES CONFIRMADAS (Nome completo validado, Posto validado, Motivo/Previsão), chame as ferramentas 'notificar_supervisor_atraso' ou 'notificar_supervisor_falta'.
-7. Após chamar a notificação, avise o colaborador que o supervisor já foi acionado e encerre o atendimento.
+    return `Você é a Thais, assistente virtual de RH da AlpiSerra. 
+Sua função é coletar avisos de Atraso ou Falta dos colaboradores via WhatsApp.
+
+REGRAS RÍGIDAS (Siga na ordem):
+1. Cumprimente o trabalhador e pergunte o motivo do contato.
+2. Identifique se é um ATRASO ou uma FALTA.
+3. Se o trabalhador informar Atraso ou Falta, EXIJA SEMPRE o Nome Completo e o CPF (ou Matrícula) caso o sistema já não tenha identificado ele.
+4. Após o trabalhador fornecer o Nome/CPF, USE A FERRAMENTA 'consultar_cadastro_trabalhador' para verificar em qual posto ele está alocado no sistema.
+   -> ATENÇÃO: Se a ferramenta disser "Trabalhador não encontrado", VOCÊ NÃO PODE PROSSEGUIR. Diga ao trabalhador que não o encontrou e peça o CPF ou Nome Completo correto.
+5. Se a ferramenta retornar os Postos do trabalhador, CONFIRME O POSTO com ele. Se houver mais de um posto, PERGUNTE em qual ele faltará/atrasará.
+6. Após validar o posto, se for FALTA, pergunte o motivo. Se for ATRASO, pergunte a previsão de chegada.
+7. Se for FALTA por motivo de saúde, peça o Atestado Médico. Se for doação de sangue ou fórum, peça a Declaração de Comparecimento. Diga que ele deve enviar a foto do documento pelo WhatsApp ou entregar depois.
+8. REGRA DE OURO: Você é ESTTRITAMENTE PROIBIDA de chamar as ferramentas 'notificar_supervisor_atraso' ou 'notificar_supervisor_falta' se o trabalhador NÃO tiver sido validado com sucesso pela ferramenta 'consultar_cadastro_trabalhador'. NUNCA INVENTE POSTOS OU NOMES.
+9. Só chame a notificação ao supervisor quando TUDO estiver validado e confirmado. Em seguida, encerre o atendimento.
 Aja com cordialidade, rapidez e firmeza.`;
   }
 
@@ -92,7 +97,11 @@ Aja com cordialidade, rapidez e firmeza.`;
       // Adiciona prompt de sistema
       if (dados.messages.length === 0) {
          if (isSupervisor) {
-           let sysPrompt = `Você é a Thais, assistente virtual da AlpiSerra exclusiva para SUPERVISORES.\nO supervisor ${nomeConhecido} está falando com você.\nSua missão:\n1. Receber as orientações dos supervisores sobre quem vai cobrir uma Falta ou Atraso que você enviou para eles.\n2. Quando o supervisor informar o nome do substituto para uma ocorrência, você deve confirmar e registrar no sistema (ferramentas em breve).\nAja de forma muito objetiva.`;
+           let sysPrompt = `Você é a Thais, assistente virtual exclusiva para SUPERVISORES. O supervisor ${nomeConhecido} está falando com você.
+Missão:
+1. Receber as instruções do supervisor.
+2. SE o supervisor pedir uma lista de funcionários, substitutos disponíveis ou relação de nomes, VOCÊ DEVE OBRIGATORIAMENTE chamar a ferramenta 'listar_substitutos'. NÃO diga que não pode fornecer a lista.
+3. Leia atentamente as notificações que você enviou antes para saber o contexto da conversa.`;
            dados.messages.push({ role: 'system', content: sysPrompt });
          } else {
            let sysPrompt = this.getSystemPrompt();
@@ -116,6 +125,19 @@ Aja com cordialidade, rapidez e firmeza.`;
         messages: dados.messages,
         temperature: 0.2,
         tools: [
+          {
+            type: 'function',
+            function: {
+              name: 'listar_substitutos',
+              description: 'Lista todos os trabalhadores do sistema que estão livres ou disponíveis para atuar como substitutos.',
+              parameters: {
+                type: 'object',
+                properties: {
+                  posto_alvo: { type: 'string', description: 'Oposto onde a falta ocorreu (opcional)' }
+                }
+              }
+            }
+          },
           {
             type: 'function',
             function: {
@@ -177,7 +199,27 @@ Aja com cordialidade, rapidez e firmeza.`;
             const args = JSON.parse(toolCall.function.arguments);
             let functionResult = '';
 
-            if (toolCall.function.name === 'consultar_cadastro_trabalhador') {
+            if (toolCall.function.name === 'listar_substitutos') {
+              this.logger.log('Supervisor pediu lista de substitutos');
+              try {
+                // Simplified query for now: get workers that are "Livre" or not alocados
+                const colabs = await this.prisma.dBColab.findMany({ 
+                  where: { situacao_disponibilidade: { in: ['Livre', 'Folguista', 'Afastamento Coberto'] } },
+                  take: 10, 
+                  select: { nome: true, localizacao: true, sub_local: true } 
+                });
+                
+                if (colabs.length === 0) {
+                  functionResult = 'Não há nenhum trabalhador com status Livre no momento.';
+                } else {
+                  const lista = colabs.map(c => `- ${c.nome} (${c.localizacao || 'Sem Posto'})`).join('\n');
+                  functionResult = 'Aqui estão alguns substitutos disponíveis no sistema:\n' + lista + '\nPergunte ao supervisor qual deles ele escolhe.';
+                }
+              } catch (err: any) {
+                functionResult = 'Erro ao buscar substitutos no banco de dados.';
+              }
+            }
+            else if (toolCall.function.name === 'consultar_cadastro_trabalhador') {
               this.logger.log(`Consultando trabalhador: ${args.termo_busca}`);
               const termo = args.termo_busca.trim();
               const isCpf = /^[\d\.\-]+$/.test(termo) && termo.replace(/\D/g, '').length >= 11;
