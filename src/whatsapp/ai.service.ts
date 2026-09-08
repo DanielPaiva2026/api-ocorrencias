@@ -84,15 +84,27 @@ Aja com cordialidade, rapidez e firmeza.`;
       let nomeConhecido = '';
       let postoConhecido = 'Desconhecido';
 
+      // Normaliza o número (remove 55 e caracteres especiais)
+      let fromNormalized = from.replace(/\D/g, '');
+      if (fromNormalized.startsWith('55') && fromNormalized.length >= 12) {
+        fromNormalized = fromNormalized.substring(2);
+      }
+
       const usuarioSupervisor = await this.prisma.usuario.findFirst({
-        where: { telefone_whatsapp: from }
+        where: { 
+          telefone_whatsapp: { contains: fromNormalized } 
+        }
       });
 
       if (usuarioSupervisor) {
         isSupervisor = true;
         nomeConhecido = usuarioSupervisor.nome;
       } else {
-        const colab = await this.prisma.dBColab.findFirst({ where: { telefone_principal: from } });
+        const colab = await this.prisma.dBColab.findFirst({ 
+          where: { 
+            telefone_principal: { contains: fromNormalized } 
+          } 
+        });
         if (colab) {
           nomeConhecido = colab.nome;
           postoConhecido = colab.localizacao || 'Desconhecido';
