@@ -16,7 +16,8 @@ exports.DisponibilidadeModule = DisponibilidadeModule;
 exports.DisponibilidadeModule = DisponibilidadeModule = __decorate([
     (0, common_1.Module)({
         providers: [disponibilidade_service_1.DisponibilidadeService],
-        controllers: [disponibilidade_controller_1.DisponibilidadeController]
+        controllers: [disponibilidade_controller_1.DisponibilidadeController],
+        exports: [disponibilidade_service_1.DisponibilidadeService]
     })
 ], DisponibilidadeModule);
 //# sourceMappingURL=disponibilidade.module.js.map

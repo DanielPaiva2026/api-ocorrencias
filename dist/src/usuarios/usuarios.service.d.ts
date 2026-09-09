@@ -4,9 +4,9 @@ export declare class UsuariosService {
     constructor(prisma: PrismaService);
     findAll(): Promise<{
         id: string;
-        cliente_id: string | null;
-        criado_em: Date;
         nome: string;
+        criado_em: Date;
+        cliente_id: string | null;
         email: string;
         role: string;
         troca_senha_obrigatoria: boolean;

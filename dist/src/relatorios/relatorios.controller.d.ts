@@ -19,8 +19,12 @@ export declare class RelatoriosController {
         }[];
         vagas: {
             totalPostos: number;
-            alocacoes: number;
             vagasAbertas: number;
+            colabsAtivos: number;
+            colabsAdministrativo: number;
+            colabsAfastados: number;
+            colabsAlocados: number;
+            colabsLivres: number;
         };
         disponibilidade: {
             colabsLivres: number;

@@ -257,19 +257,56 @@ let RelatoriosService = class RelatoriosService {
             acc[curr.motivo] = (acc[curr.motivo] || 0) + 1;
             return acc;
         }, {});
-        const totalPostos = await this.prisma.postoDeTrabalho.count();
-        const alocacoes = await this.prisma.alocacao.count();
-        const vagasAbertas = totalPostos - alocacoes;
-        const colabsLivres = await this.prisma.dBColab.count({
-            where: {
-                OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: null }],
-                alocacoes: { none: {} }
+        const postos = await this.prisma.postoDeTrabalho.findMany({
+            include: { alocacoes: true }
+        });
+        const totalPostos = postos.length;
+        const vagasAbertas = postos.filter(p => p.alocacoes.length === 0).length;
+        const colabsAtivosList = await this.prisma.dBColab.findMany({
+            where: { status_cadastro: { not: 'Inativo' } },
+            include: {
+                alocacoes: true,
+                afastamentos: {
+                    where: {
+                        data_inicio: { lte: hoje },
+                        OR: [
+                            { data_fim: null },
+                            { data_fim: { gte: hoje } }
+                        ]
+                    }
+                }
             }
         });
+        const colabsAtivos = colabsAtivosList.length;
+        let colabsAlocados = 0;
+        let colabsLivres = 0;
+        let colabsAdministrativo = 0;
+        let colabsAfastados = 0;
+        for (const c of colabsAtivosList) {
+            const isGestao = (c.categoria_cargo || '').toLowerCase().includes('administrati') ||
+                (c.categoria_cargo || '').toLowerCase().includes('gest') ||
+                (c.cargo_alterdata || '').toLowerCase().includes('administrati') ||
+                (c.cargo_alterdata || '').toLowerCase().includes('gest');
+            const isAfastadoBadge = c.situacao_disponibilidade === 'INSS' ||
+                c.situacao_disponibilidade === 'Férias' ||
+                (c.situacao_disponibilidade || '').toLowerCase().includes('afastado');
+            if (c.afastamentos.length > 0 || isAfastadoBadge) {
+                colabsAfastados++;
+            }
+            else if (isGestao) {
+                colabsAdministrativo++;
+            }
+            else if (c.alocacoes.length > 0) {
+                colabsAlocados++;
+            }
+            else {
+                colabsLivres++;
+            }
+        }
         return {
             ocorrencias: ocorrenciasMes.map(o => ({ tipo: o.tipo, quantidade: o._count.id })),
             afastamentos: Object.entries(afastamentoCount).map(([motivo, qtd]) => ({ motivo, quantidade: qtd })),
-            vagas: { totalPostos, alocacoes, vagasAbertas: vagasAbertas > 0 ? vagasAbertas : 0 },
+            vagas: { totalPostos, vagasAbertas, colabsAtivos, colabsAdministrativo, colabsAfastados, colabsAlocados, colabsLivres },
             disponibilidade: { colabsLivres }
         };
     }

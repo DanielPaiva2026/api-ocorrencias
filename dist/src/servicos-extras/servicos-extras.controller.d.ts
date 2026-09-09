@@ -5,9 +5,9 @@ export declare class ServicosExtrasController {
     constructor(servicosExtrasService: ServicosExtrasService);
     create(createServicosExtraDto: any): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<{
         id: string;
-        cliente_id: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
         status: string;
@@ -23,9 +23,9 @@ export declare class ServicosExtrasController {
     }): Promise<{
         servico: {
             id: string;
-            cliente_id: string | null;
             criado_em: Date;
             atualizado_em: Date;
+            cliente_id: string | null;
             exige_nr32: boolean;
             exige_nr35: boolean;
             status: string;
@@ -59,16 +59,19 @@ export declare class ServicosExtrasController {
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         cliente: {
             id: string;
-            codigo: string | null;
+            cep: string;
+            endereco: string;
             criado_em: Date;
             atualizado_em: Date;
+            bairro: string | null;
+            cidade: string | null;
+            numero: string | null;
+            uf: string | null;
+            codigo: string | null;
             status: string | null;
             nome_razao: string;
             responsavel: string | null;
             telefone: string | null;
-            cidade: string | null;
-            cep: string;
-            endereco: string;
             supervisor: string | null;
             quant_pessoas: string | null;
             quant_rotinas: string | null;
@@ -76,25 +79,16 @@ export declare class ServicosExtrasController {
             periodicidade_visita: string | null;
             status_contrato: string | null;
             observacao: string | null;
-            bairro: string | null;
             cnpj: string | null;
             complemento: string | null;
-            numero: string | null;
             razao_social: string | null;
-            uf: string | null;
         } | null;
         apontamentos: ({
             colab: {
                 id: string;
-                criado_em: Date;
-                atualizado_em: Date;
-                cidade: string | null;
+                nome: string;
                 cep: string;
                 endereco: string;
-                bairro: string | null;
-                numero: string | null;
-                uf: string | null;
-                nome: string;
                 status_cadastro: string | null;
                 tipo_contratacao: string | null;
                 horas_contratadas: string | null;
@@ -121,23 +115,29 @@ export declare class ServicosExtrasController {
                 reciclagem_aso: string | null;
                 url_aso: string | null;
                 url_exame_complementar: string | null;
+                criado_em: Date;
+                atualizado_em: Date;
                 ferias_limite_entrada: string | null;
                 ferias_notificacao: string | null;
                 ferias_retorno: string | null;
                 ferias_ultimo_aquisitivo: string | null;
                 ferias_vencimento: string | null;
+                bairro: string | null;
+                cidade: string | null;
                 contrato_experiencia_dias: number | null;
                 cpf: string | null;
                 is_whatsapp: boolean;
                 logradouro: string | null;
                 manual_conduta_data: string | null;
                 manual_conduta_reciclagem: string | null;
+                numero: string | null;
                 seguranca_medicina_data: string | null;
                 seguranca_medicina_reciclagem: string | null;
                 telefone_principal: string | null;
                 telefone_secundario: string | null;
                 treino_basico_data: string | null;
                 treino_basico_reciclagem: string | null;
+                uf: string | null;
                 exame_complementar_data: string | null;
                 exame_complementar_retorno: string | null;
                 requer_nr32: boolean;
@@ -167,9 +167,9 @@ export declare class ServicosExtrasController {
         })[];
     } & {
         id: string;
-        cliente_id: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
         status: string;
@@ -183,16 +183,19 @@ export declare class ServicosExtrasController {
     findOne(id: string): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<({
         cliente: {
             id: string;
-            codigo: string | null;
+            cep: string;
+            endereco: string;
             criado_em: Date;
             atualizado_em: Date;
+            bairro: string | null;
+            cidade: string | null;
+            numero: string | null;
+            uf: string | null;
+            codigo: string | null;
             status: string | null;
             nome_razao: string;
             responsavel: string | null;
             telefone: string | null;
-            cidade: string | null;
-            cep: string;
-            endereco: string;
             supervisor: string | null;
             quant_pessoas: string | null;
             quant_rotinas: string | null;
@@ -200,25 +203,16 @@ export declare class ServicosExtrasController {
             periodicidade_visita: string | null;
             status_contrato: string | null;
             observacao: string | null;
-            bairro: string | null;
             cnpj: string | null;
             complemento: string | null;
-            numero: string | null;
             razao_social: string | null;
-            uf: string | null;
         } | null;
         apontamentos: ({
             colab: {
                 id: string;
-                criado_em: Date;
-                atualizado_em: Date;
-                cidade: string | null;
+                nome: string;
                 cep: string;
                 endereco: string;
-                bairro: string | null;
-                numero: string | null;
-                uf: string | null;
-                nome: string;
                 status_cadastro: string | null;
                 tipo_contratacao: string | null;
                 horas_contratadas: string | null;
@@ -245,23 +239,29 @@ export declare class ServicosExtrasController {
                 reciclagem_aso: string | null;
                 url_aso: string | null;
                 url_exame_complementar: string | null;
+                criado_em: Date;
+                atualizado_em: Date;
                 ferias_limite_entrada: string | null;
                 ferias_notificacao: string | null;
                 ferias_retorno: string | null;
                 ferias_ultimo_aquisitivo: string | null;
                 ferias_vencimento: string | null;
+                bairro: string | null;
+                cidade: string | null;
                 contrato_experiencia_dias: number | null;
                 cpf: string | null;
                 is_whatsapp: boolean;
                 logradouro: string | null;
                 manual_conduta_data: string | null;
                 manual_conduta_reciclagem: string | null;
+                numero: string | null;
                 seguranca_medicina_data: string | null;
                 seguranca_medicina_reciclagem: string | null;
                 telefone_principal: string | null;
                 telefone_secundario: string | null;
                 treino_basico_data: string | null;
                 treino_basico_reciclagem: string | null;
+                uf: string | null;
                 exame_complementar_data: string | null;
                 exame_complementar_retorno: string | null;
                 requer_nr32: boolean;
@@ -291,9 +291,9 @@ export declare class ServicosExtrasController {
         })[];
     } & {
         id: string;
-        cliente_id: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
         status: string;
@@ -307,9 +307,9 @@ export declare class ServicosExtrasController {
     update(id: string, updateServicosExtraDto: UpdateServicosExtraDto): string;
     remove(id: string): import("@prisma/client").Prisma.Prisma__ServicoExtraClienteClient<{
         id: string;
-        cliente_id: string | null;
         criado_em: Date;
         atualizado_em: Date;
+        cliente_id: string | null;
         exige_nr32: boolean;
         exige_nr35: boolean;
         status: string;

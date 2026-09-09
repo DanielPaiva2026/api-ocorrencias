@@ -10,15 +10,18 @@ exports.WhatsappModule = void 0;
 const common_1 = require("@nestjs/common");
 const whatsapp_service_1 = require("./whatsapp.service");
 const whatsapp_controller_1 = require("./whatsapp.controller");
+const ai_service_1 = require("./ai.service");
+const disponibilidade_module_1 = require("../disponibilidade/disponibilidade.module");
 let WhatsappModule = class WhatsappModule {
 };
 exports.WhatsappModule = WhatsappModule;
 exports.WhatsappModule = WhatsappModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
+        imports: [disponibilidade_module_1.DisponibilidadeModule],
         controllers: [whatsapp_controller_1.WhatsappController],
-        providers: [whatsapp_service_1.WhatsappService],
-        exports: [whatsapp_service_1.WhatsappService],
+        providers: [whatsapp_service_1.WhatsappService, ai_service_1.AiService],
+        exports: [whatsapp_service_1.WhatsappService, ai_service_1.AiService],
     })
 ], WhatsappModule);
 //# sourceMappingURL=whatsapp.module.js.map

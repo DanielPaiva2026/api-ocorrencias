@@ -14,12 +14,12 @@ export declare class DisponibilidadeController {
         alocacoes: ({
             posto: {
                 id: string;
+                criado_em: Date;
+                atualizado_em: Date;
                 cliente_id: string;
                 codigo: string;
                 descricao_escala: string | null;
                 horas_diarias: string | null;
-                criado_em: Date;
-                atualizado_em: Date;
                 exige_nr32: boolean;
                 exige_nr35: boolean;
                 cesta_basica: string | null;

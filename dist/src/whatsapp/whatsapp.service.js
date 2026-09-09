@@ -41,6 +41,9 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -55,15 +58,19 @@ const fs = __importStar(require("fs"));
 const path = __importStar(require("path"));
 const crypto = __importStar(require("crypto"));
 const openai_1 = __importDefault(require("openai"));
+const ai_service_1 = require("./ai.service");
 let WhatsappService = WhatsappService_1 = class WhatsappService {
     prisma;
+    aiService;
     logger = new common_1.Logger(WhatsappService_1.name);
     token = process.env.WHATSAPP_TOKEN;
     phoneId = process.env.WHATSAPP_PHONE_ID;
     apiUrl = `https://graph.facebook.com/v19.0/${this.phoneId}/messages`;
     openai;
-    constructor(prisma) {
+    constructor(prisma, aiService) {
         this.prisma = prisma;
+        this.aiService = aiService;
+        this.aiService.setWhatsappService(this);
         if (process.env.OPENAI_API_KEY) {
             this.openai = new openai_1.default({ apiKey: process.env.OPENAI_API_KEY });
         }
@@ -255,12 +262,7 @@ let WhatsappService = WhatsappService_1 = class WhatsappService {
                 else if (message.type === 'text') {
                     incomingText = message.text?.body || '';
                 }
-                if (isAtestado && mediaPath) {
-                    await this.sendMessage(from, `📁 Recebemos o seu documento. Arquivo salvo internamente para análise.`);
-                }
-                else if (message.type === 'text') {
-                    await this.sendMessage(from, `Olá! Recebemos sua mensagem: "${incomingText}". Nossa assistente virtual logo entrará em operação.`);
-                }
+                await this.aiService.handleIncomingMessage(from, incomingText, mediaPath || undefined, isAtestado);
             }
         }
         catch (e) {
@@ -271,6 +273,8 @@ let WhatsappService = WhatsappService_1 = class WhatsappService {
 exports.WhatsappService = WhatsappService;
 exports.WhatsappService = WhatsappService = WhatsappService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __param(1, (0, common_1.Inject)((0, common_1.forwardRef)(() => ai_service_1.AiService))),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        ai_service_1.AiService])
 ], WhatsappService);
 //# sourceMappingURL=whatsapp.service.js.map
