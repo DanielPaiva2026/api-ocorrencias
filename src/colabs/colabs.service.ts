@@ -301,6 +301,9 @@ export class ColabsService {
   }
 
   async updateStatus(id: string, status: string) {
+    if (status === 'Inativo') {
+      await this.prisma.alocacao.deleteMany({ where: { colab_id: id } });
+    }
     return this.prisma.dBColab.update({
       where: { id },
       data: { status_cadastro: status }
@@ -318,6 +321,15 @@ export class ColabsService {
       atualizado_em,
       ...safeData 
     } = data;
+
+    const isInactive = safeData.status_cadastro === 'Inativo';
+    const disp = (safeData.situacao_disponibilidade || '').toLowerCase();
+    const isAfastado = disp.includes('inss') || disp.includes('atestado') || disp.includes('férias') || disp.includes('ferias');
+
+    if (isInactive || isAfastado) {
+      await this.prisma.alocacao.deleteMany({ where: { colab_id: id } });
+    }
+
     return this.prisma.dBColab.update({
       where: { id },
       data: safeData
