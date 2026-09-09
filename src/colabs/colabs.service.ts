@@ -323,10 +323,8 @@ export class ColabsService {
     } = data;
 
     const isInactive = safeData.status_cadastro === 'Inativo';
-    const disp = (safeData.situacao_disponibilidade || '').toLowerCase();
-    const isAfastado = disp.includes('inss') || disp.includes('atestado') || disp.includes('férias') || disp.includes('ferias');
 
-    if (isInactive || isAfastado) {
+    if (isInactive) {
       await this.prisma.alocacao.deleteMany({ where: { colab_id: id } });
     }
 

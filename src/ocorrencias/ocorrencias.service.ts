@@ -442,13 +442,19 @@ export class OcorrenciasService {
         }
 
         // Lógica de realocação se for longo prazo
-        if (payload.is_afastamento_longo) {
-           // O titular perde a alocação (a vaga fica aberta)
-           await tx.alocacao.deleteMany({
+        if (payload.is_afastamento_longo && payload.substitutos.length > 0) {
+           const alocacaoAtual = await tx.alocacao.findFirst({
              where: { colab_id: payload.atrasado_colab_id }
            });
            
-           // O preenchimento da vaga na Alocação será feito manualmente pela tela de Disponibilidade (Livres)
+           const subId = payload.substitutos[0].colab_id;
+
+           if (alocacaoAtual) {
+              await tx.alocacao.update({
+                where: { id: alocacaoAtual.id },
+                data: { colab_id: subId }
+              });
+           }
 
            const dataFimCalculada = new Date();
            if (payload.dias_afastamento) {
@@ -457,17 +463,14 @@ export class OcorrenciasService {
            const pad2 = (n: number) => n.toString().padStart(2, '0');
            const dataFimStr = `${pad2(dataFimCalculada.getDate())}/${pad2(dataFimCalculada.getMonth() + 1)}/${dataFimCalculada.getFullYear()}`;
 
-           if (payload.substitutos && payload.substitutos.length > 0) {
-             const subId = payload.substitutos[0].colab_id;
-             await tx.dBColab.update({
-               where: { id: subId },
-               data: {
+           await tx.dBColab.update({
+              where: { id: subId },
+              data: {
                  situacao_disponibilidade: 'Alocada (Substituição)',
                  data_retorno: dataFimStr,
                  observacao_retorno: `Cobrindo afastamento de ${payload.nome_titular || 'Titular'}`
-               }
-             });
-           }
+              }
+           });
          }
       }
 
