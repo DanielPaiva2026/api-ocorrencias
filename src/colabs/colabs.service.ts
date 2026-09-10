@@ -76,6 +76,7 @@ export class ColabsService {
 
   findAll() {
     return this.prisma.dBColab.findMany({
+      orderBy: { nome: 'asc' },
       include: {
         ocorrencias: true,
         alocacoes: {
