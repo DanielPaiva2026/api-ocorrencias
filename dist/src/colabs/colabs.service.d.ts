@@ -24,6 +24,7 @@ export declare class ColabsService {
                     cidade: string | null;
                     numero: string | null;
                     uf: string | null;
+                    observacao: string | null;
                     codigo: string | null;
                     status: string | null;
                     nome_razao: string;
@@ -35,7 +36,6 @@ export declare class ColabsService {
                     ranking_financeiro: string | null;
                     periodicidade_visita: string | null;
                     status_contrato: string | null;
-                    observacao: string | null;
                     cnpj: string | null;
                     complemento: string | null;
                     razao_social: string | null;
@@ -58,15 +58,15 @@ export declare class ColabsService {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
         ocorrencias: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;

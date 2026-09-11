@@ -30,8 +30,8 @@ export declare class DisponibilidadeService {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
     }[]>;
     is12x36WorkingDay(targetDate: Date, baseDateStr: string | null): boolean;

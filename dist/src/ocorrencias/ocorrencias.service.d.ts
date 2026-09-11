@@ -8,9 +8,9 @@ export declare class OcorrenciasService {
     create(data: any): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -28,9 +28,9 @@ export declare class OcorrenciasService {
     processWebhook(payload: any): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -110,9 +110,9 @@ export declare class OcorrenciasService {
     } & {
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -129,9 +129,9 @@ export declare class OcorrenciasService {
     resolve(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -148,9 +148,9 @@ export declare class OcorrenciasService {
     anexarDocumento(id: string, urlDocumento?: string): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -167,9 +167,9 @@ export declare class OcorrenciasService {
     converterParaInjustificada(id: string, sancao: string): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -249,9 +249,9 @@ export declare class OcorrenciasService {
     } & {
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -268,9 +268,9 @@ export declare class OcorrenciasService {
     resolverPendenciaDocumento(id: string, sancao: string, entregouDocumento?: boolean, url_documento?: string | null): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -292,9 +292,9 @@ export declare class OcorrenciasService {
         historico: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -313,9 +313,9 @@ export declare class OcorrenciasService {
         ocorrenciaPrincipal: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -332,9 +332,9 @@ export declare class OcorrenciasService {
         extras: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -353,9 +353,9 @@ export declare class OcorrenciasService {
         ocorrenciaPrincipal: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -372,9 +372,9 @@ export declare class OcorrenciasService {
         extras: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -392,9 +392,9 @@ export declare class OcorrenciasService {
     update(id: string, data: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -411,9 +411,9 @@ export declare class OcorrenciasService {
     remove(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;

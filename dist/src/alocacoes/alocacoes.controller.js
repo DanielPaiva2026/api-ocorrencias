@@ -26,6 +26,9 @@ let AlocacoesController = class AlocacoesController {
     alocarManual(payload) {
         return this.alocacoesService.alocarManual(payload);
     }
+    processarRemanejamento(payload) {
+        return this.alocacoesService.processarRemanejamento(payload);
+    }
 };
 exports.AlocacoesController = AlocacoesController;
 __decorate([
@@ -41,6 +44,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AlocacoesController.prototype, "alocarManual", null);
+__decorate([
+    (0, common_1.Post)('remanejamento'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AlocacoesController.prototype, "processarRemanejamento", null);
 exports.AlocacoesController = AlocacoesController = __decorate([
     (0, common_1.Controller)('alocacoes'),
     __metadata("design:paramtypes", [alocacoes_service_1.AlocacoesService])

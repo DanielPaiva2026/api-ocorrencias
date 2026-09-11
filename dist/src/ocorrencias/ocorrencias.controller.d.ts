@@ -5,9 +5,9 @@ export declare class OcorrenciasController {
     create(data: any): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -24,9 +24,9 @@ export declare class OcorrenciasController {
     webhook(payload: any): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -106,9 +106,9 @@ export declare class OcorrenciasController {
     } & {
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -188,9 +188,9 @@ export declare class OcorrenciasController {
     } & {
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -207,9 +207,9 @@ export declare class OcorrenciasController {
     resolve(id: string): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -228,9 +228,9 @@ export declare class OcorrenciasController {
     }): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -249,9 +249,9 @@ export declare class OcorrenciasController {
     }): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -272,9 +272,9 @@ export declare class OcorrenciasController {
     }): Promise<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -296,9 +296,9 @@ export declare class OcorrenciasController {
         historico: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -317,9 +317,9 @@ export declare class OcorrenciasController {
         ocorrenciaPrincipal: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -336,9 +336,9 @@ export declare class OcorrenciasController {
         extras: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -357,9 +357,9 @@ export declare class OcorrenciasController {
         ocorrenciaPrincipal: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -376,9 +376,9 @@ export declare class OcorrenciasController {
         extras: {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -396,9 +396,9 @@ export declare class OcorrenciasController {
     update(id: string, body: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;
@@ -415,9 +415,9 @@ export declare class OcorrenciasController {
     remove(id: string, body: any): import("@prisma/client").Prisma.Prisma__FluxoCorretivoClient<{
         id: string;
         criado_em: Date;
-        observacao: string | null;
         data: Date;
         colab_id: string | null;
+        observacao: string | null;
         tipo: string;
         tempo_minutos: number | null;
         resolvido: boolean;

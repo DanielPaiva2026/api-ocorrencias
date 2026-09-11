@@ -16,4 +16,10 @@ export class AlocacoesController {
   alocarManual(@Body() payload: { colabId: string, postoId: string, acao_ocupante_atual?: string }) {
     return this.alocacoesService.alocarManual(payload);
   }
+
+  @Post('remanejamento')
+  processarRemanejamento(@Body() payload: { movimentacoes: {colabId: string, postoId: string}[], livres: string[] }) {
+    return this.alocacoesService.processarRemanejamento(payload);
+  }
+
 }

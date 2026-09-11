@@ -69,8 +69,8 @@ export declare class PostosDeTrabalhoController {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
         cliente: {
             id: string;
@@ -82,6 +82,7 @@ export declare class PostosDeTrabalhoController {
             cidade: string | null;
             numero: string | null;
             uf: string | null;
+            observacao: string | null;
             codigo: string | null;
             status: string | null;
             nome_razao: string;
@@ -93,7 +94,6 @@ export declare class PostosDeTrabalhoController {
             ranking_financeiro: string | null;
             periodicidade_visita: string | null;
             status_contrato: string | null;
-            observacao: string | null;
             cnpj: string | null;
             complemento: string | null;
             razao_social: string | null;
@@ -189,8 +189,8 @@ export declare class PostosDeTrabalhoController {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
         cliente: {
             id: string;
@@ -202,6 +202,7 @@ export declare class PostosDeTrabalhoController {
             cidade: string | null;
             numero: string | null;
             uf: string | null;
+            observacao: string | null;
             codigo: string | null;
             status: string | null;
             nome_razao: string;
@@ -213,7 +214,6 @@ export declare class PostosDeTrabalhoController {
             ranking_financeiro: string | null;
             periodicidade_visita: string | null;
             status_contrato: string | null;
-            observacao: string | null;
             cnpj: string | null;
             complemento: string | null;
             razao_social: string | null;
@@ -299,8 +299,8 @@ export declare class PostosDeTrabalhoController {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
         cliente: {
             id: string;
@@ -312,6 +312,7 @@ export declare class PostosDeTrabalhoController {
             cidade: string | null;
             numero: string | null;
             uf: string | null;
+            observacao: string | null;
             codigo: string | null;
             status: string | null;
             nome_razao: string;
@@ -323,7 +324,6 @@ export declare class PostosDeTrabalhoController {
             ranking_financeiro: string | null;
             periodicidade_visita: string | null;
             status_contrato: string | null;
-            observacao: string | null;
             cnpj: string | null;
             complemento: string | null;
             razao_social: string | null;

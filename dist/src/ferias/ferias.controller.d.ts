@@ -8,10 +8,10 @@ export declare class FeriasController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        status: string;
         colab_id: string;
         data_inicio: Date;
         data_fim: Date;
+        status: string;
         url_documento: string | null;
         data_aviso: Date;
         dias_ferias: number;
@@ -23,10 +23,10 @@ export declare class FeriasController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        status: string;
         colab_id: string;
         data_inicio: Date;
         data_fim: Date;
+        status: string;
         url_documento: string | null;
         data_aviso: Date;
         dias_ferias: number;
@@ -46,10 +46,10 @@ export declare class FeriasController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        status: string;
         colab_id: string;
         data_inicio: Date;
         data_fim: Date;
+        status: string;
         url_documento: string | null;
         data_aviso: Date;
         dias_ferias: number;

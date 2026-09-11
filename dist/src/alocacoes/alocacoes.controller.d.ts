@@ -3,6 +3,48 @@ export declare class AlocacoesController {
     private readonly alocacoesService;
     constructor(alocacoesService: AlocacoesService);
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
+        posto: {
+            cliente: {
+                id: string;
+                cep: string;
+                endereco: string;
+                criado_em: Date;
+                atualizado_em: Date;
+                bairro: string | null;
+                cidade: string | null;
+                numero: string | null;
+                uf: string | null;
+                observacao: string | null;
+                codigo: string | null;
+                status: string | null;
+                nome_razao: string;
+                responsavel: string | null;
+                telefone: string | null;
+                supervisor: string | null;
+                quant_pessoas: string | null;
+                quant_rotinas: string | null;
+                ranking_financeiro: string | null;
+                periodicidade_visita: string | null;
+                status_contrato: string | null;
+                cnpj: string | null;
+                complemento: string | null;
+                razao_social: string | null;
+            };
+        } & {
+            id: string;
+            criado_em: Date;
+            atualizado_em: Date;
+            cliente_id: string;
+            codigo: string;
+            descricao_escala: string | null;
+            horas_diarias: string | null;
+            exige_nr32: boolean;
+            exige_nr35: boolean;
+            cesta_basica: string | null;
+            feriados: string | null;
+            insalubridade: string | null;
+            data_base_escala_12x36: string | null;
+        };
         colab: {
             id: string;
             nome: string;
@@ -65,58 +107,25 @@ export declare class AlocacoesController {
             prazo_experiencia: string | null;
             nivel_atuacao: string | null;
         };
-        posto: {
-            cliente: {
-                id: string;
-                cep: string;
-                endereco: string;
-                criado_em: Date;
-                atualizado_em: Date;
-                bairro: string | null;
-                cidade: string | null;
-                numero: string | null;
-                uf: string | null;
-                codigo: string | null;
-                status: string | null;
-                nome_razao: string;
-                responsavel: string | null;
-                telefone: string | null;
-                supervisor: string | null;
-                quant_pessoas: string | null;
-                quant_rotinas: string | null;
-                ranking_financeiro: string | null;
-                periodicidade_visita: string | null;
-                status_contrato: string | null;
-                observacao: string | null;
-                cnpj: string | null;
-                complemento: string | null;
-                razao_social: string | null;
-            };
-        } & {
-            id: string;
-            criado_em: Date;
-            atualizado_em: Date;
-            cliente_id: string;
-            codigo: string;
-            descricao_escala: string | null;
-            horas_diarias: string | null;
-            exige_nr32: boolean;
-            exige_nr35: boolean;
-            cesta_basica: string | null;
-            feriados: string | null;
-            insalubridade: string | null;
-            data_base_escala_12x36: string | null;
-        };
     } & {
         id: string;
         criado_em: Date;
-        posto_id: string;
         colab_id: string;
+        posto_id: string;
     })[]>;
     alocarManual(payload: {
         colabId: string;
         postoId: string;
         acao_ocupante_atual?: string;
+    }): Promise<{
+        success: boolean;
+    }>;
+    processarRemanejamento(payload: {
+        movimentacoes: {
+            colabId: string;
+            postoId: string;
+        }[];
+        livres: string[];
     }): Promise<{
         success: boolean;
     }>;

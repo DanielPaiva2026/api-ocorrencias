@@ -30,8 +30,8 @@ export declare class DisponibilidadeController {
         } & {
             id: string;
             criado_em: Date;
-            posto_id: string;
             colab_id: string;
+            posto_id: string;
         })[];
     }[]>;
     getSubstitutos(postoId?: string, categoria_cargo?: string, data?: string, exige_nr32?: string, exige_nr35?: string, cidade_alvo?: string): Promise<{

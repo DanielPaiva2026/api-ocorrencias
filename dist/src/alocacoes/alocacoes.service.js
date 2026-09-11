@@ -71,6 +71,59 @@ let AlocacoesService = class AlocacoesService {
             return { success: true };
         });
     }
+    async processarRemanejamento(payload) {
+        return this.prisma.$transaction(async (tx) => {
+            const now = new Date();
+            const todosColabs = [...payload.movimentacoes.map(m => m.colabId), ...payload.livres];
+            for (const colabId of todosColabs) {
+                await tx.alocacao.deleteMany({
+                    where: { colab_id: colabId }
+                });
+                await tx.dBColab.update({
+                    where: { id: colabId },
+                    data: { situacao_disponibilidade: 'Disponível' }
+                });
+            }
+            for (const mov of payload.movimentacoes) {
+                await tx.alocacao.deleteMany({
+                    where: { posto_id: mov.postoId }
+                });
+                await tx.alocacao.create({
+                    data: {
+                        colab_id: mov.colabId,
+                        posto_id: mov.postoId
+                    }
+                });
+                await tx.dBColab.update({
+                    where: { id: mov.colabId },
+                    data: { situacao_disponibilidade: 'Alocada' }
+                });
+                await tx.fluxoCorretivo.create({
+                    data: {
+                        colab_id: mov.colabId,
+                        tipo: 'Remanejado',
+                        data: now,
+                        observacao: 'Colaborador remanejado para novo posto de trabalho.',
+                        origem: 'SISTEMA',
+                        resolvido: true
+                    }
+                });
+            }
+            for (const colabId of payload.livres) {
+                await tx.fluxoCorretivo.create({
+                    data: {
+                        colab_id: colabId,
+                        tipo: 'Desalocado',
+                        data: now,
+                        observacao: 'Colaborador desalocado devido a remanejamento (Ficou Livre).',
+                        origem: 'SISTEMA',
+                        resolvido: true
+                    }
+                });
+            }
+            return { success: true };
+        });
+    }
 };
 exports.AlocacoesService = AlocacoesService;
 exports.AlocacoesService = AlocacoesService = __decorate([

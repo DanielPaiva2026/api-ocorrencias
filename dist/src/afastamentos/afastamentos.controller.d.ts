@@ -6,12 +6,12 @@ export declare class AfastamentosController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
         data_fim: Date | null;
         data_retorno_prevista: Date;
+        observacao: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     findAll(): import("@prisma/client").Prisma.PrismaPromise<({
         colab: {
@@ -80,12 +80,12 @@ export declare class AfastamentosController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
         data_fim: Date | null;
         data_retorno_prevista: Date;
+        observacao: string | null;
     })[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__AfastamentoClient<({
         colab: {
@@ -154,33 +154,33 @@ export declare class AfastamentosController {
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
         data_fim: Date | null;
         data_retorno_prevista: Date;
+        observacao: string | null;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, updateAfastamentoDto: any): import("@prisma/client").Prisma.Prisma__AfastamentoClient<{
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
         data_fim: Date | null;
         data_retorno_prevista: Date;
+        observacao: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     remove(id: string): import("@prisma/client").Prisma.Prisma__AfastamentoClient<{
         id: string;
         criado_em: Date;
         atualizado_em: Date;
-        observacao: string | null;
         colab_id: string;
         motivo: string;
         data_inicio: Date;
         data_fim: Date | null;
         data_retorno_prevista: Date;
+        observacao: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }

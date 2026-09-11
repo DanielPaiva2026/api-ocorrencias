@@ -69,9 +69,9 @@ export declare class DashboardService {
         } & {
             id: string;
             criado_em: Date;
-            observacao: string | null;
             data: Date;
             colab_id: string | null;
+            observacao: string | null;
             tipo: string;
             tempo_minutos: number | null;
             resolvido: boolean;
@@ -152,10 +152,10 @@ export declare class DashboardService {
             id: string;
             criado_em: Date;
             atualizado_em: Date;
-            status: string;
             colab_id: string;
             data_inicio: Date;
             data_fim: Date;
+            status: string;
             url_documento: string | null;
             data_aviso: Date;
             dias_ferias: number;
@@ -175,6 +175,7 @@ export declare class DashboardService {
                     cidade: string | null;
                     numero: string | null;
                     uf: string | null;
+                    observacao: string | null;
                     codigo: string | null;
                     status: string | null;
                     nome_razao: string;
@@ -186,7 +187,6 @@ export declare class DashboardService {
                     ranking_financeiro: string | null;
                     periodicidade_visita: string | null;
                     status_contrato: string | null;
-                    observacao: string | null;
                     cnpj: string | null;
                     complemento: string | null;
                     razao_social: string | null;
@@ -273,10 +273,10 @@ export declare class DashboardService {
                 id: string;
                 criado_em: Date;
                 atualizado_em: Date;
-                status: string;
                 colab_id: string;
                 data_inicio: Date;
                 data_fim: Date;
+                status: string;
                 url_documento: string | null;
                 data_aviso: Date;
                 dias_ferias: number;
@@ -359,10 +359,10 @@ export declare class DashboardService {
             id: string;
             criado_em: Date;
             atualizado_em: Date;
-            status: string;
             colab_id: string;
             data_inicio: Date;
             data_fim: Date;
+            status: string;
             url_documento: string | null;
             data_aviso: Date;
             dias_ferias: number;
@@ -437,12 +437,12 @@ export declare class DashboardService {
             id: string;
             criado_em: Date;
             atualizado_em: Date;
-            observacao: string | null;
             colab_id: string;
             motivo: string;
             data_inicio: Date;
             data_fim: Date | null;
             data_retorno_prevista: Date;
+            observacao: string | null;
         })[];
         coberturasAtivas: ({
             posto: {
@@ -456,6 +456,7 @@ export declare class DashboardService {
                     cidade: string | null;
                     numero: string | null;
                     uf: string | null;
+                    observacao: string | null;
                     codigo: string | null;
                     status: string | null;
                     nome_razao: string;
@@ -467,7 +468,6 @@ export declare class DashboardService {
                     ranking_financeiro: string | null;
                     periodicidade_visita: string | null;
                     status_contrato: string | null;
-                    observacao: string | null;
                     cnpj: string | null;
                     complemento: string | null;
                     razao_social: string | null;
@@ -491,10 +491,10 @@ export declare class DashboardService {
                 id: string;
                 criado_em: Date;
                 atualizado_em: Date;
-                status: string;
                 colab_id: string;
                 data_inicio: Date;
                 data_fim: Date;
+                status: string;
                 url_documento: string | null;
                 data_aviso: Date;
                 dias_ferias: number;
@@ -577,9 +577,9 @@ export declare class DashboardService {
             } & {
                 id: string;
                 criado_em: Date;
-                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
+                observacao: string | null;
                 tipo: string;
                 tempo_minutos: number | null;
                 resolvido: boolean;
@@ -667,9 +667,9 @@ export declare class DashboardService {
             } & {
                 id: string;
                 criado_em: Date;
-                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
+                observacao: string | null;
                 tipo: string;
                 tempo_minutos: number | null;
                 resolvido: boolean;
@@ -757,9 +757,9 @@ export declare class DashboardService {
             } & {
                 id: string;
                 criado_em: Date;
-                observacao: string | null;
                 data: Date;
                 colab_id: string | null;
+                observacao: string | null;
                 tipo: string;
                 tempo_minutos: number | null;
                 resolvido: boolean;
