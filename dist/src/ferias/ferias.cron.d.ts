@@ -6,4 +6,5 @@ export declare class FeriasCron {
     private readonly logger;
     constructor(prisma: PrismaService, notificationService: NotificationService);
     processarFeriasDoDia(): Promise<void>;
+    private verificarAlertasDeVencimento;
 }

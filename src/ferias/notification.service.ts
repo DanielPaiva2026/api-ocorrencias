@@ -3,6 +3,15 @@ import { WhatsappService } from '../whatsapp/whatsapp.service';
 
 @Injectable()
 export class NotificationService {
+  async notificarAlertaFerias(nomeColab: string, dataLimiteAviso: Date, diasRestantes: number) {
+    const mensagem = `[SISTEMA RH] ⚠️ ALERTA DE FÉRIAS ⚠️\nO colaborador *${nomeColab}* precisa ter o aviso de férias gerado e assinado até *${dataLimiteAviso.toLocaleDateString('pt-BR')}*.\nFaltam ${diasRestantes} dias para este limite.`;
+    this.logger.log(`Notificando RH sobre fǸrias de ${nomeColab}`);
+    // Notifica ADM
+    await this.whatsappService.sendMessage('5524981151562', mensagem);
+    // Para notificar coordenador/RH, podemos buscar no banco os usuários correspondentes ou usar o grupo
+    // await this.whatsappService.sendMessage('GRUPO_RH_OU_NUMERO', mensagem);
+  }
+
   private readonly logger = new Logger(NotificationService.name);
 
   constructor(private readonly whatsappService: WhatsappService) {}

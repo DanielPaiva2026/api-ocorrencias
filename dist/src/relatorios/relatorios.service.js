@@ -126,15 +126,19 @@ let RelatoriosService = class RelatoriosService {
             if (limitExtendedDays > 0) {
                 dataLimite.setDate(dataLimite.getDate() + limitExtendedDays);
             }
-            const diasRestantesLimiteFatal = (0, date_fns_1.differenceInDays)(dataLimite, hoje);
+            const dataLimiteInicio = new Date(dataLimite);
+            dataLimiteInicio.setDate(dataLimiteInicio.getDate() - 45);
+            const dataLimiteAviso = new Date(dataLimiteInicio);
+            dataLimiteAviso.setDate(dataLimiteAviso.getDate() - 30);
+            const diasRestantesAviso = (0, date_fns_1.differenceInDays)(dataLimiteAviso, hoje);
             let status = '';
-            if (forceAcaoImediata || diasRestantesLimiteFatal <= 90) {
+            if (forceAcaoImediata || diasRestantesAviso < 0) {
                 status = 'AÇÃO IMEDIATA';
             }
-            else if (diasRestantesLimiteFatal <= 115) {
+            else if (diasRestantesAviso <= 30) {
                 status = 'ATRASADA';
             }
-            else if (diasRestantesLimiteFatal <= 120) {
+            else if (diasRestantesAviso <= 60) {
                 status = 'AVISO';
             }
             if (status !== '') {
@@ -143,7 +147,9 @@ let RelatoriosService = class RelatoriosService {
                     colabNome: c.nome,
                     dataBase: baseDataStr,
                     dataLimite: dataLimite.toLocaleDateString('pt-BR'),
-                    diasRestantes: diasRestantesLimiteFatal,
+                    dataLimiteAviso: dataLimiteAviso.toLocaleDateString('pt-BR'),
+                    diasRestantesAviso: diasRestantesAviso,
+                    diasRestantes: (0, date_fns_1.differenceInDays)(dataLimite, hoje),
                     status: status
                 });
             }

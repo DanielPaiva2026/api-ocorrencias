@@ -15,6 +15,11 @@ const common_1 = require("@nestjs/common");
 const whatsapp_service_1 = require("../whatsapp/whatsapp.service");
 let NotificationService = NotificationService_1 = class NotificationService {
     whatsappService;
+    async notificarAlertaFerias(nomeColab, dataLimiteAviso, diasRestantes) {
+        const mensagem = `[SISTEMA RH] ⚠️ ALERTA DE FÉRIAS ⚠️\nO colaborador *${nomeColab}* precisa ter o aviso de férias gerado e assinado até *${dataLimiteAviso.toLocaleDateString('pt-BR')}*.\nFaltam ${diasRestantes} dias para este limite.`;
+        this.logger.log(`Notificando RH sobre fǸrias de ${nomeColab}`);
+        await this.whatsappService.sendMessage('5524981151562', mensagem);
+    }
     logger = new common_1.Logger(NotificationService_1.name);
     constructor(whatsappService) {
         this.whatsappService = whatsappService;
