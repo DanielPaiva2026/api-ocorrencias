@@ -1,20 +1,39 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class NotificationService {
   async notificarAlertaFerias(nomeColab: string, dataLimiteAviso: Date, diasRestantes: number) {
     const mensagem = `[SISTEMA RH] ⚠️ ALERTA DE FÉRIAS ⚠️\nO colaborador *${nomeColab}* precisa ter o aviso de férias gerado e assinado até *${dataLimiteAviso.toLocaleDateString('pt-BR')}*.\nFaltam ${diasRestantes} dias para este limite.`;
     this.logger.log(`Notificando RH sobre fǸrias de ${nomeColab}`);
-    // Notifica ADM
+    
+    // Notifica ADM fixo
     await this.whatsappService.sendMessage('5524981151562', mensagem);
-    // Para notificar coordenador/RH, podemos buscar no banco os usuários correspondentes ou usar o grupo
-    // await this.whatsappService.sendMessage('GRUPO_RH_OU_NUMERO', mensagem);
+    
+    // Notifica RH e COORDENADOR
+    const gestores = await this.prisma.usuario.findMany({
+      where: {
+        role: { in: ['RH', 'COORDENADOR', 'GESTOR'] },
+        telefone_whatsapp: { not: null }
+      }
+    });
+
+    for (const gestor of gestores) {
+      if (gestor.telefone_whatsapp && gestor.telefone_whatsapp.trim() !== '') {
+        // Limpar o numero
+        let limpo = gestor.telefone_whatsapp.replace(/\D/g, '');
+        if (limpo.length === 11 || limpo.length === 10) {
+          limpo = '55' + limpo;
+        }
+        await this.whatsappService.sendMessage(limpo, mensagem);
+      }
+    }
   }
 
   private readonly logger = new Logger(NotificationService.name);
 
-  constructor(private readonly whatsappService: WhatsappService) {}
+  constructor(private readonly whatsappService: WhatsappService, private prisma: PrismaService) {}
 
   async notificarSubstitutoEntrada(colabSubstituto: any, posto: any, dataInicio: Date) {
     const mensagem = `[SISTEMA RH] Olá ${colabSubstituto.nome}, você foi designado para cobrir o posto ${posto.codigo} a partir de ${dataInicio.toLocaleDateString('pt-BR')}.`;

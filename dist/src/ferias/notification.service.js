@@ -13,16 +13,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NotificationService = void 0;
 const common_1 = require("@nestjs/common");
 const whatsapp_service_1 = require("../whatsapp/whatsapp.service");
+const prisma_service_1 = require("../prisma/prisma.service");
 let NotificationService = NotificationService_1 = class NotificationService {
     whatsappService;
+    prisma;
     async notificarAlertaFerias(nomeColab, dataLimiteAviso, diasRestantes) {
         const mensagem = `[SISTEMA RH] ⚠️ ALERTA DE FÉRIAS ⚠️\nO colaborador *${nomeColab}* precisa ter o aviso de férias gerado e assinado até *${dataLimiteAviso.toLocaleDateString('pt-BR')}*.\nFaltam ${diasRestantes} dias para este limite.`;
         this.logger.log(`Notificando RH sobre fǸrias de ${nomeColab}`);
         await this.whatsappService.sendMessage('5524981151562', mensagem);
+        const gestores = await this.prisma.usuario.findMany({
+            where: {
+                role: { in: ['RH', 'COORDENADOR', 'GESTOR'] },
+                telefone_whatsapp: { not: null }
+            }
+        });
+        for (const gestor of gestores) {
+            if (gestor.telefone_whatsapp && gestor.telefone_whatsapp.trim() !== '') {
+                let limpo = gestor.telefone_whatsapp.replace(/\D/g, '');
+                if (limpo.length === 11 || limpo.length === 10) {
+                    limpo = '55' + limpo;
+                }
+                await this.whatsappService.sendMessage(limpo, mensagem);
+            }
+        }
     }
     logger = new common_1.Logger(NotificationService_1.name);
-    constructor(whatsappService) {
+    constructor(whatsappService, prisma) {
         this.whatsappService = whatsappService;
+        this.prisma = prisma;
     }
     async notificarSubstitutoEntrada(colabSubstituto, posto, dataInicio) {
         const mensagem = `[SISTEMA RH] Olá ${colabSubstituto.nome}, você foi designado para cobrir o posto ${posto.codigo} a partir de ${dataInicio.toLocaleDateString('pt-BR')}.`;
@@ -43,6 +61,6 @@ let NotificationService = NotificationService_1 = class NotificationService {
 exports.NotificationService = NotificationService;
 exports.NotificationService = NotificationService = NotificationService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [whatsapp_service_1.WhatsappService])
+    __metadata("design:paramtypes", [whatsapp_service_1.WhatsappService, prisma_service_1.PrismaService])
 ], NotificationService);
 //# sourceMappingURL=notification.service.js.map
