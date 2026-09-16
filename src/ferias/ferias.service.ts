@@ -132,9 +132,10 @@ export class FeriasService {
       updates.dias_ferias = dias_ferias;
     }
     
-    // Recalcular data_fim se mudamos inicio ou dias
+    const current = await this.prisma.avisoFerias.findUnique({where: {id}});
+    if (!current) return null;
+
     if (updates.data_inicio || updates.dias_ferias) {
-      const current = await this.prisma.avisoFerias.findUnique({where: {id}});
       const dIn = updates.data_inicio || current?.data_inicio;
       const df = updates.dias_ferias || current?.dias_ferias;
       const dFim = new Date(dIn);
@@ -142,15 +143,44 @@ export class FeriasService {
       updates.data_fim = dFim;
     }
 
-    return this.prisma.avisoFerias.update({
+    const updatedAviso = await this.prisma.avisoFerias.update({
       where: { id },
       data: updates
     });
+
+    if (updates.data_inicio || updates.data_fim) {
+      await this.prisma.afastamento.updateMany({
+        where: {
+          colab_id: current.colab_id,
+          motivo: 'FǸrias',
+          data_inicio: current.data_inicio,
+          data_fim: current.data_fim
+        },
+        data: {
+          data_inicio: updatedAviso.data_inicio,
+          data_fim: updatedAviso.data_fim
+        }
+      });
+    }
+
+    return updatedAviso;
   }
 
   async deleteAviso(id: string) {
-    await this.prisma.substituicaoFerias.deleteMany({ where: { aviso_ferias_id: id } });
-    return this.prisma.avisoFerias.delete({ where: { id } });
+    const aviso = await this.prisma.avisoFerias.findUnique({ where: { id } });
+    if (aviso) {
+      await this.prisma.substituicaoFerias.deleteMany({ where: { aviso_ferias_id: id } });
+      await this.prisma.afastamento.deleteMany({
+        where: {
+          colab_id: aviso.colab_id,
+          motivo: 'FǸrias',
+          data_inicio: aviso.data_inicio,
+          data_fim: aviso.data_fim
+        }
+      });
+      return this.prisma.avisoFerias.delete({ where: { id } });
+    }
+    return null;
   }
 
   async confirmarCobertura(id: string) {

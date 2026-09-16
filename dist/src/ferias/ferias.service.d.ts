@@ -59,7 +59,7 @@ export declare class FeriasService {
         dias_venda: number;
         cliente_informado: boolean;
         status_retorno: string;
-    }>;
+    } | null>;
     deleteAviso(id: string): Promise<{
         id: string;
         criado_em: Date;
@@ -74,7 +74,7 @@ export declare class FeriasService {
         dias_venda: number;
         cliente_informado: boolean;
         status_retorno: string;
-    }>;
+    } | null>;
     confirmarCobertura(id: string): Promise<{
         id: string;
         posto_id: string;
