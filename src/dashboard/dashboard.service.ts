@@ -6,6 +6,29 @@ export class DashboardService {
   constructor(private prisma: PrismaService) {}
 
   async getDashboardStats() {
+
+    // CLEANUP TEMPORARIO: Apagar afastamentos orfaos de ferias
+    try {
+      const todosAvisos = await this.prisma.avisoFerias.findMany();
+      const todosAfastamentosFerias = await this.prisma.afastamento.findMany({
+        where: { motivo: { contains: 'rias' } }
+      });
+      
+      for (const af of todosAfastamentosFerias) {
+        // existe algum aviso com este colab_id e mesma data_inicio?
+        const hasAviso = todosAvisos.find(av => 
+          av.colab_id === af.colab_id && 
+          new Date(av.data_inicio).getTime() === new Date(af.data_inicio).getTime()
+        );
+        if (!hasAviso) {
+          await this.prisma.afastamento.delete({ where: { id: af.id } });
+          console.log('Deletado afastamento orfao:', af.id);
+        }
+      }
+    } catch(e) {
+      console.log('Erro no cleanup:', e);
+    }
+
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
