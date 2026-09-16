@@ -211,6 +211,7 @@ model SubstituicaoFerias {
   colab_substituto_id  String
   colab_substituido_id String?
   ativa                Boolean         @default(true)
+  confirmado           Boolean         @default(false)
   aviso                AvisoFerias     @relation(fields: [aviso_ferias_id], references: [id])
   posto                PostoDeTrabalho @relation(fields: [posto_id], references: [id])
 }

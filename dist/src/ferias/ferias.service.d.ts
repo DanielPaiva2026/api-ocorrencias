@@ -43,6 +43,55 @@ export declare class FeriasService {
         colab_substituto_id: string;
         colab_substituido_id: string | null;
         ativa: boolean;
+        confirmado: boolean;
+    }>;
+    updateAviso(id: string, data: any): Promise<{
+        id: string;
+        criado_em: Date;
+        atualizado_em: Date;
+        colab_id: string;
+        data_inicio: Date;
+        data_fim: Date;
+        status: string;
+        url_documento: string | null;
+        data_aviso: Date;
+        dias_ferias: number;
+        dias_venda: number;
+        cliente_informado: boolean;
+        status_retorno: string;
+    }>;
+    deleteAviso(id: string): Promise<{
+        id: string;
+        criado_em: Date;
+        atualizado_em: Date;
+        colab_id: string;
+        data_inicio: Date;
+        data_fim: Date;
+        status: string;
+        url_documento: string | null;
+        data_aviso: Date;
+        dias_ferias: number;
+        dias_venda: number;
+        cliente_informado: boolean;
+        status_retorno: string;
+    }>;
+    confirmarCobertura(id: string): Promise<{
+        id: string;
+        posto_id: string;
+        aviso_ferias_id: string;
+        colab_substituto_id: string;
+        colab_substituido_id: string | null;
+        ativa: boolean;
+        confirmado: boolean;
+    }>;
+    trocarCobertura(id: string, novoSubstitutoId: string): Promise<{
+        id: string;
+        posto_id: string;
+        aviso_ferias_id: string;
+        colab_substituto_id: string;
+        colab_substituido_id: string | null;
+        ativa: boolean;
+        confirmado: boolean;
     }>;
     decisaoRetorno(avisoId: string, retorna: boolean): Promise<{
         id: string;

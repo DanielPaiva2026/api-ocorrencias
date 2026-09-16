@@ -85,7 +85,7 @@ export declare class DashboardService {
             url_documento: string | null;
             servico_extra_id: string | null;
         })[];
-        pendenciasFerias: ({
+        avisosFerias: ({
             colab: {
                 id: string;
                 nome: string;
@@ -291,6 +291,7 @@ export declare class DashboardService {
             colab_substituto_id: string;
             colab_substituido_id: string | null;
             ativa: boolean;
+            confirmado: boolean;
         })[];
         avisosRetorno: ({
             colab: {
@@ -509,6 +510,7 @@ export declare class DashboardService {
             colab_substituto_id: string;
             colab_substituido_id: string | null;
             ativa: boolean;
+            confirmado: boolean;
         })[];
         hoje: {
             ocorrenciasRecentes: ({

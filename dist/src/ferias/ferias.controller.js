@@ -28,8 +28,20 @@ let FeriasController = class FeriasController {
     updateDocumento(id, urlDocumento) {
         return this.feriasService.updateDocumento(id, urlDocumento);
     }
+    updateAviso(id, data) {
+        return this.feriasService.updateAviso(id, data);
+    }
+    deleteAviso(id) {
+        return this.feriasService.deleteAviso(id);
+    }
     createCobertura(aviso_ferias_id, createCoberturaDto) {
         return this.feriasService.createCobertura(aviso_ferias_id, createCoberturaDto);
+    }
+    confirmarCobertura(id) {
+        return this.feriasService.confirmarCobertura(id);
+    }
+    trocarCobertura(id, novoSubstitutoId) {
+        return this.feriasService.trocarCobertura(id, novoSubstitutoId);
     }
     decisaoRetorno(id, retorna) {
         return this.feriasService.decisaoRetorno(id, retorna);
@@ -52,6 +64,21 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], FeriasController.prototype, "updateDocumento", null);
 __decorate([
+    (0, common_1.Patch)('aviso/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], FeriasController.prototype, "updateAviso", null);
+__decorate([
+    (0, common_1.Delete)('aviso/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], FeriasController.prototype, "deleteAviso", null);
+__decorate([
     (0, common_1.Post)('aviso/:id/cobertura'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
@@ -59,6 +86,21 @@ __decorate([
     __metadata("design:paramtypes", [String, create_cobertura_dto_1.CreateCoberturaDto]),
     __metadata("design:returntype", void 0)
 ], FeriasController.prototype, "createCobertura", null);
+__decorate([
+    (0, common_1.Patch)('cobertura/:id/confirmar'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], FeriasController.prototype, "confirmarCobertura", null);
+__decorate([
+    (0, common_1.Patch)('cobertura/:id/trocar'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)('colab_substituto_id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], FeriasController.prototype, "trocarCobertura", null);
 __decorate([
     (0, common_1.Post)('aviso/:id/decisao-retorno'),
     __param(0, (0, common_1.Param)('id')),

@@ -52,10 +52,9 @@ let DashboardService = class DashboardService {
             include: { colab: true },
             orderBy: { prazo_documento: 'asc' }
         });
-        const pendenciasFerias = await this.prisma.avisoFerias.findMany({
-            where: { status: 'AGUARDANDO_ASSINATURA' },
+        const avisosFerias = await this.prisma.avisoFerias.findMany({
             include: { colab: true },
-            orderBy: { data_aviso: 'asc' }
+            orderBy: { data_aviso: 'desc' }
         });
         const emDoisDias = new Date();
         emDoisDias.setDate(emDoisDias.getDate() + 2);
@@ -100,7 +99,7 @@ let DashboardService = class DashboardService {
         });
         return {
             alertasDocumentos,
-            pendenciasFerias,
+            avisosFerias,
             alertasTransferencia,
             avisosRetorno,
             colaboradoresEmFerias,
