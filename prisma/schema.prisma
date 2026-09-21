@@ -133,6 +133,10 @@ model PostoDeTrabalho {
   cesta_basica           String?
   feriados               String?
   insalubridade          String?
+  status                 String               @default("Ativo")
+  tipo_cobertura         String?
+  par_impar              String?
+  cobertura_de           String?
   alocacoes              Alocacao[]
   cliente                DBCliente            @relation(fields: [cliente_id], references: [id])
   substituicoes_ferias   SubstituicaoFerias[]

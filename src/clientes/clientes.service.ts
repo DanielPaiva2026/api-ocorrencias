@@ -69,7 +69,8 @@ export class ClientesService {
               funcao: { type: Type.STRING, description: 'L para Limpeza, P para Porteiro, E para Encarregado, S para Supervisor, M para Manutenção, J para Jardinagem' },
               turno: { type: Type.STRING, description: 'D para Diurno, N para Noturno' },
               escala_tipo: { type: Type.STRING, description: 'A para 12x36, B para 44hs 6x1, C para 44hs 5x2, ou string Parcial caso seja diferente' },
-              quantidade: { type: Type.INTEGER, description: 'Quantidade de postos idênticos' }
+              quantidade: { type: Type.INTEGER, description: 'Quantidade de postos' },
+              cobertura_tipo: { type: Type.STRING, description: 'Se escala B ou C: FIXO (cobre dom/feriado com posto extra), REVEZAMENTO (trabalha dom/fer, folga na semana), ou NENHUMA. Nulo se não se aplicar.' }
             }
           }
         }
@@ -83,7 +84,7 @@ ${text}
 Retorne um JSON com os dados do cliente e os postos de trabalho. 
 Identifique a razão social (ou nome principal do contratante) no campo razao_social.
 No campo empresa_contratada, coloque 'FALCAO' se o contratado for FALCAO PAIVA ou AGENTS. Coloque 'MACHADO' se for MACHADO SOLUCOES.
-Para cada posto de trabalho, identifique a função, turno, escala e quantidade solicitada.
+Para cada posto de trabalho, identifique a função, turno, escala e quantidade solicitada. Se a escala for 6x1 (B) ou 5x2 (C), identifique o cobertura_tipo: "FIXO" se exigir folguista para domingos e feriados, "REVEZAMENTO" se a pessoa trabalha domingo/feriado e folga na semana, ou "NENHUMA" se não houver cobertura.
 `;
 
     const result = await ai.models.generateContent({
@@ -128,6 +129,66 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
     return data;
   }
 
+  async createManual(data: any) {
+    const prefix = data.empresa === 'MACHADO' ? 'MC' : 'FC';
+    
+    const lastClient = await this.prisma.dBCliente.findFirst({
+      where: { codigo: { startsWith: prefix } },
+      orderBy: { codigo: 'desc' }
+    });
+
+    let nextNumber = 1;
+    if (lastClient && lastClient.codigo) {
+      const match = lastClient.codigo.match(/\d+$/);
+      if (match) nextNumber = parseInt(match[0], 10) + 1;
+    }
+    const newCodigo = `${prefix}${String(nextNumber).padStart(3, '0')}`;
+
+    return this.prisma.dBCliente.create({
+      data: {
+        codigo: newCodigo,
+        nome_razao: data.razao_social || 'Desconhecido',
+        cnpj: data.cnpj || "",
+        endereco: data.endereco || "",
+        responsavel: data.responsavel || "",
+        telefone: data.telefone || "",
+        cep: data.cep || "",
+        numero: data.numero || "",
+        complemento: data.complemento || "",
+        bairro: data.bairro || "",
+        cidade: data.cidade || "",
+        uf: data.uf || "",
+        observacao: data.observacao || "",
+        status: 'Ativo'
+      }
+    });
+  }
+
+  async createPostoManual(clienteId: string, data: any) {
+    // We don't have categoria_posto in the Prisma schema, we only have descricao_escala
+    return this.prisma.postoDeTrabalho.create({
+      data: {
+        cliente_id: clienteId,
+        codigo: data.codigo,
+        descricao_escala: data.descricao_escala || null,
+        horas_diarias: data.horas_diarias || null,
+        exige_nr32: data.exige_nr32 || false,
+        exige_nr35: data.exige_nr35 || false,
+        status: data.status || 'Ativo',
+        tipo_cobertura: data.tipo_cobertura || null,
+        par_impar: data.par_impar || null,
+        cobertura_de: data.cobertura_de || null
+      }
+    });
+  }
+
+  async updatePosto(id: string, data: any) {
+    return this.prisma.postoDeTrabalho.update({
+      where: { id },
+      data
+    });
+  }
+
   async confirmContract(data: any) {
     const prefix = data.empresa_contratada === 'MACHADO' ? 'MC' : 'FC';
     
@@ -155,6 +216,7 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
         for (let i = 1; i <= (posto.quantidade || 1); i++) {
           const sequencia = posto.quantidade === 1 ? 'U' : String(i);
           const codigoPosto = `${newCodigo} - ${funcaoChar}${turnoChar}${tipoChar}${escalaChar}/${sequencia}`;
+          const tipoCobertura = posto.cobertura_tipo && ['FIXO', 'REVEZAMENTO'].includes(posto.cobertura_tipo.toUpperCase()) ? posto.cobertura_tipo.toUpperCase() : 'NENHUMA';
           
           postosParaInserir.push({
             codigo: codigoPosto,
@@ -163,7 +225,35 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
             tipo_escala: isParcial ? `D - ${posto.escala_tipo}` : posto.escala_tipo,
             exige_nr32: false,
             exige_nr35: false,
+            tipo_cobertura: tipoCobertura,
+            par_impar: 'PAR', // Default, editável dps
           });
+
+          // Se for cobertura FIXA, geramos os postos de cobertura (Domingo e Feriado) atrelados a ele
+          if (tipoCobertura === 'FIXO') {
+             // Formato solicitado pelo usuário: LD-AU ou similar com "DOM/FER" no final, flagando.
+             // Como a sequência base já tem a letra (U, 1, 2), vamos apenas concatenar -DOM
+             postosParaInserir.push({
+                codigo: `${codigoPosto}-DOM`,
+                categoria_posto: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
+                turno: posto.turno === 'D' ? 'Diurno' : 'Noturno',
+                tipo_escala: 'Cobertura Domingo',
+                exige_nr32: false,
+                exige_nr35: false,
+                tipo_cobertura: 'NENHUMA',
+                cobertura_de: 'DOMINGO'
+             });
+             postosParaInserir.push({
+                codigo: `${codigoPosto}-FER`,
+                categoria_posto: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
+                turno: posto.turno === 'D' ? 'Diurno' : 'Noturno',
+                tipo_escala: 'Cobertura Feriado',
+                exige_nr32: false,
+                exige_nr35: false,
+                tipo_cobertura: 'NENHUMA',
+                cobertura_de: 'FERIADO'
+             });
+          }
         }
       }
     }

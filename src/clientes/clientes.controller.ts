@@ -26,6 +26,21 @@ export class ClientesController {
     return this.clientesService.update(id, data);
   }
 
+  @Post('manual')
+  createManual(@Body() data: any) {
+    return this.clientesService.createManual(data);
+  }
+
+  @Post(':id/postos')
+  createPostoManual(@Param('id') id: string, @Body() data: any) {
+    return this.clientesService.createPostoManual(id, data);
+  }
+
+  @Patch('postos/:id')
+  updatePosto(@Param('id') id: string, @Body() data: any) {
+    return this.clientesService.updatePosto(id, data);
+  }
+
   @Post('preview-contrato')
   @UseInterceptors(FileInterceptor('file'))
   async previewContrato(@UploadedFile() file: Express.Multer.File) {
