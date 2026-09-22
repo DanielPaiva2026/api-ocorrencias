@@ -8,7 +8,12 @@ export class RelatoriosService {
 
   private parseDate(dateStr: string | null): Date | null {
     if (!dateStr) return null;
-    const parsed = parse(dateStr, 'dd/MM/yyyy', new Date());
+    let parsed;
+    if (dateStr.includes('-')) {
+      parsed = new Date(dateStr + 'T00:00:00');
+    } else {
+      parsed = parse(dateStr, 'dd/MM/yyyy', new Date());
+    }
     return isValid(parsed) ? parsed : null;
   }
 
