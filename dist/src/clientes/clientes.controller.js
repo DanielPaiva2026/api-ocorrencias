@@ -33,6 +33,15 @@ let ClientesController = class ClientesController {
     update(id, data) {
         return this.clientesService.update(id, data);
     }
+    createManual(data) {
+        return this.clientesService.createManual(data);
+    }
+    createPostoManual(id, data) {
+        return this.clientesService.createPostoManual(id, data);
+    }
+    updatePosto(id, data) {
+        return this.clientesService.updatePosto(id, data);
+    }
     async previewContrato(file) {
         if (!file)
             throw new Error('Nenhum arquivo enviado');
@@ -85,6 +94,29 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], ClientesController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)('manual'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ClientesController.prototype, "createManual", null);
+__decorate([
+    (0, common_1.Post)(':id/postos'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], ClientesController.prototype, "createPostoManual", null);
+__decorate([
+    (0, common_1.Patch)('postos/:id'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], ClientesController.prototype, "updatePosto", null);
 __decorate([
     (0, common_1.Post)('preview-contrato'),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),

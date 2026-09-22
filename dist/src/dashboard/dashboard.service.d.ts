@@ -204,6 +204,10 @@ export declare class DashboardService {
                 cesta_basica: string | null;
                 feriados: string | null;
                 insalubridade: string | null;
+                status: string;
+                tipo_cobertura: string | null;
+                par_impar: string | null;
+                cobertura_de: string | null;
                 data_base_escala_12x36: string | null;
             };
             aviso: {
@@ -486,6 +490,10 @@ export declare class DashboardService {
                 cesta_basica: string | null;
                 feriados: string | null;
                 insalubridade: string | null;
+                status: string;
+                tipo_cobertura: string | null;
+                par_impar: string | null;
+                cobertura_de: string | null;
                 data_base_escala_12x36: string | null;
             };
             aviso: {

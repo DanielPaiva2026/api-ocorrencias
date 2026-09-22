@@ -86,6 +86,10 @@ export declare class ClientesController {
             cesta_basica: string | null;
             feriados: string | null;
             insalubridade: string | null;
+            status: string;
+            tipo_cobertura: string | null;
+            par_impar: string | null;
+            cobertura_de: string | null;
             data_base_escala_12x36: string | null;
         })[];
     } & {
@@ -196,6 +200,70 @@ export declare class ClientesController {
         complemento: string | null;
         razao_social: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
+    createManual(data: any): Promise<{
+        id: string;
+        cep: string;
+        endereco: string;
+        criado_em: Date;
+        atualizado_em: Date;
+        bairro: string | null;
+        cidade: string | null;
+        numero: string | null;
+        uf: string | null;
+        observacao: string | null;
+        codigo: string | null;
+        status: string | null;
+        nome_razao: string;
+        responsavel: string | null;
+        telefone: string | null;
+        supervisor: string | null;
+        quant_pessoas: string | null;
+        quant_rotinas: string | null;
+        ranking_financeiro: string | null;
+        periodicidade_visita: string | null;
+        status_contrato: string | null;
+        cnpj: string | null;
+        complemento: string | null;
+        razao_social: string | null;
+    }>;
+    createPostoManual(id: string, data: any): Promise<{
+        id: string;
+        criado_em: Date;
+        atualizado_em: Date;
+        cliente_id: string;
+        codigo: string;
+        descricao_escala: string | null;
+        horas_diarias: string | null;
+        exige_nr32: boolean;
+        exige_nr35: boolean;
+        cesta_basica: string | null;
+        feriados: string | null;
+        insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
+        data_base_escala_12x36: string | null;
+    }>;
+    updatePosto(id: string, data: any): Promise<{
+        id: string;
+        criado_em: Date;
+        atualizado_em: Date;
+        cliente_id: string;
+        codigo: string;
+        descricao_escala: string | null;
+        horas_diarias: string | null;
+        exige_nr32: boolean;
+        exige_nr35: boolean;
+        cesta_basica: string | null;
+        feriados: string | null;
+        insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
+        data_base_escala_12x36: string | null;
+    }>;
     previewContrato(file: Express.Multer.File): Promise<any>;
     confirmarContrato(data: any): Promise<{
         postos_de_trabalho: {
@@ -211,6 +279,10 @@ export declare class ClientesController {
             cesta_basica: string | null;
             feriados: string | null;
             insalubridade: string | null;
+            status: string;
+            tipo_cobertura: string | null;
+            par_impar: string | null;
+            cobertura_de: string | null;
             data_base_escala_12x36: string | null;
         }[];
     } & {

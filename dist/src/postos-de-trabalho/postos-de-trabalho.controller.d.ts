@@ -111,6 +111,10 @@ export declare class PostosDeTrabalhoController {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
         data_base_escala_12x36: string | null;
     })[]>;
     getParaAlocacao(colabId: string): Promise<{
@@ -230,6 +234,10 @@ export declare class PostosDeTrabalhoController {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
         data_base_escala_12x36: string | null;
     }[]>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__PostoDeTrabalhoClient<({
@@ -341,6 +349,10 @@ export declare class PostosDeTrabalhoController {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
         data_base_escala_12x36: string | null;
     }) | null, null, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     update(id: string, data: any): import("@prisma/client").Prisma.Prisma__PostoDeTrabalhoClient<{
@@ -356,6 +368,10 @@ export declare class PostosDeTrabalhoController {
         cesta_basica: string | null;
         feriados: string | null;
         insalubridade: string | null;
+        status: string;
+        tipo_cobertura: string | null;
+        par_impar: string | null;
+        cobertura_de: string | null;
         data_base_escala_12x36: string | null;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
 }
