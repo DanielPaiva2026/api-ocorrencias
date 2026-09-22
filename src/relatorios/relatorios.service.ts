@@ -15,7 +15,7 @@ export class RelatoriosService {
   async getVencimentos() {
     const colabs = await this.prisma.dBColab.findMany({
       where: { 
-        OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: null }]
+        OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: 'ativo' }, { status_cadastro: null }]
       },
       select: { id: true, nome: true, categoria_cargo: true, reciclagem_integracao: true, reciclagem_nr32: true, reciclagem_nr35: true, reciclagem_aso: true },
     });
@@ -56,7 +56,7 @@ export class RelatoriosService {
     const hoje = new Date();
     const colabs = await this.prisma.dBColab.findMany({
       where: { 
-        OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: null }],
+        OR: [{ status_cadastro: 'Ativo' }, { status_cadastro: 'ativo' }, { status_cadastro: null }],
         afastamentos: {
           none: {
             motivo: 'INSS',
@@ -302,7 +302,7 @@ export class RelatoriosService {
     const vagasAbertas = postos.filter(p => p.alocacoes.length === 0).length;
 
     const colabsAtivosList = await this.prisma.dBColab.findMany({
-      where: { status_cadastro: { not: 'Inativo' } },
+      where: { status_cadastro: { notIn: ['Inativo', 'inativo'] } },
       include: {
         alocacoes: true,
         afastamentos: {
