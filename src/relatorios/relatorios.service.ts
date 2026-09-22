@@ -69,7 +69,7 @@ export class RelatoriosService {
         }
       },
       select: { 
-        id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true,
+        id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true, ferias_vencimento: true, ferias_limite_entrada: true, ferias_notificacao: true,
         afastamentos: {
           where: { motivo: 'INSS', data_fim: { not: null } },
           select: { data_inicio: true, data_fim: true }
@@ -129,16 +129,21 @@ export class RelatoriosService {
       }
 
       // O limite concessivo é 2 anos após a data base
-      const dataLimite = addYears(dataBase, 2);
-      if (limitExtendedDays > 0) {
+            // Utilizar limites manuais se existirem (vindos do frontend Tratamento de Férias)
+      let dataLimite = c.ferias_vencimento ? (this.parseDate(c.ferias_vencimento) || addYears(dataBase, 2)) : addYears(dataBase, 2);
+      if (!c.ferias_vencimento && limitExtendedDays > 0) {
           dataLimite.setDate(dataLimite.getDate() + limitExtendedDays);
       }
       
-      const dataLimiteInicio = new Date(dataLimite);
-      dataLimiteInicio.setDate(dataLimiteInicio.getDate() - 45); // Limite para iniciar
+      let dataLimiteInicio = c.ferias_limite_entrada ? (this.parseDate(c.ferias_limite_entrada) || new Date(dataLimite)) : new Date(dataLimite);
+      if (!c.ferias_limite_entrada) {
+        dataLimiteInicio.setDate(dataLimiteInicio.getDate() - 45); // Limite para iniciar
+      }
       
-      const dataLimiteAviso = new Date(dataLimiteInicio);
-      dataLimiteAviso.setDate(dataLimiteAviso.getDate() - 30); // Limite para aviso
+      let dataLimiteAviso = c.ferias_notificacao ? (this.parseDate(c.ferias_notificacao) || new Date(dataLimiteInicio)) : new Date(dataLimiteInicio);
+      if (!c.ferias_notificacao) {
+        dataLimiteAviso.setDate(dataLimiteAviso.getDate() - 30); // Limite para aviso
+      }
       
       const diasRestantesAviso = differenceInDays(dataLimiteAviso, hoje);
       

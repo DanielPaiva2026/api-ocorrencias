@@ -77,7 +77,7 @@ let RelatoriosService = class RelatoriosService {
                 }
             },
             select: {
-                id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true,
+                id: true, nome: true, admissao: true, ferias_ultimo_aquisitivo: true, ferias_vencimento: true, ferias_limite_entrada: true, ferias_notificacao: true,
                 afastamentos: {
                     where: { motivo: 'INSS', data_fim: { not: null } },
                     select: { data_inicio: true, data_fim: true }
@@ -122,14 +122,18 @@ let RelatoriosService = class RelatoriosService {
                     }
                 }
             }
-            const dataLimite = (0, date_fns_1.addYears)(dataBase, 2);
-            if (limitExtendedDays > 0) {
+            let dataLimite = c.ferias_vencimento ? (this.parseDate(c.ferias_vencimento) || (0, date_fns_1.addYears)(dataBase, 2)) : (0, date_fns_1.addYears)(dataBase, 2);
+            if (!c.ferias_vencimento && limitExtendedDays > 0) {
                 dataLimite.setDate(dataLimite.getDate() + limitExtendedDays);
             }
-            const dataLimiteInicio = new Date(dataLimite);
-            dataLimiteInicio.setDate(dataLimiteInicio.getDate() - 45);
-            const dataLimiteAviso = new Date(dataLimiteInicio);
-            dataLimiteAviso.setDate(dataLimiteAviso.getDate() - 30);
+            let dataLimiteInicio = c.ferias_limite_entrada ? (this.parseDate(c.ferias_limite_entrada) || new Date(dataLimite)) : new Date(dataLimite);
+            if (!c.ferias_limite_entrada) {
+                dataLimiteInicio.setDate(dataLimiteInicio.getDate() - 45);
+            }
+            let dataLimiteAviso = c.ferias_notificacao ? (this.parseDate(c.ferias_notificacao) || new Date(dataLimiteInicio)) : new Date(dataLimiteInicio);
+            if (!c.ferias_notificacao) {
+                dataLimiteAviso.setDate(dataLimiteAviso.getDate() - 30);
+            }
             const diasRestantesAviso = (0, date_fns_1.differenceInDays)(dataLimiteAviso, hoje);
             let status = '';
             if (forceAcaoImediata || diasRestantesAviso < 0) {
