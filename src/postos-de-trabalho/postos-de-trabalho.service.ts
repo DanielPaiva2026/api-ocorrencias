@@ -108,8 +108,16 @@ export class PostosDeTrabalhoService {
     return this.prisma.postoDeTrabalho.update({
       where: { id },
       data: {
-        exige_nr32: data.exige_nr32,
-        exige_nr35: data.exige_nr35,
+        codigo: data.codigo,
+        descricao_escala: data.descricao_escala,
+        tipo_escala: data.tipo_escala,
+        funcao: data.funcao,
+        status: data.status,
+        tipo_cobertura: data.tipo_cobertura,
+        par_impar: data.par_impar,
+        cobertura_de: data.cobertura_de,
+        exige_nr32: data.exige_nr32 === true || String(data.exige_nr32) === 'true',
+        exige_nr35: data.exige_nr35 === true || String(data.exige_nr35) === 'true',
         horas_diarias: data.horas_diarias,
         data_base_escala_12x36: data.data_base_escala_12x36
       }

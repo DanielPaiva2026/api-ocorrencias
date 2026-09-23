@@ -165,15 +165,16 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
   }
 
   async createPostoManual(clienteId: string, data: any) {
-    // We don't have categoria_posto in the Prisma schema, we only have descricao_escala
     return this.prisma.postoDeTrabalho.create({
       data: {
         cliente_id: clienteId,
         codigo: data.codigo,
         descricao_escala: data.descricao_escala || null,
+        tipo_escala: data.tipo_escala || null,
+        funcao: data.funcao || null,
         horas_diarias: data.horas_diarias || null,
-        exige_nr32: data.exige_nr32 || false,
-        exige_nr35: data.exige_nr35 || false,
+        exige_nr32: data.exige_nr32 === true || String(data.exige_nr32) === 'true',
+        exige_nr35: data.exige_nr35 === true || String(data.exige_nr35) === 'true',
         status: data.status || 'Ativo',
         tipo_cobertura: data.tipo_cobertura || null,
         par_impar: data.par_impar || null,

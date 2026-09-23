@@ -125,6 +125,8 @@ model PostoDeTrabalho {
   cliente_id             String
   codigo                 String               @unique
   descricao_escala       String?
+    tipo_escala            String?
+    funcao                 String?
   horas_diarias          String?
   criado_em              DateTime             @default(now())
   atualizado_em          DateTime             @updatedAt
