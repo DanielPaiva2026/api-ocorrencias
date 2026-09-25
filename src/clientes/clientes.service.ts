@@ -88,26 +88,28 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
 `;
 
     let result;
+    const modelName = 'gemini-2.5-flash';
     try {
       result = await ai.models.generateContent({
-        model: 'gemini-1.5-flash',
+        model: modelName,
         contents: prompt,
         config: { responseMimeType: 'application/json', responseSchema: responseSchema }
       });
     } catch (error: any) {
-      console.warn('First attempt failed, waiting 2.5s and retrying with gemini-1.5-flash...', error.message);
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      console.warn('First attempt failed, waiting 3s and retrying with ' + modelName + '...', error.message);
+      await new Promise(resolve => setTimeout(resolve, 3000));
       
       try {
         result = await ai.models.generateContent({
-          model: 'gemini-1.5-flash',
+          model: modelName,
           contents: prompt,
           config: { responseMimeType: 'application/json', responseSchema: responseSchema }
         });
       } catch (err2: any) {
-        console.warn('Second attempt failed, trying gemini-1.5-flash-8b...', err2.message);
+        console.warn('Second attempt failed, waiting 5s and trying ' + modelName + ' again...', err2.message);
+        await new Promise(resolve => setTimeout(resolve, 5000));
         result = await ai.models.generateContent({
-          model: 'gemini-1.5-flash-8b',
+          model: modelName,
           contents: prompt,
           config: { responseMimeType: 'application/json', responseSchema: responseSchema }
         });
