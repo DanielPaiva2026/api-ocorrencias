@@ -87,14 +87,27 @@ No campo empresa_contratada, coloque 'FALCAO' se o contratado for FALCAO PAIVA o
 Para cada posto de trabalho, identifique a função, turno, escala e quantidade solicitada. Se a escala for 6x1 (B) ou 5x2 (C), identifique o cobertura_tipo: "FIXO" se exigir folguista para domingos e feriados, "REVEZAMENTO" se a pessoa trabalha domingo/feriado e folga na semana, ou "NENHUMA" se não houver cobertura.
 `;
 
-    const result = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: responseSchema,
-      }
-    });
+    let result;
+    try {
+      result = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: responseSchema,
+        }
+      });
+    } catch (error: any) {
+      console.warn('Fallback to gemini-1.5-pro due to error:', error.message);
+      result = await ai.models.generateContent({
+        model: 'gemini-1.5-pro',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: responseSchema,
+        }
+      });
+    }
 
     const data = JSON.parse(result.text || '{}');
     
