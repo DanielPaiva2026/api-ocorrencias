@@ -237,42 +237,48 @@ Para cada posto de trabalho, identifique a função, turno, escala e quantidade 
         for (let i = 1; i <= (posto.quantidade || 1); i++) {
           const sequencia = posto.quantidade === 1 ? 'U' : String(i);
           const codigoPosto = `${newCodigo} - ${funcaoChar}${turnoChar}${tipoChar}${escalaChar}/${sequencia}`;
-          const tipoCobertura = posto.cobertura_tipo && ['FIXO', 'REVEZAMENTO'].includes(posto.cobertura_tipo.toUpperCase()) ? posto.cobertura_tipo.toUpperCase() : 'NENHUMA';
+          let tipoCobertura = posto.cobertura_tipo && ['FIXO', 'REVEZAMENTO'].includes(posto.cobertura_tipo.toUpperCase()) ? posto.cobertura_tipo.toUpperCase() : 'NENHUMA';
+          if (tipoCobertura === 'REVEZAMENTO') tipoCobertura = 'FOLGA_SEMANA';
           
+          let tipoEscalaReal = null;
+          if (posto.escala_tipo === 'A') tipoEscalaReal = '12x36';
+          else if (posto.escala_tipo === 'B') tipoEscalaReal = '6x1';
+          else if (posto.escala_tipo === 'C') tipoEscalaReal = '5x2';
+          else tipoEscalaReal = posto.escala_tipo || null;
+
           postosParaInserir.push({
             codigo: codigoPosto,
-            categoria_posto: posto.funcao_nome || 'Limpeza',
-            turno: posto.turno === 'D' ? 'Diurno' : 'Noturno',
-            tipo_escala: isParcial ? `D - ${posto.escala_tipo}` : posto.escala_tipo,
+            funcao: posto.funcao_nome || 'Limpeza',
+            descricao_escala: posto.turno === 'D' ? 'Diurno' : 'Noturno',
+            tipo_escala: tipoEscalaReal,
             exige_nr32: false,
             exige_nr35: false,
             tipo_cobertura: tipoCobertura,
-            par_impar: 'PAR', // Default, editável dps
+            par_impar: null,
           });
 
-          // Se for cobertura FIXA, geramos os postos de cobertura (Domingo e Feriado) atrelados a ele
           if (tipoCobertura === 'FIXO') {
-             // Formato solicitado pelo usuário: LD-AU ou similar com "DOM/FER" no final, flagando.
-             // Como a sequência base já tem a letra (U, 1, 2), vamos apenas concatenar -DOM
              postosParaInserir.push({
                 codigo: `${codigoPosto}-DOM`,
-                categoria_posto: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
-                turno: posto.turno === 'D' ? 'Diurno' : 'Noturno',
-                tipo_escala: 'Cobertura Domingo',
+                funcao: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
+                descricao_escala: posto.turno === 'D' ? 'Diurno' : 'Noturno',
+                tipo_escala: 'Cobertura',
                 exige_nr32: false,
                 exige_nr35: false,
                 tipo_cobertura: 'NENHUMA',
-                cobertura_de: 'DOMINGO'
+                cobertura_de: 'DOMINGO',
+                par_impar: null
              });
              postosParaInserir.push({
                 codigo: `${codigoPosto}-FER`,
-                categoria_posto: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
-                turno: posto.turno === 'D' ? 'Diurno' : 'Noturno',
-                tipo_escala: 'Cobertura Feriado',
+                funcao: (posto.funcao_nome || 'Limpeza') + ' (Cobertura)',
+                descricao_escala: posto.turno === 'D' ? 'Diurno' : 'Noturno',
+                tipo_escala: 'Cobertura',
                 exige_nr32: false,
                 exige_nr35: false,
                 tipo_cobertura: 'NENHUMA',
-                cobertura_de: 'FERIADO'
+                cobertura_de: 'FERIADO',
+                par_impar: null
              });
           }
         }
